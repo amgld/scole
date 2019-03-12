@@ -1,0 +1,81 @@
+/**
+ *   ТАБЛИЦА СТИЛЕЙ ЭЛЕКТРОННОГО ЖУРНАЛА «ШКАЛА»
+ *
+ *   Copyright © А. М. Гольдин, 2019. a@goldin.su
+ *   Лицензия CC BY-NC-ND Version 4.0
+ *   https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.ru
+ */
+
+@font-face {
+   font-family:fnt; src:url("ptsans.otf");}
+body {
+   background:#f6f3f0; font:12pt fnt, sans-serif;
+   margin:0px; padding:0px;
+}
+   
+/* ОКНА С ФОРМОЙ АВТОРИЗАЦИИ И ИНФОРМАЦИОННЫМ СООБЩЕНИЕМ
+   ----------------------------------------------------- */
+article, output {
+   display: none; width:18em; position:absolute; top:45%; left:50%;
+   margin-top:-5em; margin-left:-9em; padding:0px; border:1px solid #639;
+   border-radius:10px; box-shadow: 2px 2px 3px 2px #999;
+   text-align:center; background:#f6f3ee;}
+output {
+   top:40%; z-index:99999;}
+article h1, article input, article button, output button, article div {
+   font-size:14pt;}
+article h1 {
+   background:#963; color:#ff6; margin:0px 0px 20px; padding:5px;
+   border:1px solid #963; border-radius:10px 10px 0px 0px;
+   font-weight:bold;}
+article div {
+   font-size:12pt; color:red; text-align:center;
+   margin-bottom:20px; display:none;}
+output div {
+   font-size:14pt; text-align:center; margin:20px 5px 0px;}
+article input, article button, output button {
+   display:inline-block; width:80%; margin:5px 0px; padding:3px;}
+article input {
+   background:#f6f3f0; border:none; border-bottom:1px solid #963;}
+article input:focus {
+   background:#fff; outline:none;}
+article button, output button {
+   background:#963; color:#ff6; border:none;
+   margin:20px 0px; font-weight:bold; cursor: pointer;}
+
+/* ХИДЕР (ЗАГОЛОВОЧНАЯ СТРОКА И МЕНЮ)
+   ----------------------------------------------------- */
+header, nav {
+   position:fixed; width:100%; height:22pt; left:0px; top:0px;
+   z-index:99998; background:#963; color:#ff6; font-size:14pt;
+   padding:2pt 6pt 0px; text-align:right;
+}
+header span {
+   padding:0px 3pt;}
+header span#progName {
+   position:absolute; left:10px; top:2pt; font-weight:bold;}
+header span#chPwd, header a {
+   text-decoration:none; color:#ff6;}
+header a {
+   padding-right:10px;}
+header select {
+   background:#963; color:#ff6; font-size:12pt; border:none; padding-top:0px;
+   -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none;
+   appearance: none;}
+nav {
+   top:22pt; background:#b0844d; text-align:center;}
+nav ul {
+   margin:0px; padding:0px;}
+nav li {
+   list-style:none; display:inline; padding:3pt 12pt 0px;}
+nav li.sel {
+   background:#f6f3ee; color:#963; font-weight:bold;
+   box-shadow:inset 0px 2px 0px 0px #b0844d; border-bottom:5pt solid #f6f3ee;
+   border-radius:5px 5px 0px 0px;}
+header span#chPwd:hover, header a:hover, header select:hover, nav li:hover {
+   cursor:pointer;}
+
+/* СОДЕРЖАТЕЛЬНЫЕ БЛОКИ СТРАНИЦЫ
+   ----------------------------------------------------- */
+section {
+   display:none; position:absolute; width:100%; left:0px; top:70pt;}

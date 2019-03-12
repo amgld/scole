@@ -1,0 +1,17 @@
+{
+   "PORT":     443,
+   "SERVER":   "ScoleServer",
+   "ERR404":   "<h1>404</h1><hr><address>ScoleServer</address>",
+   "MIME":   {
+      "svg":   "image/svg+xml",
+      "css":   "text/css",
+      "html":  "text/html",
+      "js":    "text/javascript",
+      "ico":   "image/x-icon",
+      "otf":   "font/otf"
+   },
+   "PWD":      "peL4msLYvzbUJ9dBYumQdjPG",
+   "SALT":     "abcde",
+   "KEYPATH":  "key.pem",
+   "CERTPATH": "cert.pem"
+}
