@@ -18,7 +18,10 @@ document.body.innerHTML += `
     <div id="loginWarn">Не введен логин/пароль!</div>
   </article>
 `;
-let uPwd = '', uLogin  = '', apiResp = '';
+let
+   uToken  = '',
+   uLogin  = '',
+   apiResp = '';
 if (!uLogin) dqs("article").style.display = "block";
 
 // Параметры запроса к API сервера
@@ -26,18 +29,28 @@ const apiOpt = {method: "POST", cache: "no-cache", body: ''};
 
 // Обработка отправки логина и пароля
 const submLogin = () => {
-   uLogin = dqs("#uLogin").value.trim(); uPwd = dqs("#uPwd").value.trim();
+   uLogin = dqs("#uLogin").value.trim();
+   uPwd = dqs("#uPwd").value.trim();
    if (!uLogin || !uPwd) dqs("#loginWarn").style.display = "block";
    else {
       dqs("#loginWarn").style.display = "none";
       (async () => {
-         apiOpt.body = `{"l": "${uLogin}", "p": "${uPwd}", "f": "login"}`;
+         apiOpt.body = `{
+            "l": "${uLogin}",
+            "p": "${dqs('#uPwd').value.trim()}",
+            "f": "login"            
+         }`;         
          apiResp = await (await fetch("/", apiOpt)).text();
          if (apiResp == "none") {
             dqs("#loginWarn").innerHTML = "Неверный логин/пароль!";
             dqs("#loginWarn").style.display = "block";
          }
          else {
+            // Чистим все переменные, содержащие пароль
+            dqs('#uPwd').value = '';
+            apiOpt.body = '';
+            // Сохраняем токен и публикуем контент страницы
+            uToken = JSON.parse(apiResp).token;
             dqs("article").style.display = "none";
             headerGen();
          }

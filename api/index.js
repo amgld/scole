@@ -20,7 +20,7 @@ const RIGHTS = {
 };
 for (let item in RIGHTS) RIGHTS[item].push("login");
 
-module.exports = post => {   
+module.exports = (post, addr) => {   
    
    // Разбираем переданные в аргументе POST-данные
    let postDt = {};   
@@ -30,7 +30,7 @@ module.exports = post => {
    if (!postDt.p) postDt.p = "noPassw";
       
    // Проверяем результаты аутентификации юзера
-   let authResult = auth(postDt.l, postDt.p);
+   let authResult = auth(postDt.l, postDt.p, addr);
    if (!authResult) return "none";
       
    // Проверяем полномочия юзера на запрашиваемую функцию
