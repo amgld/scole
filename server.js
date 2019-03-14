@@ -7,25 +7,24 @@
  */
 "use strict";
 
-const
-   DOCROOT  = __dirname + "/www/",
-   LOGROOT  = __dirname + "/logs/",
+const DOCROOT  = __dirname + "/www/",
+      LOGROOT  = __dirname + "/logs/",
 
-   https    = require("https"),
-   url      = require("url"),
-   fs       = require("fs"),
-   nedb     = require("nedb"),
-   htmlpdf  = require("html-pdf"),
+      https    = require("https"),
+      url      = require("url"),
+      fs       = require("fs"),
+      nedb     = require("nedb"),
+      htmlpdf  = require("html-pdf"),
 
-   {PORT, SERVER, ERR404, MIME, PWD, SALT, KEYPATH, CERTPATH}
-            = require("./config"),
-   api      = require("./api"),
-   putlog   = require("./api/putlog"),
+      {PORT, SERVER, ERR404, MIME, PWD, SALT, KEYPATH, CERTPATH}
+               = require("./config"),
+      api      = require("./api"),
+      putlog   = require("./api/putlog"),
 
-   httpsOpt = {
-      key: fs.readFileSync(__dirname  + "/ssl/" + KEYPATH),
-      cert: fs.readFileSync(__dirname + "/ssl/" + CERTPATH)      
-   };
+      httpsOpt = {
+         key: fs.readFileSync(__dirname  + "/ssl/" + KEYPATH),
+         cert: fs.readFileSync(__dirname + "/ssl/" + CERTPATH)      
+      };
 global.salt   = SALT;
 global.admPwd = PWD;
 

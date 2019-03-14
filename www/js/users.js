@@ -7,6 +7,6 @@
  */
 "use strict";
 
-document.body.innerHTML += `
+dqs("#content").innerHTML += `
    <section id="users">Блок «Пользователи»</section>
 `;

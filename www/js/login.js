@@ -7,7 +7,7 @@
  */
 "use strict";
 
-document.body.innerHTML += `
+dqs("#content").innerHTML += `
   <article>
     <h1>ЭЖ «Шкала»</h1>
     <input type="text" id="uLogin" placeholder="Логин" autofocus
@@ -18,10 +18,7 @@ document.body.innerHTML += `
     <div id="loginWarn">Не введен логин/пароль!</div>
   </article>
 `;
-let
-   uToken  = '',
-   uLogin  = '',
-   apiResp = '';
+let uToken  = '', uLogin  = '', apiResp = '';
 if (!uLogin) dqs("article").style.display = "block";
 
 // Параметры запроса к API сервера
@@ -30,7 +27,6 @@ const apiOpt = {method: "POST", cache: "no-cache", body: ''};
 // Обработка отправки логина и пароля
 const submLogin = () => {
    uLogin = dqs("#uLogin").value.trim();
-   uPwd = dqs("#uPwd").value.trim();
    if (!uLogin || !uPwd) dqs("#loginWarn").style.display = "block";
    else {
       dqs("#loginWarn").style.display = "none";

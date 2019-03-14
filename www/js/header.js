@@ -46,7 +46,7 @@ const headerOptGen = roles => {
 const headerGen = () => {
    let apiRespObj = JSON.parse(apiResp);
    let rl = apiRespObj.roles;
-   document.body.innerHTML += `
+   dqs("#content").innerHTML += `
       <header>
          <span id="progName">ЭЖ «Шкала»</span>
          <span>${uLogin}:<span>

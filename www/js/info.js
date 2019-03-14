@@ -7,7 +7,7 @@
  */
 "use strict";
 
-document.body.innerHTML += `
+dqs("#content").innerHTML += `
   <output>
     <div></div><button type="button" onClick="info(2);">OK</button>
   </output>
