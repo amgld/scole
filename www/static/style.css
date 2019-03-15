@@ -16,7 +16,7 @@ body {
 /* ОКНА С ФОРМОЙ АВТОРИЗАЦИИ И ИНФОРМАЦИОННЫМ СООБЩЕНИЕМ
    ----------------------------------------------------- */
 article, output {
-   display: none; width:18em; position:absolute; top:45%; left:50%;
+   display: none; width:18em; position:absolute; top:30%; left:50%;
    margin-top:-5em; margin-left:-9em; padding:0px; border:1px solid #639;
    border-radius:10px; box-shadow: 2px 2px 3px 2px #999;
    text-align:center; background:#f6f3ee;}
@@ -42,6 +42,8 @@ article input:focus {
 article button, output button {
    background:#963; color:#ff6; border:none;
    margin:20px 0px; font-weight:bold; cursor: pointer;}
+article img {
+   display:block; margin:5px auto -2px;}
 
 /* ХИДЕР (ЗАГОЛОВОЧНАЯ СТРОКА И МЕНЮ)
    ----------------------------------------------------- */

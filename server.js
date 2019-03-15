@@ -29,7 +29,7 @@ const DOCROOT  = __dirname + "/www/",
 global.salt   = SALT;
 global.admPwd = PWD;
 
-// Генерирование числового номера капчи по входной строке
+// Генерирование числового значения капчи по её Id
 global.captNumGen = str => {
    let captNum = '', s, h = 0;
    for (let j = 0; j < 6; j++) {
@@ -56,9 +56,8 @@ const sendOtvet = (otvet, kod, contType, content) => {
    otvet.writeHead(kod, {
       "Content-Type": contType, "Server": SERVER,
       "Strict-Transport-Security": "max-age=32000000"
-   });   
-   otvet.write(content);
-   otvet.end();
+   });
+   otvet.end(content);
 }
 
 // Собственно цикл обработки запроса
