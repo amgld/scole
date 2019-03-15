@@ -20,6 +20,7 @@ const DOCROOT  = __dirname + "/www/",
                = require("./config"),
       api      = require("./api"),
       putlog   = require("./api/putlog"),
+      captGen  = require("./api/captchaGen"),
 
       httpsOpt = {
          key: fs.readFileSync(__dirname  + "/ssl/" + KEYPATH),
@@ -27,6 +28,28 @@ const DOCROOT  = __dirname + "/www/",
       };
 global.salt   = SALT;
 global.admPwd = PWD;
+
+// Генерирование числового номера капчи по входной строке
+global.captNumGen = str => {
+   let captNum = '', s, h = 0;
+   for (let j = 0; j < 6; j++) {
+      s = global.salt + j + str;
+      for (let i=0; i<s.length; i++) h = ((h << 5) - h) + s.charCodeAt(i);
+      captNum += Math.abs(h) % 10;
+   }
+   return captNum;
+}
+
+// Параметры отдаваемой капчи
+const captOpt = {
+   bkR: 246, bkG: 243, bkB: 240, // фоновый цвет
+   fnR: 214, fnG: 191, fnB: 168, // цвет шрифта   
+}
+
+// Массив выданных сервером клиенту ID капчи и время жизни капчи в секундах
+// (те, что вернулись от клиента, а также старые удаляются)
+global.captchaIdArr = [];
+const CAPTDEATH = 180;
 
 // Отправка ответа (kod - код состояния, contType - mime-тип, content - тело)
 const sendOtvet = (otvet, kod, contType, content) => {
@@ -38,17 +61,30 @@ const sendOtvet = (otvet, kod, contType, content) => {
    otvet.end();
 }
 
+// Собственно цикл обработки запроса
 https.createServer(httpsOpt, (zapros, otvet) => {
    
-   // Получаем параметры запроса
+   // Получаем параметры запроса   
    let pathname = url.parse(zapros.url).pathname;
    if (!pathname.includes(".")) pathname += "/index.html";
    pathname = pathname.replace("//", '/').replace(/\.\./g, '');
    
    let ADDR = zapros.connection.remoteAddress.replace("::1", "127.0.0.1");
    
+   // Если пришел запрос капчи, отдаем ее вместе с ее Id (в заголовке X-Cpt)
+   if (pathname == "/cpt.a") {
+      let tm = Date.now();
+      // Удаляем все устаревшие Id капчи и кладем новый Id
+      captchaIdArr = captchaIdArr.filter(
+         x => Number(x) > Number(tm - CAPTDEATH * 1000));
+      captchaIdArr.push(tm);
+      otvet.writeHead(200,
+         {"Content-Type": "image/png", "Server": SERVER, "X-Cpt": tm});
+      otvet.end(captGen(captNumGen(tm), captOpt));
+   }
+   
    // Если метод GET, просто отдаем запрошенный статический файл
-   if (zapros.method == "GET")
+   else if (zapros.method == "GET")
       fs.readFile(DOCROOT + pathname, function(err, cont) {
          let mtip = MIME[pathname.split(".")[1]];      
          if (!mtip || err) {
