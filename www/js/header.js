@@ -54,7 +54,7 @@ const showMenuMob = () => {
       (mmiDisp == "none") ? "static/menuMobClose.svg" : "static/menuMob.svg";
 }
 
-// Формирование хидера
+// Формирование хидера и включение футера
 const headerGen = () => {
    let apiRespObj = JSON.parse(apiResp);
    let rl = apiRespObj.roles;
@@ -72,4 +72,9 @@ const headerGen = () => {
       <nav></nav>
    `;
    menuGen();
+   (async () => {
+      let adminCont = await (await fetch("/a.a")).text();
+      dqs("footer").innerHTML += `Админ.: ${adminCont}`;
+      dqs("footer").style.display = "block";
+   })();   
 };

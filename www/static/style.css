@@ -80,6 +80,18 @@ header img {
    height:14pt; position:fixed; top:5px; left:5px; display:none;}
 header img:hover {
    cursor:pointer;}
+   
+/* ФУТЕР
+   ----------------------------------------------------- */
+footer {
+   position:fixed; width:100%; left:0px; bottom:0px;
+   z-index:99997; background:#963; color:#ff6; font-size:11pt;
+   padding:2pt 2px; text-align:center; display:none;
+}
+footer a {
+   color:#ff6; text-decoration:none}
+footer a:hover {
+   text-decoration:underline}
 
 /* СОДЕРЖАТЕЛЬНЫЕ БЛОКИ СТРАНИЦЫ
    ----------------------------------------------------- */

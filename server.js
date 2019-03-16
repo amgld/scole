@@ -16,7 +16,7 @@ const DOCROOT  = __dirname + "/www/",
       nedb     = require("nedb"),
       htmlpdf  = require("html-pdf"),
 
-      {PORT, SERVER, ERR404, MIME, PWD, SALT, KEYPATH, CERTPATH}
+      {PORT, SERVER, ERR404, MIME, PWD, SALT, ADMIN, KEYPATH, CERTPATH}
                = require("./config"),
       api      = require("./api"),
       putlog   = require("./api/putlog"),
@@ -69,6 +69,9 @@ https.createServer(httpsOpt, (zapros, otvet) => {
    pathname = pathname.replace("//", '/').replace(/\.\./g, '');
    
    let ADDR = zapros.connection.remoteAddress.replace("::1", "127.0.0.1");
+   
+   // Если пришел запрос контактов администратора
+   if (pathname == "/a.a") sendOtvet(otvet, 200, "text/plain", ADMIN);
    
    // Если пришел запрос капчи, отдаем ее вместе с ее Id (в заголовке X-Cpt)
    if (pathname == "/cpt.a") {
