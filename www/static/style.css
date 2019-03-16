@@ -76,8 +76,34 @@ nav li.sel {
    border-radius:5px 5px 0px 0px;}
 header span#chPwd:hover, header a:hover, header select:hover, nav li:hover {
    cursor:pointer;}
+header img {
+   height:14pt; position:fixed; top:5px; left:5px; display:none;}
+header img:hover {
+   cursor:pointer;}
 
 /* СОДЕРЖАТЕЛЬНЫЕ БЛОКИ СТРАНИЦЫ
    ----------------------------------------------------- */
 section {
    display:none; position:absolute; width:100%; left:0px; top:70pt;}
+   
+/* МОБИЛЬНАЯ ВЕРСИЯ
+   ----------------------------------------------------- */
+@media (max-width: 960px) {
+   /* Хидер и меню ............................. */
+   header img {
+      display:block;}
+   span#progName {
+      display:none;}
+   nav {
+      display:none;}
+   nav ul {
+      position:fixed; left:0px; top:22pt; width:100%;}
+   nav li {
+      display:block; padding:3px; background:#b0844d;}
+   nav li.sel {
+      box-shadow:none; border:none; border-radius:0px;
+      background:#b0844d; color:#ff6;
+   }
+   section {
+      top:48pt;}
+}

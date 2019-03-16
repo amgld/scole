@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   id="svg8"
-   version="1.1"
-   viewBox="0 0 8.4666665 6.3500002"
+   width="32"
    height="24"
-   width="32">
+   viewBox="0 0 8.4666665 6.3500002"
+   version="1.1"
+   id="svg8">
   <defs
      id="defs2" />
   <metadata
@@ -24,50 +24,46 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-  <g
-     transform="translate(0,-290.64998)"
-     id="layer1">
-    <rect
-       y="290.64999"
-       x="3.5736083e-08"
-       height="1.5875"
-       width="1.5875"
-       id="rect10"
-       style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.1419794;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-    <rect
-       style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.27798006;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect817"
-       width="6.0854168"
-       height="1.5875"
-       x="2.3812501"
-       y="290.64999" />
-    <rect
-       style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.1419794;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect823"
-       width="1.5875"
-       height="1.5875"
-       x="3.5736083e-08"
-       y="293.03122" />
-    <rect
-       y="293.03122"
-       x="2.3812501"
-       height="1.5875"
-       width="6.0854168"
-       id="rect825"
-       style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.27798006;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-    <rect
-       y="295.41248"
-       x="3.5736083e-08"
-       height="1.5875"
-       width="1.5875"
-       id="rect829"
-       style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.1419794;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-    <rect
-       style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.27798006;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect831"
-       width="6.0854168"
-       height="1.5875"
-       x="2.3812501"
-       y="295.41248" />
-  </g>
+  <rect
+     y="0"
+     x="3.5736083e-08"
+     height="1.0583334"
+     width="1.0583334"
+     id="rect10"
+     style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.09465294;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  <rect
+     style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.22696976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="rect817"
+     width="6.0854168"
+     height="1.0583334"
+     x="2.3812501"
+     y="0" />
+  <rect
+     style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.09465294;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="rect20"
+     width="1.0583334"
+     height="1.0583334"
+     x="3.5736083e-08"
+     y="2.6458333" />
+  <rect
+     y="2.6458333"
+     x="2.3812501"
+     height="1.0583334"
+     width="6.0854168"
+     id="rect22"
+     style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.22696976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  <rect
+     y="5.2916665"
+     x="3.5736083e-08"
+     height="1.0583334"
+     width="1.0583334"
+     id="rect24"
+     style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.09465294;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+  <rect
+     style="opacity:1;fill:#ffff66;fill-opacity:1;stroke:none;stroke-width:0.22696976;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+     id="rect26"
+     width="6.0854168"
+     height="1.0583334"
+     x="2.3812501"
+     y="5.2916665" />
 </svg>

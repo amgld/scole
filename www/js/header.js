@@ -14,6 +14,9 @@ const blockShow = menuItem => {
       mn.classList.remove("sel");
    dqs(`#mn${menuItem}`).className = "sel";
    
+   // Сворачиваем мобильное меню
+   if (dqs("header img").src.includes("MobClose")) dqs("header img").click();
+   
    // Показываем соответствующий блок контента
    for (let sect of document.querySelectorAll("section"))
       sect.style.display = "none";
@@ -42,12 +45,22 @@ const headerOptGen = roles => {
    return res;
 };
 
+// Обработка кликания на иконке мобильного меню
+const showMenuMob = () => {
+   let mmiDisp = dqs("nav").style.display || "none";
+   dqs("nav").style.display =
+      (mmiDisp == "none") ? "block" : "none";
+   dqs("header img").src =
+      (mmiDisp == "none") ? "static/menuMobClose.svg" : "static/menuMob.svg";
+}
+
 // Формирование хидера
 const headerGen = () => {
    let apiRespObj = JSON.parse(apiResp);
    let rl = apiRespObj.roles;
    dqs("#content").innerHTML += `
       <header>
+         <img src="static/menuMob.svg" title="Меню" onClick="showMenuMob()">
          <span id="progName">ЭЖ «Шкала»</span>
          <span>${uLogin}:<span>
          <select id="selRole" onChange="menuGen()" title="Роль пользователя">
