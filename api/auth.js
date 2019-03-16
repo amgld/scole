@@ -35,7 +35,11 @@ let hash = (str, slt) => {
 //    "roles": ["admin", "teacher"],
 // }
 // Переменные salt и admPwd являются глобальными; addr - это ip юзера
-module.exports = (login, pwd, addr) => {
+// cptId        - Id капчи (таймстамп)
+// capt         - собственно капча (6 цифр)
+// captchaIdArr - глобальный массив, содержащий активные Id капчей
+// captNumGen   - глобальная функция, генерирующая капчу по ее Id
+module.exports = (login, pwd, cptId, capt, addr) => {
    
    // Номер дня от начала юникс-эры
    let dt = ~~(Date.now()/(1000 * 3600 * 24));
@@ -50,6 +54,15 @@ module.exports = (login, pwd, addr) => {
    
    // Если пришел пароль
    else {
+      // Сначала проверяем капчу; в любом случае убиваем ее
+      let cptIdIndex = captchaIdArr.indexOf(Number(cptId));
+      if (cptIdIndex > -1) {
+         captchaIdArr.splice(cptIdIndex, 1);
+         if (captNumGen(cptId) != capt) return 0;         
+      }
+      else return 0;
+      
+      // Если он утверждает, что он администратор
       if (login == "admin") {
          if (hash(pwd, 'z') == admPwd)
             return {token: '¤'+hash(dt+addr+login, salt), roles: ["root"]};

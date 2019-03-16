@@ -25,12 +25,14 @@ module.exports = (post, addr) => {
    // Разбираем переданные в аргументе POST-данные
    let postDt = {};   
    try {postDt = JSON.parse(post);} catch (e) {return "none";}   
-   if (!postDt.f) postDt.f = "noFunc";
-   if (!postDt.l) postDt.l = "noLogin";
-   if (!postDt.p) postDt.p = "noPassw";
+   if (!postDt.f)  postDt.f  = "noFunc";
+   if (!postDt.l)  postDt.l  = "noLogin";
+   if (!postDt.p)  postDt.p  = "noPassw";
+   if (!postDt.ci) postDt.ci = "noCptId";
+   if (!postDt.c)  postDt.c  = "noCapt";
       
    // Проверяем результаты аутентификации юзера
-   let authResult = auth(postDt.l, postDt.p, addr);
+   let authResult = auth(postDt.l, postDt.p, postDt.ci, postDt.c, addr);
    if (!authResult) return "none";
       
    // Проверяем полномочия юзера на запрашиваемую функцию
