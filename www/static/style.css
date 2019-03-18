@@ -12,6 +12,11 @@ body {
    background:#f6f3f0; font:12pt fnt, sans-serif;
    margin:0px; padding:0px;
 }
+h1, h2, h3 {
+   color:#963; text-align:center; margin:12pt 0px 6pt;
+}
+h3 {
+   font-size:1.1em;}
    
 /* ОКНА С ФОРМОЙ АВТОРИЗАЦИИ И ИНФОРМАЦИОННЫМ СООБЩЕНИЕМ
    ----------------------------------------------------- */
@@ -93,10 +98,30 @@ footer a {
 footer a:hover {
    text-decoration:underline}
 
-/* СОДЕРЖАТЕЛЬНЫЕ БЛОКИ СТРАНИЦЫ
+/* СОДЕРЖАТЕЛЬНЫЕ БЛОКИ СТРАНИЦЫ: ОБЩИЕ СТИЛИ
    ----------------------------------------------------- */
 section {
-   display:none; position:absolute; width:100%; left:0px; top:70pt;}
+   display:none; position:absolute; width:100%; left:0px; top:70pt;
+   text-align:center;}
+section button {
+   background:#963; color:#ff6; border:none; cursor: pointer;
+   margin:20px 0px; padding:3px 10px; font-weight:bold;
+   border-radius:3px;}
+section input, section select {
+   font-size:1em; padding:3px; border:1px solid #b0844d; border-radius:3px;}
+
+/* БЛОК РАБОТЫ С ПОЛЬЗОВАТЕЛЯМИ
+   ----------------------------------------------------- */
+section#users input, section#users select {
+   display:block; width:15em; max-width:98%; margin:3pt auto;}
+section#users select {
+   margin:auto; background:white;}
+section#users button {
+   display:block; margin:3pt auto;}
+section#users button#addUser {
+   background:none; font-weight:normal; color:#963;}
+section#users button#addUser:hover {
+   text-decoration:underline; color:#b0844d;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
@@ -114,8 +139,7 @@ section {
       display:block; padding:3px; background:#b0844d;}
    nav li.sel {
       box-shadow:none; border:none; border-radius:0px;
-      background:#b0844d; color:#ff6;
-   }
+      background:#b0844d; color:#ff6;   }
    section {
       top:48pt;}
 }

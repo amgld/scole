@@ -26,8 +26,13 @@ const DOCROOT  = __dirname + "/www/",
          key: fs.readFileSync(__dirname  + "/ssl/" + KEYPATH),
          cert: fs.readFileSync(__dirname + "/ssl/" + CERTPATH)      
       };
+
 global.salt   = SALT;
 global.admPwd = PWD;
+
+// Инициализация коллекций базы данных
+global.db = {};
+db.users  = new nedb({filename: "db/users.db", autoload: true});
 
 // Генерирование числового значения капчи по её Id
 global.captNumGen = str => {
@@ -63,7 +68,7 @@ const sendOtvet = (otvet, kod, contType, content) => {
 // Собственно цикл обработки запроса
 https.createServer(httpsOpt, (zapros, otvet) => {
    
-   // Получаем параметры запроса   
+   // Получаем параметры запроса
    let pathname = url.parse(zapros.url).pathname;
    if (!pathname.includes(".")) pathname += "/index.html";
    pathname = pathname.replace("//", '/').replace(/\.\./g, '');
