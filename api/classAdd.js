@@ -9,5 +9,25 @@
 
 // Возвращает "success" либо "none"
 module.exports = newClassName => {
+   
+   // Проверяем формат пришедшего имени класса
+   const reClassName = /\d{1,2}[A-Я]{1}/;
+   if (!reClassName.test(newClassName)) return "none";
+   
+   // Проверяем, нет ли уже такого класса в списке,
+   // если нет - добавляем, если есть - возвращаем ошибку
+   db.curric.find(
+      {type: "class", className: newClassName},
+      (err, result) => {
+         if (result.length) return("none");
+         else {
+            let subNames = ["мальч", "дев", "иняз1", "иняз2", "инф1", "инф2"]
+                         . map(x => newClassName + '-' + x);
+            db.curric.insert(
+               {type: "class", className: newClassName, groups: subNames});
+            return("success");
+         }
+      }
+   );
    return "success";
 };
