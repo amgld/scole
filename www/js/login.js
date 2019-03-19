@@ -10,18 +10,21 @@
 dqs("#content").innerHTML += `
   <article>
     <h1>ЭЖ «Шкала»</h1>
+    <input type="text" readonly id="uCateg" value="Учащийся"
+           onClick="turnCateg()">
     <input type="text" id="uLogin" placeholder="Логин" autofocus
-           onKeyDown="if (event.keyCode == 13) submLogin();">
+           onKeyDown="if (event.keyCode == 13) submLogin()">
     <input type="password" id="uPwd" placeholder="Пароль"
-           onKeyDown="if (event.keyCode == 13) submLogin();">
+           onKeyDown="if (event.keyCode == 13) submLogin()">
     <img>
     <input type="tsxt" id="uCpt" placeholder="Код с картинки"
-           onKeyDown="if (event.keyCode == 13) submLogin();">
-    <button type="button" onClick="submLogin();">Вход</button>
+           onKeyDown="if (event.keyCode == 13) submLogin()">
+    <button type="button" onClick="submLogin()">Вход</button>
     <div id="loginWarn">Не введен логин/пароль/код!</div>
   </article>
 `;
-let uToken  = '', uLogin  = '', uCpt = '', apiResp = '', captId = 0;
+let uToken = '', uCateg = '', uLogin = '', uCpt = '', apiResp = '', captId = 0,
+    uTipes = {"Учащийся": "pupil", "Сотрудник": "staff", "Родитель": "par"};
 if (!uLogin) dqs("article").style.display = "block";
 
 // Параметры запроса к API сервера
@@ -36,15 +39,25 @@ const getCapt = async () => {
 };
 getCapt();
 
+// Обработка кликания на поле категории пользователя (циклическое переключение)
+const turnCateg = () => {
+   let cond = dqs("#uCateg").value;
+   let valNew = (cond == "Учащийся") ?
+      "Сотрудник" : ((cond == "Сотрудник") ? "Родитель" : "Учащийся");
+   dqs("#uCateg").value = valNew;
+}
+
 // Обработка отправки логина, пароля и капчи
 const submLogin = () => {
    uLogin = dqs("#uLogin").value.trim();
+   uCateg = uTipes[dqs("#uCateg").value];
    uCpt = dqs("#uCpt").value.trim();
    if (!uLogin || !uPwd || !uCpt) dqs("#loginWarn").style.display = "block";
    else {
       dqs("#loginWarn").style.display = "none";
       (async () => {
          apiOpt.body = `{
+            "t":  "${uCateg}",
             "l":  "${uLogin}",
             "p":  "${dqs('#uPwd').value.trim()}",
             "f":  "login",

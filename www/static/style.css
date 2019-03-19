@@ -17,6 +17,9 @@ h1, h2, h3 {
 }
 h3 {
    font-size:1.1em;}
+select {
+   -webkit-appearance: none; -moz-appearance: none;
+   -ms-appearance: none; appearance: none;}
    
 /* ОКНА С ФОРМОЙ АВТОРИЗАЦИИ И ИНФОРМАЦИОННЫМ СООБЩЕНИЕМ
    ----------------------------------------------------- */
@@ -44,6 +47,9 @@ article input {
    background:#f6f3f0; border:none; border-bottom:1px solid #963;}
 article input:focus {
    background:#fff; outline:none;}
+article input#uCateg, article input#uCateg:focus {
+   background:#e6ded5; text-align:center; font-size:0.9em;
+   font-weight:bold; color:#963; border:none; padding:3px;}
 article button, output button {
    background:#963; color:#ff6; border:none;
    margin:20px 0px; font-weight:bold; cursor: pointer;}
@@ -66,9 +72,7 @@ header span#chPwd, header a {
 header a {
    padding-right:10px;}
 header select {
-   background:#963; color:#ff6; font-size:12pt; border:none; padding-top:0px;
-   -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none;
-   appearance: none;}
+   background:#963; color:#ff6; font-size:12pt; border:none; padding-top:0px;}
 nav {
    top:22pt; background:#b0844d; text-align:center;}
 nav ul {
@@ -112,16 +116,21 @@ section input, section select {
 
 /* БЛОК РАБОТЫ С ПОЛЬЗОВАТЕЛЯМИ
    ----------------------------------------------------- */
-section#users input, section#users select {
+section#users input {
    display:block; width:15em; max-width:98%; margin:3pt auto;}
 section#users select {
-   margin:auto; background:white;}
+   margin:3pt auto; background:white;}
 section#users button {
    display:block; margin:3pt auto;}
 section#users button#addUser {
    background:none; font-weight:normal; color:#963;}
 section#users button#addUser:hover {
    text-decoration:underline; color:#b0844d;}
+   
+/* БЛОК РАБОТЫ СО СПИСКОМ КЛАССОВ
+   ----------------------------------------------------- */
+section#classes select {
+   margin:3pt; background:white;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */

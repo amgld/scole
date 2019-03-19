@@ -31,8 +31,11 @@ global.salt   = SALT;
 global.admPwd = PWD;
 
 // Инициализация коллекций базы данных
-global.db = {};
-db.users  = new nedb({filename: "db/users.db", autoload: true});
+global.db  = {};
+db.staff    = new nedb({filename: "db/staff.db",    autoload: true});
+db.pupils  = new nedb({filename: "db/pupils.db",  autoload: true});
+db.curric  = new nedb({filename: "db/curric.db",  autoload: true});
+db.distrib = new nedb({filename: "db/distrib.db", autoload: true});
 
 // Генерирование числового значения капчи по её Id
 global.captNumGen = str => {
