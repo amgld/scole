@@ -7,11 +7,14 @@
  */
 "use strict";
 
-const auth = require("./auth");
+const
+   auth     = require("./auth"),
+   classAdd = require("./classAdd");
 
 // Полномочия (доступные функции) пользователей в зависимости от их роли
 const RIGHTS = {
-   "root":    ["usList", "admAdd", "admDel", "userAdd", "userEdit", "userDel"],
+   "root":    [
+      "classAdd", "usList", "admAdd", "admDel", "userAdd", "userEdit", "userDel"],
    "admin":   ["usList", "userAdd", "userEdit", "userDel"],
    "teacher": [],
    "tutor":   [],
@@ -23,8 +26,9 @@ for (let item in RIGHTS) RIGHTS[item].push("login");
 module.exports = (post, addr) => {   
    
    // Разбираем переданные в аргументе POST-данные
-   let postDt = {};   
-   try {postDt = JSON.parse(post);} catch (e) {return "none";}   
+   let postDt = {};
+   try {postDt = JSON.parse(post);} catch (e) {return "none";}
+   if (!postDt.t)  postDt.t  = "staff";
    if (!postDt.f)  postDt.f  = "noFunc";
    if (!postDt.l)  postDt.l  = "noLogin";
    if (!postDt.p)  postDt.p  = "noPassw";
@@ -32,7 +36,7 @@ module.exports = (post, addr) => {
    if (!postDt.c)  postDt.c  = "noCapt";
       
    // Проверяем результаты аутентификации юзера
-   let authResult = auth(postDt.l, postDt.p, postDt.ci, postDt.c, addr);
+   let authResult = auth(postDt.t, postDt.l, postDt.p, postDt.ci, postDt.c, addr);
    if (!authResult) return "none";
       
    // Проверяем полномочия юзера на запрашиваемую функцию
@@ -48,7 +52,13 @@ module.exports = (post, addr) => {
       case "login":
          return JSON.stringify(authResult);
          break;
-            
+         
+      // Добавление номера класса (типа 10Б) в коллекцию curric
+      case "classAdd":
+         if (!postDt.z) return "none"; 
+         return classAdd(postDt.z);
+         break;
+      
       default:
          return "none";
          break;

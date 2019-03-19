@@ -7,6 +7,25 @@
  */
 "use strict";
 
+// Отправка запроса к API для добавления класса
+const classAdd = () => {
+   let newClassName = dqs("#addClassNum").value.toString()
+                    + dqs("#addClassLit").value;
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "t":  "a",
+      "l":  "${uLogin}",
+      "p":  "${uToken}",
+      "f":  "classAdd",
+      "z":  "${newClassName}"
+   }`};
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") info(1, "Ошибка: запрошенная операция отклонена.");
+      else info(0, `${newClassName} класс успешно добавлен.`);
+   })();
+};
+
+// Формирование контента странички
 dqs("#content").innerHTML += `
    <section id="classes">
      <select id="addClassNum"></select>
