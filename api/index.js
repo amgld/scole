@@ -7,9 +7,8 @@
  */
 "use strict";
 
-const
-   auth     = require("./auth"),
-   classAdd = require("./classAdd");
+const auth     = require("./auth"),
+      classAdd = require("./classAdd");
 
 // Полномочия (доступные функции) пользователей в зависимости от их роли
 const RIGHTS = {
@@ -23,7 +22,7 @@ const RIGHTS = {
 };
 for (let item in RIGHTS) RIGHTS[item].push("login");
 
-module.exports = (post, addr) => {   
+module.exports = async (post, addr) => {   
    
    // Разбираем переданные в аргументе POST-данные
    let postDt = {};
@@ -36,7 +35,8 @@ module.exports = (post, addr) => {
    if (!postDt.c)  postDt.c  = "noCapt";
       
    // Проверяем результаты аутентификации юзера
-   let authResult = auth(postDt.t, postDt.l, postDt.p, postDt.ci, postDt.c, addr);
+   let authResult = await auth(
+      postDt.t, postDt.l, postDt.p, postDt.ci, postDt.c, addr);
    if (!authResult) return "none";
       
    // Проверяем полномочия юзера на запрашиваемую функцию
@@ -55,8 +55,9 @@ module.exports = (post, addr) => {
          
       // Добавление номера класса (типа 10Б) в коллекцию curric
       case "classAdd":
-         if (!postDt.z) return "none"; 
-         return classAdd(postDt.z);
+         if (!postDt.z) return "none";
+         let clAddResp = await classAdd(postDt.z);
+         return clAddResp;
          break;
       
       default:

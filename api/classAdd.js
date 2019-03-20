@@ -8,7 +8,18 @@
 "use strict";
 
 // Возвращает "success" либо "none"
-module.exports = newClassName => {
+module.exports = async newClassName => {
+   
+   // Промисификатор метода find() работы с базой
+   // Пример вызова: let res = await dbFind("curric", {type: "class"}) 
+   const dbFind = (collectionName, objFind) => {
+      return new Promise((resolve, reject) => {
+         db[collectionName].find(objFind, (err, docs) => {
+            if (err) reject(err);
+            else     resolve(docs);
+         })
+      })
+   };
    
    // Проверяем формат пришедшего имени класса
    const reClassName = /\d{1,2}[A-Я]{1}/;
@@ -16,18 +27,13 @@ module.exports = newClassName => {
    
    // Проверяем, нет ли уже такого класса в списке,
    // если нет - добавляем, если есть - возвращаем ошибку
-   db.curric.find(
-      {type: "class", className: newClassName},
-      (err, result) => {
-         if (result.length) return("none");
-         else {
-            let subNames = ["мальч", "дев", "иняз1", "иняз2", "инф1", "инф2"]
-                         . map(x => newClassName + '-' + x);
-            db.curric.insert(
-               {type: "class", className: newClassName, groups: subNames});
-            return("success");
-         }
-      }
-   );
-   return "success";
+   let res = await dbFind("curric", {type: "class", className: newClassName});
+   if (res.length) return "none";
+   else {
+      let subNames = ["мальч", "дев", "иняз1", "иняз2", "инф1", "инф2"]
+                   . map(x => newClassName + '-' + x);
+      db.curric.insert(
+         {type: "class", className: newClassName, groups: subNames});
+      return "success";
+   }   
 };
