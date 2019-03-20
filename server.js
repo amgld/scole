@@ -7,6 +7,8 @@
  */
 "use strict";
 
+/* ПОДКЛЮЧЕНИЕ МОДУЛЕЙ И ОПРЕДЕЛЕНИЕ ГЛОБАЛЬНЫХ КОНСТАНТ
+ * ----------------------------------------------------------------------- */
 const DOCROOT  = __dirname + "/www/",
       LOGROOT  = __dirname + "/logs/",
 
@@ -30,12 +32,18 @@ const DOCROOT  = __dirname + "/www/",
 global.salt   = SALT;
 global.admPwd = PWD;
 
-// Инициализация коллекций базы данных
+
+/* ИНИЦИАЛИЗАЦИЯ КОЛЛЕКЦИЙ БАЗЫ ДАННЫХ
+ * ----------------------------------------------------------------------- */
 global.db  = {};
 db.staff    = new nedb({filename: "db/staff.db",    autoload: true});
 db.pupils  = new nedb({filename: "db/pupils.db",  autoload: true});
 db.curric  = new nedb({filename: "db/curric.db",  autoload: true});
 db.distrib = new nedb({filename: "db/distrib.db", autoload: true});
+
+
+/* ОПРЕДЕЛЕНИЯ ФУНКЦИЙ
+ * ----------------------------------------------------------------------- */
 
 // Генерирование числового значения капчи по её Id
 global.captNumGen = str => {
@@ -48,6 +56,30 @@ global.captNumGen = str => {
    return captNum;
 }
 
+// Промисификатор метода find() работы с базой
+// Пример вызова: let res = await dbFind("curric", {type: "class"}) 
+global.dbFind = (collectionName, objFind) => {
+   return new Promise((resolve, reject) => {
+      db[collectionName].find(objFind, (err, docs) => {
+         if (err) reject(err);
+         else     resolve(docs);
+      })
+   })
+};
+
+// Отправка ответа (kod - код состояния, contType - mime-тип, content - тело)
+const sendOtvet = (otvet, kod, contType, content) => {
+   otvet.writeHead(kod, {
+      "Content-Type": contType, "Server": SERVER,
+      "Strict-Transport-Security": "max-age=32000000"
+   });
+   otvet.end(content);
+}
+
+
+/* ОБЪЕКТЫ, ОБСЛУЖИВАЮЩИЕ РАБОТУ С КАПЧЕЙ
+ * ----------------------------------------------------------------------- */
+
 // Параметры отдаваемой капчи
 const captOpt = {
    bkR: 246, bkG: 243, bkB: 240, // фоновый цвет
@@ -59,16 +91,9 @@ const captOpt = {
 global.captchaIdArr = [];
 const CAPTDEATH = 180;
 
-// Отправка ответа (kod - код состояния, contType - mime-тип, content - тело)
-const sendOtvet = (otvet, kod, contType, content) => {
-   otvet.writeHead(kod, {
-      "Content-Type": contType, "Server": SERVER,
-      "Strict-Transport-Security": "max-age=32000000"
-   });
-   otvet.end(content);
-}
 
-// Собственно цикл обработки запроса
+/* СОБСТВЕННО ЦИКЛ ОБРАБОТКИ ЗАПРОСА
+ * ----------------------------------------------------------------------- */
 https.createServer(httpsOpt, (zapros, otvet) => {
    
    // Получаем параметры запроса
@@ -122,4 +147,5 @@ https.createServer(httpsOpt, (zapros, otvet) => {
    
 }).listen(PORT);
 
-console.info(`Сервер стартовал на порту ${PORT}`);
+let now = (new Date()).toString().replace(/ \(.*\)/, '');
+console.info(`${now} Сервер Scole стартовал на порту ${PORT}`);

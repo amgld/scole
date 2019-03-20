@@ -20,7 +20,9 @@ const classAdd = () => {
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
-      if (apiResp == "none") info(1, "Ошибка: запрошенная операция отклонена.");
+      if (apiResp == "none")
+         info(1,
+         "Ошибка: неверное название класса, либо такой класс уже существует.");
       else info(0, `${newClassName} класс успешно добавлен.`);
    })();
 };

@@ -10,17 +10,6 @@
 // Возвращает "success" либо "none"
 module.exports = async newClassName => {
    
-   // Промисификатор метода find() работы с базой
-   // Пример вызова: let res = await dbFind("curric", {type: "class"}) 
-   const dbFind = (collectionName, objFind) => {
-      return new Promise((resolve, reject) => {
-         db[collectionName].find(objFind, (err, docs) => {
-            if (err) reject(err);
-            else     resolve(docs);
-         })
-      })
-   };
-   
    // Проверяем формат пришедшего имени класса
    const reClassName = /\d{1,2}[A-Я]{1}/;
    if (!reClassName.test(newClassName)) return "none";
