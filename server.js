@@ -56,7 +56,7 @@ global.captNumGen = str => {
    return captNum;
 }
 
-// Промисификатор метода find() работы с базой
+// Промисификатор метода find() работы с базой db
 // Пример вызова: let res = await dbFind("curric", {type: "class"}) 
 global.dbFind = (collectionName, objFind) => {
    return new Promise((resolve, reject) => {
@@ -107,7 +107,7 @@ https.createServer(httpsOpt, (zapros, otvet) => {
    if (pathname == "/a.a") sendOtvet(otvet, 200, "text/plain", ADMIN);
    
    // Если пришел запрос капчи, отдаем ее вместе с ее Id (в заголовке X-Cpt)
-   if (pathname == "/cpt.a") {
+   else if (pathname == "/cpt.a") {
       let tm = Date.now();
       // Удаляем все устаревшие Id капчи и кладем новый Id
       captchaIdArr = captchaIdArr.filter(
@@ -148,4 +148,4 @@ https.createServer(httpsOpt, (zapros, otvet) => {
 }).listen(PORT);
 
 let now = (new Date()).toString().replace(/ \(.*\)/, '');
-console.info(`${now} Сервер Scole стартовал на порту ${PORT}`);
+console.info(`${now} ScoleServer стартовал на порту ${PORT}`);
