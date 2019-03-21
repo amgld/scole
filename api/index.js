@@ -7,13 +7,15 @@
  */
 "use strict";
 
-const auth     = require("./auth"),
-      classAdd = require("./classAdd");
+const auth        = require("./auth"),
+      classAdd    = require("./classAdd"),
+      classesList = require("./classesList.js");
 
 // Полномочия (доступные функции) пользователей в зависимости от их роли
 const RIGHTS = {
    "root":    [
-      "classAdd", "usList", "admAdd", "admDel", "userAdd", "userEdit", "userDel"],
+      "classAdd", "classesList", "usList", "admAdd", "admDel",
+      "userAdd", "userEdit", "userDel"],
    "admin":   ["usList", "userAdd", "userEdit", "userDel"],
    "teacher": [],
    "tutor":   [],
@@ -58,6 +60,12 @@ module.exports = async (post, addr) => {
          if (!postDt.z) return "none";
          let clAddResp = await classAdd(postDt.z);
          return clAddResp;
+         break;
+         
+      // Просмотр списка имеющихся классов в коллекции curric
+      case "classesList":
+         let clListResp = await classesList();
+         return JSON.stringify(clListResp);
          break;
       
       default:

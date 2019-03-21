@@ -21,6 +21,10 @@ const blockShow = menuItem => {
    for (let sect of document.querySelectorAll("section"))
       sect.style.display = "none";
    dqs(`#${menuItem}`).style.display = "block";
+   
+   // Вызываем необходимую для этого блока функцию для подгрузки контента
+   // (функции подгрузки для каждого блока определены в самих скриптах блоков)
+   getContent[menuItem]();
 };
 
 // Генерирование меню в зависимости от выбранной роли пользователя
