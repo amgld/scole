@@ -132,7 +132,7 @@ section#users button#addUser:hover {
 section#classes select {
    margin:3pt; background:white;}
 section#classes div {
-   width:800px; max-width:98%; text-align:left; margin:auto;}
+   display:inline-block; max-width:98%; text-align:left;}
 section#classes span {
    display:inline-block; margin:3px; padding:3px;
    width:3.2em; background:#e6ded5;}
