@@ -15,9 +15,11 @@ const clListPubl = clArr => {
    // Сначала сортируем массив классов правильным образом
    let massiv = clArr.map(x => x.padStart(3, '0')).sort()
                  . map(x => x.replace(/^0/, ''));
-   // Публикуем с иконками удаления   
-   let clListElem = dqs("#classes div");
-   clListElem.innerHTML = massiv.join("; ");   
+   // Публикуем с иконками удаления
+   let cont = '';
+   for (let currCl of massiv) cont += `
+      <span><div>&#10060;</div>${currCl}</span>`;
+   dqs("#classes div").innerHTML = cont;   
 };
 
 // Отправка запроса к API для добавления класса
