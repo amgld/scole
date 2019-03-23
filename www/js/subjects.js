@@ -1,5 +1,5 @@
 /**
- *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: БЛОК ТАКОЙ-ТО
+ *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: БЛОК РЕДАКТИРОВАНИЯ СПИСКА ПРЕДМЕТОВ
  * 
  *   Copyright © А. М. Гольдин, 2019. a@goldin.su
  *   Лицензия CC BY-NC-ND Version 4.0
@@ -7,6 +7,96 @@
  */
 "use strict";
 
+// Объект названий предметов {"s110": "Русский язык", ...}
+// (в ini.js определен еще объект названий предметов по умолчанию subjDef)
+let subjList = {};
+
+// Публикация списка предметов на страничке из объекта sbObj
+const sbListPubl = sbObj => {
+   // Сначала сортируем объект по числовым полям ключей (d480 > s110),
+   // затем публикуем с иконками удаления (только для ключей, начинающихся с d)
+   let sbObjSort = subjSort(sbObj); // определена в ini.js
+   let cont = '';
+   for (let sbKey in sbObjSort) {
+      let divDel = (sbKey[0] == 'd') ?
+          `<div onclick=subjDel("${sbKey}")>&#10060;</div>` :
+          "<div class='noCur'></div>";
+      cont +=
+         `<span>${divDel}${sbKey.substr(1,3)}&emsp;${sbObjSort[sbKey]}</span>`;
+   }
+   dqs("#sbList").innerHTML = cont;  
+};
+
+/*
+// Отправка запроса к API для добавления класса
+const classAdd = () => {
+   let newClassName = dqs("#addClassNum").value.toString()
+                    + dqs("#addClassLit").value;
+   dqs("#addClassNum").value = '1';
+   dqs("#addClassLit").value = 'А';
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "t":  "a", "l":  "${uLogin}", "p":  "${uToken}",
+      "f":  "classAdd",
+      "z":  "${newClassName}"
+   }`};
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") info(1, "Такой класс уже существует.");
+      else {
+         info(0, `${newClassName} класс успешно добавлен.`);
+         classesList.push(newClassName);
+         clListPubl(classesList);
+      }
+   })();
+};
+*/
+
+/*
+// Удаление класса
+const classNumDel = clNum => {
+   if (confirm("Вы уверены?")) {
+      let apiOpt = {method: "POST", cache: "no-cache", body: `{
+         "t":  "a", "l":  "${uLogin}", "p":  "${uToken}",
+         "f":  "classDel",
+         "z":  "${clNum}"
+      }`};
+      (async () => {
+         let apiResp = await (await fetch("/", apiOpt)).text();
+         if (apiResp == "none") info(1, "Ошибка на сервере.");
+         else {
+            info(0, clNum + " удален!");
+            let clIndex = classesList.indexOf(clNum);
+            if (clIndex > -1) classesList.splice(clIndex, 1);
+            clListPubl(classesList);
+         }
+      })();      
+   }
+}
+*/
+
+// Формирование контента странички
 dqs("#content").innerHTML += `
-   <section id="subjects">Блок «Предметы»</section>
+   <section id="subjects">
+     <h3>Список предметов</h3>
+     <div id="sbList"></div><br>
+     <input type="text" id="sbNewKod" placeholder="Условный номер" autofocus>
+     <input type="text" id="sbNewName" placeholder="Наименование">
+     <button type="button" onclick="subjAdd()">Добавить</button>
+   </section>
 `;
+
+// Динамически подгружаем список предметов в объект subjList (сливаем объект
+// названий предметов по умолчанию subjDef и то, что получено с помощью API)
+// и публикуем его на страничке (имя метода = имени пункта меню!)
+getContent.subjects = () => {
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "t":  "a", "l":  "${uLogin}", "p":  "${uToken}",
+      "f":  "subjList"
+   }`};
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      let subjListDop = JSON.parse(apiResp);
+      subjList = {...subjDef, ...subjListDop};
+      sbListPubl(subjList);
+   })();
+}

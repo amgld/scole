@@ -1,5 +1,5 @@
 /**
- *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: БЛОК ТАКОЙ-ТО
+ *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: БЛОК РЕДАКТИРОВАНИЯ СПИСКА КЛАССОВ
  * 
  *   Copyright © А. М. Гольдин, 2019. a@goldin.su
  *   Лицензия CC BY-NC-ND Version 4.0
@@ -16,10 +16,9 @@ const clListPubl = clArr => {
       dqs("#clList").innerHTML = "Классов не найдено";
       return;
    }
-   // Сначала сортируем массив классов правильным образом
-   let massiv = clArr.map(x => x.padStart(3, '0')).sort()
-                 . map(x => x.replace(/^0/, ''));
-   // Публикуем с иконками удаления
+   // Сначала сортируем массив классов правильным образом,
+   // затем публикуем с иконками удаления
+   let massiv = classSort(clArr); // определена в ini.js
    let cont = '',
        currNum = Number(massiv[0].substr(0, massiv[0].length - 1));
    for (let currCl of massiv) {            

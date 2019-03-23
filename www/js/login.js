@@ -12,7 +12,7 @@ dqs("#content").innerHTML += `
     <h1>ЭЖ «Шкала»</h1>
     <input type="text" readonly id="uCateg" value="Учащийся"
            onClick="turnCateg()">
-    <input type="text" id="uLogin" placeholder="Логин" autofocus
+    <input type="text" id="uLogin" placeholder="Логин"
            onKeyDown="if (event.keyCode == 13) submLogin()">
     <input type="password" id="uPwd" placeholder="Пароль"
            onKeyDown="if (event.keyCode == 13) submLogin()">
@@ -23,6 +23,7 @@ dqs("#content").innerHTML += `
     <div id="loginWarn">Не введен логин/пароль/код!</div>
   </article>
 `;
+
 let uToken = '', uCateg = '', uLogin = '', uCpt = '', apiResp = '', captId = 0,
     uTipes = {"Учащийся": "pupil", "Сотрудник": "staff", "Родитель": "par"};
 if (!uLogin) dqs("article").style.display = "block";
@@ -83,3 +84,4 @@ const submLogin = () => {
       })();
    }
 }
+dqs("#uLogin").focus();

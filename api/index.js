@@ -10,12 +10,13 @@
 const auth        = require("./auth"),
       classAdd    = require("./classAdd"),
       classesList = require("./classesList"),
-      classDel    = require("./classDel");
+      classDel    = require("./classDel"),
+      subjList    = require("./subjList");
 
 // Полномочия (доступные функции) пользователей в зависимости от их роли
 const RIGHTS = {
    "root":    [
-      "classAdd", "classesList", "classDel"],
+      "classAdd", "classesList", "classDel", "subjList"],
    "admin":   [],
    "teacher": [],
    "tutor":   [],
@@ -71,6 +72,12 @@ module.exports = async (post, addr) => {
       // Удаление класса из списка классов в коллекции curric
       case "classDel":         
          return classDel(postDt.z);
+         break;
+         
+      // Просмотр списка дополнительных предметов в коллекции curric
+      case "subjList":         
+         let sbListResp = await subjList();
+         return JSON.stringify(sbListResp);
          break;
       
       default:

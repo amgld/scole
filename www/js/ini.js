@@ -87,3 +87,10 @@ const dqs = elem => document.querySelector(elem);
 
 // Экспорт функции для среды nodejs
 const ex = obj => {if (typeof(module) != "undefined") module.export = obj};
+
+// Сортировка массива названий классов правильным образом (11А > 1А)
+const classSort = classArr => classArr.map(x => x.padStart(3, '0')).sort()
+                . map(x => x.replace(/^0/, ''));
+
+// Сортировка списка предметов правильным образом по ключам (d480 > s110)
+const subjSort = sbObj => sbObj;

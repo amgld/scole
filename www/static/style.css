@@ -17,6 +17,8 @@ h1, h2, h3 {
 }
 h3 {
    font-size:1.1em;}
+h3:first-child {
+   margin-top:0px;}
 select {
    -webkit-appearance: none; -moz-appearance: none;
    -ms-appearance: none; appearance: none;}
@@ -106,7 +108,7 @@ footer a:hover {
    ----------------------------------------------------- */
 section {
    display:none; position:absolute; width:100%; left:0px; top:70pt;
-   text-align:center;}
+   text-align:center; padding-bottom:60px;}
 section button {
    background:#963; color:#ff6; border:none; cursor: pointer;
    margin:20px 0px; padding:3px 10px; font-weight:bold;
@@ -140,6 +142,24 @@ section#classes span div {
    display:inline; margin-right:3px;}
 section#classes span div:hover {
    cursor:pointer;}
+
+/* БЛОК РАБОТЫ СО СПИСКОМ ПРЕДМЕТОВ
+   ----------------------------------------------------- */
+section#subjects div {
+   display:inline-block; max-width:98%; text-align:left;}
+section#subjects span, section#subjects input {
+   display:block; margin:3px auto; padding:3px;
+   width:25em; max-width:98%; background:#e6ded5;}
+section#subjects input {
+   background:#fff; max-width:95%;}
+section#subjects input:first-of-type {
+   margin-top:30px;}
+section#subjects span div {
+   display:inline-block; width:1.5em; margin-right:3px;}
+section#subjects span div:hover {
+   cursor:pointer;}
+section#subjects span div.noCur:hover {
+   cursor:default;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
