@@ -77,15 +77,13 @@ const classNumDel = clNum => {
 }
 
 // Формирование контента странички
-dqs("#content").innerHTML += `
-   <section id="classes">
-     <h3>Список классов</h3>
-     <div id="clList"></div><br>
-     <select id="addClassNum"></select>
-     <select id="addClassLit"></select>
-     <button type="button" onclick="classAdd()">Добавить</button>
-   </section>
-`;
+createSection("classes", `
+   <h3>Список классов</h3>
+   <div id="clList"></div><br>
+   <select id="addClassNum"></select>
+   <select id="addClassLit"></select>
+   <button type="button" onclick="classAdd()">Добавить</button>
+`);
 
 // Формирование опций селектов для добавления класса
 let clNumOpt = '', clLitOpt = '', clLiters = "АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЭЮЯ";

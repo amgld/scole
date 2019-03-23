@@ -7,6 +7,6 @@
  */
 "use strict";
 
-dqs("#content").innerHTML += `
-   <section id="admins">Блок «Администраторы»</section>
-`;
+createSection("admins", `
+   Блок «Администраторы»
+`);

@@ -48,11 +48,10 @@ const userAddEdit = () => {
    dqs("#addEditUser").innerHTML = '';
 }
 
-dqs("#content").innerHTML += `
-   <section id="users">
+// Формирование контента странички
+createSection("users", `
    <button type="button" id="addUser" onclick="userFormGen('add')">
       + Добавить
    </button>
    <div id="addEditUser"></div>
-   </section>
-`;
+`);

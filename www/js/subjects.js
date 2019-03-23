@@ -75,15 +75,13 @@ const classNumDel = clNum => {
 */
 
 // Формирование контента странички
-dqs("#content").innerHTML += `
-   <section id="subjects">
-     <h3>Список предметов</h3>
-     <div id="sbList"></div><br>
-     <input type="text" id="sbNewKod" placeholder="Условный номер" autofocus>
-     <input type="text" id="sbNewName" placeholder="Наименование">
-     <button type="button" onclick="subjAdd()">Добавить</button>
-   </section>
-`;
+createSection("subjects", `
+   <h3>Список предметов</h3>
+   <div id="sbList"></div><br>
+   <input type="text" id="sbNewKod" placeholder="Условный номер" autofocus>
+   <input type="text" id="sbNewName" placeholder="Наименование">
+   <button type="button" onclick="subjAdd()">Добавить</button>
+`);
 
 // Динамически подгружаем список предметов в объект subjList (сливаем объект
 // названий предметов по умолчанию subjDef и то, что получено с помощью API)

@@ -1,5 +1,5 @@
 /**
- *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: ИНИЦИАЛИЗАЦИЯ КОНСТАНТ, ФУНКЦИЙ И БАЗЫ ДАННЫХ
+ *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: ИНИЦИАЛИЗАЦИЯ КОНСТАНТ И ФУНКЦИЙ
  * 
  *   Copyright © А. М. Гольдин, 2019. a@goldin.su
  *   Лицензия CC BY-NC-ND Version 4.0
@@ -84,6 +84,16 @@ let getContent = {};
 
 // Просто удобное сокращение :)
 const dqs = elem => document.querySelector(elem);
+
+// Создание нового элемента section на странице с id="newId"
+// и наполнение его содержимым inner
+let elems = {};
+const createSection = (newId, inner) => {
+   elems[newId] = document.createElement("section");
+   elems[newId].id = newId;
+   elems[newId].innerHTML = inner;
+   dqs("#content").appendChild(elems[newId]);
+};
 
 // Экспорт функции для среды nodejs
 const ex = obj => {if (typeof(module) != "undefined") module.export = obj};

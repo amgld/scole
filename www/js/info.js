@@ -7,11 +7,10 @@
  */
 "use strict";
 
-dqs("#content").innerHTML += `
-  <output>
-    <div></div><button type="button" onClick="info(2);">OK</button>
-  </output>
-`;
+elems.infoElem = document.createElement("output");
+elems.infoElem.innerHTML =
+   "<div></div><button type='button' onClick='info(2)'>OK</button>";
+dqs("#content").appendChild(elems.infoElem);
 
 // Выдача окна с сообщением
 // Первый аргумент: 0 - информационное, 1 - ошибка, 2 - закрыть окно
