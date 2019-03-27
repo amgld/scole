@@ -19,10 +19,13 @@ const sbListPubl = sbObj => {
    let cont = '';
    for (let sbKey in sbObjSort) {
       let divDel = (sbKey[0] == 'd') ?
-          `<div onclick=subjDel("${sbKey}")>&#10060;</div>` :
+          `<div onclick="subjDel('${sbKey}')" title="Удалить">&#10060;</div>` :
           "<div class='noCur'></div>";
-      cont +=
-         `<span>${divDel}${sbKey.substr(1,3)}&emsp;${sbObjSort[sbKey]}</span>`;
+      let divEdit = (sbKey[0] == 'd') ?
+          `<div onclick="subjEdit.getInp('${sbKey}', '${sbObjSort[sbKey]}')" title="Редактировать">&#9874;</div>` :
+          "<div class='noCur'></div>";
+      cont += `<span id="sb-${sbKey}">${divDel}${divEdit}`
+            + `${sbKey.substr(1,3)}&emsp;${sbObjSort[sbKey]}</span>`;
    }
    dqs("#sbList").innerHTML = cont;  
 };
@@ -74,11 +77,28 @@ const classNumDel = clNum => {
 }
 */
 
+// Редактирование названия предмета
+const subjEdit = {
+   getInp: (sbKey, oldName) => {   
+      dqs(`#sb-${sbKey}`).innerHTML =
+         `<input class="sbEd" type="text" value="${oldName}"
+           onKeyDown="if (event.keyCode == 13)
+           subjEdit.subm('${sbKey}', this.value)">`;
+   },
+   subm: (sbKey, newName) => {
+      // Отправляем запрос к API на редактирование, в случае успеха публикуем
+      // обновленные данные
+      newName = newName.trim();
+      subjList[sbKey] = newName;
+      sbListPubl(subjList);
+   }
+}
+
 // Формирование контента странички
 createSection("subjects", `
    <h3>Список предметов</h3>
    <div id="sbList"></div><br>
-   <input type="text" id="sbNewKod" placeholder="Условный номер" autofocus>
+   <input type="text" id="sbNewKod" placeholder="Условный номер">
    <input type="text" id="sbNewName" placeholder="Наименование">
    <button type="button" onclick="subjAdd()">Добавить</button>
 `);

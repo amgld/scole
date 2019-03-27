@@ -36,8 +36,6 @@ const userFormGen = func => {
       <input type="password" id="newUserPwd"   placeholder="Пароль">
       <input type="password" id="newUserPwd1"  placeholder="Повтор пароля">      
       <button type="button" onclick="userAddEdit()">Сохранить</button>
-      &#10060;
-      &#10000;
    `;
    dqs("#addEditUser").innerHTML = formInner;
    dqs("#newUserLogin").focus();

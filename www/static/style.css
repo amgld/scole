@@ -154,8 +154,10 @@ section#subjects input {
    background:#fff; max-width:95%;}
 section#subjects input:first-of-type {
    margin-top:30px;}
+section#subjects input.sbEd {
+   width:90%; margin:auto;}
 section#subjects span div {
-   display:inline-block; width:1.5em; margin-right:3px;}
+   display:inline-block; width:1.5em; margin-right:3px; color:#963;}
 section#subjects span div:hover {
    cursor:pointer;}
 section#subjects span div.noCur:hover {
