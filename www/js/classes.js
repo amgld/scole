@@ -46,7 +46,7 @@ const classAdd = () => {
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
-      if (apiResp == "none") info(1, "Такой класс уже существует.");
+      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
       else {
          info(0, `${newClassName} класс успешно добавлен.`);
          classesList.push(newClassName);

@@ -30,29 +30,51 @@ const sbListPubl = sbObj => {
    dqs("#sbList").innerHTML = cont;  
 };
 
-/*
-// Отправка запроса к API для добавления класса
-const classAdd = () => {
-   let newClassName = dqs("#addClassNum").value.toString()
-                    + dqs("#addClassLit").value;
-   dqs("#addClassNum").value = '1';
-   dqs("#addClassLit").value = 'А';
+// Отправка запроса к API для добавления дополнительного предмета
+const subjAdd = () => {
+   let newSubjKey  = 'd' + dqs("#sbNewKod").value.trim();
+   let newSubjName = dqs("#sbNewName").value.trim();
+   dqs("#sbNewKod").value  = '';
+   dqs("#sbNewName").value = '';
+   
+   let rK = /^d\d{3}$/;
+   if (!rK.test(newSubjKey)) {
+      info(1, "Условный номер имеет неверный формат.");
+      return;
+   }
+   
+   if (!newSubjName) {
+      info(1, "Не указано наименование предмета.");
+      return;
+   }
+   
+   let rN = /^[A-Za-z0-9А-Яа-яЁё ]{2,30}$/;
+   if (!rN.test(newSubjName)) {
+      info(1, "Наименование предмета может содержать от 2 до 30 букв русского "
+            + "и латинского алфавитов, цифр и пробелов.");
+      return;
+   }
+   
+   if (Object.keys(subjList).includes(newSubjKey) ||
+       Object.keys(subjList).includes(newSubjKey.replace('d', 's'))) {
+      info(1, "Предмет с таким условным номером уже существует.");
+      return;
+   }
+   
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t":  "a", "l":  "${uLogin}", "p":  "${uToken}",
-      "f":  "classAdd",
-      "z":  "${newClassName}"
+      "l":  "${uLogin}", "p":  "${uToken}",
+      "f":  "subjAdd",
+      "z":  ["${newSubjKey}", "${newSubjName}"]
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
-      if (apiResp == "none") info(1, "Такой класс уже существует.");
+      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
       else {
-         info(0, `${newClassName} класс успешно добавлен.`);
-         classesList.push(newClassName);
-         clListPubl(classesList);
+         subjList[newSubjKey] = newSubjName;
+         sbListPubl(subjList);
       }
    })();
 };
-*/
 
 /*
 // Удаление класса
@@ -98,8 +120,10 @@ const subjEdit = {
 createSection("subjects", `
    <h3>Список предметов</h3>
    <div id="sbList"></div><br>
-   <input type="text" id="sbNewKod" placeholder="Условный номер">
-   <input type="text" id="sbNewName" placeholder="Наименование">
+   <input type="text" id="sbNewKod" placeholder="Условный номер"
+      onKeyDown="if (event.keyCode == 13) subjAdd()">
+   <input type="text" id="sbNewName" placeholder="Наименование"
+      onKeyDown="if (event.keyCode == 13) subjAdd()">
    <button type="button" onclick="subjAdd()">Добавить</button>
 `);
 

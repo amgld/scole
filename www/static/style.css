@@ -27,11 +27,11 @@ select {
    ----------------------------------------------------- */
 article, output {
    display: none; width:18em; position:absolute; top:30%; left:50%;
-   margin-top:-5em; margin-left:-9em; padding:0px; border:1px solid #639;
+   margin-top:-5em; margin-left:-9em; padding:0px; border:1px solid #963;
    border-radius:10px; box-shadow: 2px 2px 3px 2px #999;
    text-align:center; background:#f6f3ee;}
 output {
-   top:40%; z-index:99999;}
+   position:fixed; top:40%; z-index:99999;}
 article h1, article input, article button, output button, article div {
    font-size:14pt;}
 article h1 {

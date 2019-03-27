@@ -11,7 +11,7 @@
 module.exports = async newClassName => {
    
    // Проверяем формат пришедшего имени класса
-   const reClassName = /\d{1,2}[A-Я]{1}/;
+   const reClassName = /^\d{1,2}[A-Я]{1}$/;
    if (!reClassName.test(newClassName)) return "none";
    
    // Проверяем, нет ли уже такого класса в списке,

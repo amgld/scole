@@ -66,7 +66,7 @@ const subjDef = {
    "s540": "Обществознание",
    "s550": "Экономика",
    "s560": "Право",
-   "d570": "География",
+   "s570": "География",
    "s610": "Физика",
    "s620": "Астрономия",
    "s630": "Химия",
@@ -100,7 +100,13 @@ const classSort = classArr => classArr.map(x => x.padStart(3, '0')).sort()
                 . map(x => x.replace(/^0/, ''));
 
 // Сортировка списка предметов правильным образом по ключам (d480 > s110)
-const subjSort = sbObj => sbObj;
+const subjSort = sbObj => {
+   let res = {};
+   Object.keys(sbObj)
+      .sort((k1, k2) => Number(k1.substr(1,3)) - Number(k2.substr(1,3)))
+      .forEach(key => {res[key] = sbObj[key]});
+   return res;
+};
 
 // Экспорт функций и других объектов для среды nodejs
 if (typeof(module) !== "undefined") {

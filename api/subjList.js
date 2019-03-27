@@ -7,10 +7,10 @@
  */
 "use strict";
 
-// Возвращает массив имен классов
+// Возвращает объект с условными номерами (ключи) и наименованиями предметов
 module.exports = async () => {
    let res = await dbFind("curric", {type: "subj"});
    let sbList = {};
-   for (let currDoc of res) sbList[currDoc.kod] = currDoc.name;   
+   for (let currDoc of res) sbList[currDoc.sbKod] = currDoc.sbName;   
    return sbList;
 };

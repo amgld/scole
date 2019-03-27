@@ -1,5 +1,5 @@
 /**
- *   ДОБАВЛЕНИЕ НОМЕРА КЛАССА В КОЛЛЕКЦИЮ CURRIC
+ *   ДОБАВЛЕНИЕ ДОПОЛНИТЕЛЬНОГО ПРЕДМЕТА В КОЛЛЕКЦИЮ CURRIC
  * 
  *   Copyright © А. М. Гольдин, 2019. a@goldin.su
  *   Лицензия CC BY-NC-ND Version 4.0
@@ -8,21 +8,23 @@
 "use strict";
 
 // Возвращает "success" либо "none"
-module.exports = async newClassName => {
+module.exports = async newSubj => {
    
-   // Проверяем формат пришедшего имени класса
-   const reClassName = /\d{1,2}[A-Я]{1}/;
-   if (!reClassName.test(newClassName)) return "none";
+   // Проверяем, что пришло
+   const newSubjKey  = newSubj[0].trim() || 'a',
+         newSubjName = newSubj[1].trim() || 'a',
+         reSubjKey   = /^[ds]{1}\d{3}$/,
+         reSubjName  = /^[A-Za-z0-9А-Яа-яЁё ]{2,30}$/;
+   if (!reSubjKey.test(newSubjKey) || !reSubjName.test(newSubjName))
+      return "none";
    
-   // Проверяем, нет ли уже такого класса в списке,
+   // Проверяем, нет ли уже предмета с таким же условным номером,
    // если нет - добавляем, если есть - возвращаем ошибку
-   let res = await dbFind("curric", {type: "class", className: newClassName});
+   let res = await dbFind("curric", {type: "subj", sbKod: newSubjKey});
    if (res.length) return "none";
-   else {
-      let subNames = ["мальч", "дев", "иняз1", "иняз2", "инф1", "инф2"]
-                   . map(x => newClassName + '-' + x);
+   else {      
       db.curric.insert(
-         {type: "class", className: newClassName, groups: subNames});
+         {type: "subj", sbKod: newSubjKey, sbName: newSubjName});
       return "success";
    }   
 };
