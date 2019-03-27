@@ -46,10 +46,7 @@ module.exports = (tip, login, pwd, cptId, capt, addr) => {
    // Номер дня от начала юникс-эры
    let dt = ~~(Date.now()/(1000 * 3600 * 24));
    
-   let tokenTrue = '¤' + hash(dt+addr+login, salt);
-   
-   // Получаем из базы соответствующую запись по логину
-   // if (login != "admin") {uRecord = ''};
+   let tokenTrue = '¤' + hash(dt+addr+login, salt);   
    
    // Если пришел токен
    if (pwd[0] == '¤') {
@@ -77,6 +74,10 @@ module.exports = (tip, login, pwd, cptId, capt, addr) => {
             return {token: '¤'+hash(dt+addr+login, salt), roles: ["root"]};
          else return 0;
       }
-      else return 0;
+      else {
+         // Получаем из базы соответствующую запись по логину
+         // uRecord = '';
+         return 0;
+      }
    }
 };

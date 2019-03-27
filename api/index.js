@@ -11,12 +11,13 @@ const auth        = require("./auth"),
       classAdd    = require("./classAdd"),
       classesList = require("./classesList"),
       classDel    = require("./classDel"),
-      subjList    = require("./subjList");
+      subjList    = require("./subjList"),
+      subjAdd     = require("./subjAdd");
 
 // Полномочия (доступные функции) пользователей в зависимости от их роли
 const RIGHTS = {
    "root":    [
-      "classAdd", "classesList", "classDel", "subjList"],
+      "classAdd", "classesList", "classDel", "subjList", "subjAdd"],
    "admin":   [],
    "teacher": [],
    "tutor":   [],
@@ -30,7 +31,7 @@ module.exports = async (post, addr) => {
    // Разбираем переданные в аргументе POST-данные
    let postDt = {};
    try {postDt = JSON.parse(post);} catch (e) {return "none";}
-   if (!postDt.t)  postDt.t  = "staff";
+   if (!postDt.t)  postDt.t  = "noType";
    if (!postDt.f)  postDt.f  = "noFunc";
    if (!postDt.l)  postDt.l  = "noLogin";
    if (!postDt.p)  postDt.p  = "noPassw";
@@ -78,6 +79,13 @@ module.exports = async (post, addr) => {
       case "subjList":         
          let sbListResp = await subjList();
          return JSON.stringify(sbListResp);
+         break;
+         
+      // Добавление дополнительного предмета в коллекцию curric
+      case "subjAdd":
+         if (!postDt.z) return "none";
+         let sbAddResp = await subjAdd(postDt.z);
+         return sbAddResp;
          break;
       
       default:

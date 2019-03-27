@@ -40,7 +40,7 @@ const classAdd = () => {
    dqs("#addClassNum").value = '1';
    dqs("#addClassLit").value = 'А';
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t":  "a", "l":  "${uLogin}", "p":  "${uToken}",
+      "l":  "${uLogin}", "p":  "${uToken}",
       "f":  "classAdd",
       "z":  "${newClassName}"
    }`};
@@ -59,7 +59,7 @@ const classAdd = () => {
 const classNumDel = clNum => {
    if (confirm("Вы уверены?")) {
       let apiOpt = {method: "POST", cache: "no-cache", body: `{
-         "t":  "a", "l":  "${uLogin}", "p":  "${uToken}",
+         "l":  "${uLogin}", "p":  "${uToken}",
          "f":  "classDel",
          "z":  "${clNum}"
       }`};
@@ -98,7 +98,7 @@ dqs("#addClassLit").innerHTML = clLitOpt;
 // с помощью API и публикуем его на страничке (имя метода = имени пункта меню!)
 getContent.classes = () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t":  "a", "l":  "${uLogin}", "p":  "${uToken}",
+      "l":  "${uLogin}", "p":  "${uToken}",
       "f":  "classesList"
    }`};
    (async () => {
