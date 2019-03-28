@@ -7,7 +7,7 @@
  */
 "use strict";
 
-// Строка со списком классов для формирования селекта
+// Строка со списком классов для формирования селектов выбора класса
 // (подгружается с помощью API в конце этого модуля)
 let clListSel = '';
 
@@ -19,16 +19,16 @@ const nuFormButt = `
 // Циклическое переключение поля категории юзера
 // и отображение полей выбора класса и отчества
 const newCategTurn = () => {
-   let ncField = dqs("#newCateg");
+   let ncField = dqs("#newUcateg");
    if (ncField.value == "Учащийся") {
       ncField.value = "Учитель";
-      dqs("#newClass").style.display    = "none";
-      dqs("#newUserOtch").style.display = "block";
+      dqs("#newUclass").style.display = "none";
+      dqs("#newUotch").style.display  = "block";
    }
    else {
       ncField.value = "Учащийся";
-      dqs("#newClass").style.display    = "block";
-      dqs("#newUserOtch").style.display = "none";
+      dqs("#newUclass").style.display = "block";
+      dqs("#newUotch").style.display  = "none";
    }
 }
 
@@ -38,20 +38,20 @@ const userFormGen = func => {
    if (!clList) {info(1, "Не получен список классов"); return;}
    const zagol = {add:"Новый пользователь", edit:"Редактирование пользователя"};
    let formInner = `<h3>${zagol[func]}</h3>
-      <input type="text" id="newUserLogin" placeholder="Логин">
-      <input type="text" id="newUserFamil" placeholder="Фамилия">
-      <input type="text" id="newUserName"  placeholder="Имя">
-      <input type="text" id="newUserOtch"  placeholder="Отчество">
-      <input type="text" id="newCateg" readonly value="Учащийся"
+      <input type="text" id="newUlogin" placeholder="Логин">
+      <input type="text" id="newUfamil" placeholder="Фамилия">
+      <input type="text" id="newUname"  placeholder="Имя">
+      <input type="text" id="newUotch"  placeholder="Отчество">
+      <input type="text" id="newUcateg" readonly value="Учащийся"
              onClick="newCategTurn()">
-      <select id="newClass">${clListSel}</select>
-      <input type="password" id="newUserPwd"   placeholder="Пароль">
-      <input type="password" id="newUserPwd1"  placeholder="Повтор пароля">      
+      <select id="newUclass">${clListSel}</select>
+      <input type="password" id="newUpwd"   placeholder="Пароль">
+      <input type="password" id="newUpwd1"  placeholder="Повтор пароля">      
       <button type="button" onclick="userAddEdit(0)">Сохранить</button>
    `;
-   dqs("#addEditUser").innerHTML = formInner;
-   dqs("#newUserOtch").style.display = "none";
-   dqs("#newUserLogin").focus();
+   dqs("#addEditUser").innerHTML  = formInner;
+   dqs("#newUotch").style.display = "none";
+   dqs("#newUlogin").focus();
    
    dqs("#addUser").outerHTML = `
       <button type="button" id="addUser" onclick="userAddEdit(1)">
@@ -62,11 +62,39 @@ const userFormGen = func => {
 // Добавление/редактирование пользователя
 // (аргумент 1 - ничего не делать, просто закрыть форму)
 const userAddEdit = arg => {
+   let newUser = {};
+   if (!arg) {
+      const newUsFields = ["Ulogin", "Ufamil", "Uname", "Uotch", "Ucateg",
+                           "Uclass", "Upwd", "Upwd1"];      
+      for (let field of newUsFields) {
+         newUser[field] = dqs(`#new${field}`).value.trim() || '';
+         if (!newUser[field] && (field != "Uotch")) {            
+            info(1, "Заполнены не все поля!");
+            return;
+         }
+      }
+      if (newUser.Upwd != newUser.Upwd1) {
+         info(1, "Пароли не совпадают.");
+         return;
+      }
+      delete newUser.Upwd1;
+   }
    dqs("#addEditUser").innerHTML = '';
-   dqs("#addUser").outerHTML = nuFormButt;
+   dqs("#addUser").outerHTML     = nuFormButt;
    if (arg) return;
    
-   // Запрос к API для добавления/редактирования пользователя
+   // Посылаем запрос к API на добавление/редактирование
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "l":  "${uLogin}", "p":  "${uToken}",
+      "f":  "usAddEdit",
+      "z":  ${newUser}
+   }`};
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+      else info(0,
+         `Пользователь ${newUser.Ulogin} успешно добавлен (отредактирован).`);
+   })();
 }
 
 // Формирование контента странички
