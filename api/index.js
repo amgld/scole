@@ -7,17 +7,19 @@
  */
 "use strict";
 
-const auth        = require("./auth"),
-      classAdd    = require("./classAdd"),
-      classesList = require("./classesList"),
-      classDel    = require("./classDel"),
-      subjList    = require("./subjList"),
-      subjAdd     = require("./subjAdd");
+// Подключение необходимых модулей API
+const modReq = [
+   "auth", "classAdd", "classesList", "classDel",
+   "subjList", "subjAdd", "subjEdit", "subjDel"
+];
+const mod = {};
+for (let modName of modReq) mod[modName] = require("./" + modName);
 
 // Полномочия (доступные функции) пользователей в зависимости от их роли
 const RIGHTS = {
    "root":    [
-      "classAdd", "classesList", "classDel", "subjList", "subjAdd"],
+      "classAdd", "classesList", "classDel",
+      "subjList", "subjAdd", "subjEdit", "subjDel"],
    "admin":   [],
    "teacher": [],
    "tutor":   [],
@@ -39,7 +41,7 @@ module.exports = async (post, addr) => {
    if (!postDt.c)  postDt.c  = "noCapt";
       
    // Проверяем результаты аутентификации юзера
-   let authResult = await auth(
+   let authResult = await mod.auth(
       postDt.t, postDt.l, postDt.p, postDt.ci, postDt.c, addr);
    if (!authResult) return "none";
       
@@ -60,32 +62,44 @@ module.exports = async (post, addr) => {
       // Добавление номера класса (типа 10Б) в коллекцию curric
       case "classAdd":
          if (!postDt.z) return "none";
-         let clAddResp = await classAdd(postDt.z);
+         let clAddResp = await mod.classAdd(postDt.z);
          return clAddResp;
          break;
          
       // Просмотр списка имеющихся классов в коллекции curric
       case "classesList":
-         let clListResp = await classesList();
+         let clListResp = await mod.classesList();
          return JSON.stringify(clListResp);
          break;
          
       // Удаление класса из списка классов в коллекции curric
       case "classDel":         
-         return classDel(postDt.z);
+         return mod.classDel(postDt.z);
          break;
          
       // Просмотр списка дополнительных предметов в коллекции curric
       case "subjList":         
-         let sbListResp = await subjList();
+         let sbListResp = await mod.subjList();
          return JSON.stringify(sbListResp);
          break;
          
       // Добавление дополнительного предмета в коллекцию curric
       case "subjAdd":
          if (!postDt.z) return "none";
-         let sbAddResp = await subjAdd(postDt.z);
+         let sbAddResp = await mod.subjAdd(postDt.z);
          return sbAddResp;
+         break;
+         
+       // Редактирование наименования дополнительного предмета
+      case "subjEdit":
+         if (!postDt.z) return "none";
+         let sbEditResp = await mod.subjEdit(postDt.z);
+         return sbEditResp;
+         break;
+         
+      // Удаление дополнительного предмета из списка предметов
+      case "subjDel":         
+         return mod.subjDel(postDt.z);
          break;
       
       default:

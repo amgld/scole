@@ -1,7 +1,13 @@
 {"type":"class","className":"9Ж","groups":["9Ж-мальч","9Ж-дев","9Ж-иняз1","9Ж-иняз2","9Ж-инф1","9Ж-инф2"],"_id":"0jFZrdxeXscjCUgF"}
-{"type":"subj","sbKod":"d565","sbName":"Психология","_id":"5HgZPlq2IE8K2bPy"}
+{"type":"subj","sbKod":"d565","sbName":"Психология (фак.)","_id":"5HgZPlq2IE8K2bPy"}
 {"type":"class","className":"10К","groups":["10К-мальч","10К-дев","10К-иняз1","10К-иняз2","10К-инф1","10К-инф2"],"_id":"BsccEhmXLVVhLVKJ"}
+{"type":"subj","sbKod":"d445","sbName":"СК Матем. (подготовка к ЕГЭ)","_id":"RHQd4eknj41F63IK"}
+{"type":"subj","sbKod":"d644","sbName":"Анатомия человека","_id":"ef21bzE2hRVoAkQc"}
 {"type":"class","className":"8С","groups":["8С-мальч","8С-дев","8С-иняз1","8С-иняз2","8С-инф1","8С-инф2"],"_id":"oLHXP2ftQ8waBQDR"}
 {"type":"subj","sbKod":"d645","sbName":"Основы медицинских знаний","_id":"wxkxLvfQk9sBRTfc"}
-{"type":"subj","sbKod":"d644","sbName":"Анатомия человека","_id":"ef21bzE2hRVoAkQc"}
-{"type":"subj","sbKod":"d445","sbName":"СК Подготовка к ЕГЭ","_id":"RHQd4eknj41F63IK"}
+{"$$deleted":true,"_id":"RHQd4eknj41F63IK"}
+{"$$deleted":true,"_id":"ef21bzE2hRVoAkQc"}
+{"$$deleted":true,"_id":"5HgZPlq2IE8K2bPy"}
+{"type":"subj","sbKod":"d125","sbName":"Зарубежная литература","_id":"uplydp9vE8qzXTo9"}
+{"type":"class","className":"11З","groups":["11З-мальч","11З-дев","11З-иняз1","11З-иняз2","11З-инф1","11З-инф2"],"_id":"iUjHIJHwLwe0dcIV"}
+{"$$deleted":true,"_id":"0jFZrdxeXscjCUgF"}

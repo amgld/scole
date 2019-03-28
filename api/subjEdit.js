@@ -1,5 +1,5 @@
 /**
- *   ДОБАВЛЕНИЕ ДОПОЛНИТЕЛЬНОГО ПРЕДМЕТА В КОЛЛЕКЦИЮ CURRIC
+ *   РЕДАКТИРОВАНИЕ НАЗВАНИЯ ДОПОЛНИТЕЛЬНОГО ПРЕДМЕТА В КОЛЛЕКЦИИ CURRIC
  * 
  *   Copyright © А. М. Гольдин, 2019. a@goldin.su
  *   Лицензия CC BY-NC-ND Version 4.0
@@ -18,13 +18,15 @@ module.exports = async newSubj => {
    if (!reSubjKey.test(newSubjKey) || !reSubjName.test(newSubjName))
       return "none";
    
-   // Проверяем, нет ли уже предмета с таким же условным номером,
-   // если нет - добавляем, если есть - возвращаем ошибку
+   // Проверяем, есть ли такой предмет в коллекции;
+   // если есть - редактируем, если нет - возвращаем ошибку
    let res = await dbFind("curric", {type: "subj", sbKod: newSubjKey});
-   if (res.length) return "none";
-   else {      
-      db.curric.insert(
-         {type: "subj", sbKod: newSubjKey, sbName: newSubjName});
+   if (res.length) {      
+      db.curric.update(
+         {type: "subj", sbKod: newSubjKey},
+         {type: "subj", sbKod: newSubjKey, sbName: newSubjName}, {}
+      );
       return "success";
-   }   
+   }
+   else return "none";
 };

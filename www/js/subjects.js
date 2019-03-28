@@ -51,7 +51,7 @@ const subjAdd = () => {
    let rN = /^[A-Za-z0-9А-Яа-яЁё ]{2,30}$/;
    if (!rN.test(newSubjName)) {
       info(1, "Наименование предмета может содержать от 2 до 30 букв русского "
-            + "и латинского алфавитов, цифр и пробелов.");
+            + "и латинского алфавитов, цифр, скобок, точек и пробелов.");
       return;
    }
    
@@ -76,28 +76,23 @@ const subjAdd = () => {
    })();
 };
 
-/*
-// Удаление класса
-const classNumDel = clNum => {
-   if (confirm("Вы уверены?")) {
-      let apiOpt = {method: "POST", cache: "no-cache", body: `{
-         "t":  "a", "l":  "${uLogin}", "p":  "${uToken}",
-         "f":  "classDel",
-         "z":  "${clNum}"
-      }`};
-      (async () => {
-         let apiResp = await (await fetch("/", apiOpt)).text();
-         if (apiResp == "none") info(1, "Ошибка на сервере.");
-         else {
-            info(0, clNum + " удален!");
-            let clIndex = classesList.indexOf(clNum);
-            if (clIndex > -1) classesList.splice(clIndex, 1);
-            clListPubl(classesList);
-         }
-      })();      
-   }
+// Удаление дополнительного предмета
+const subjDel = sbDelKey => {
+   if (!confirm("Вы уверены?")) return;
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "l":  "${uLogin}", "p":  "${uToken}",
+      "f":  "subjDel",
+      "z":  "${sbDelKey}"
+   }`};
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+      else {
+         delete subjList[sbDelKey];
+         sbListPubl(subjList);
+      }
+   })();      
 }
-*/
 
 // Редактирование названия предмета
 const subjEdit = {
@@ -108,11 +103,32 @@ const subjEdit = {
            subjEdit.subm('${sbKey}', this.value)">`;
    },
    subm: (sbKey, newName) => {
-      // Отправляем запрос к API на редактирование, в случае успеха публикуем
-      // обновленные данные
       newName = newName.trim();
-      subjList[sbKey] = newName;
-      sbListPubl(subjList);
+      let rN = /^[A-Za-z0-9А-Яа-яЁё(). ]{2,30}$/;
+      if (!rN.test(newName)) {
+         info(1, "Наименование предмета может содержать от 2 до 30 букв "
+               + "русского и латинского алфавитов, цифр, скобок, точек "
+               + "и пробелов.");
+         return;
+      }
+      // Отправляем запрос к API на редактирование,
+      // в случае успеха публикуем обновленные данные
+      let apiOpt = {method: "POST", cache: "no-cache", body: `{
+         "l":  "${uLogin}", "p":  "${uToken}",
+         "f":  "subjEdit",
+         "z":  ["${sbKey}", "${newName}"]
+      }`};
+      (async () => {
+         let apiResp = await (await fetch("/", apiOpt)).text();
+         if (apiResp == "none") {
+            info(1, "Запрашиваемая операция отклонена.");
+            sbListPubl(subjList);
+         }
+         else {
+            subjList[sbKey] = newName;
+            sbListPubl(subjList);
+         }
+      })();
    }
 }
 

@@ -48,7 +48,6 @@ const classAdd = () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
       if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
       else {
-         info(0, `${newClassName} класс успешно добавлен.`);
          classesList.push(newClassName);
          clListPubl(classesList);
       }
@@ -57,23 +56,21 @@ const classAdd = () => {
 
 // Удаление класса
 const classNumDel = clNum => {
-   if (confirm("Вы уверены?")) {
-      let apiOpt = {method: "POST", cache: "no-cache", body: `{
-         "l":  "${uLogin}", "p":  "${uToken}",
-         "f":  "classDel",
-         "z":  "${clNum}"
-      }`};
-      (async () => {
-         let apiResp = await (await fetch("/", apiOpt)).text();
-         if (apiResp == "none") info(1, "Ошибка на сервере.");
-         else {
-            info(0, clNum + " удален!");
-            let clIndex = classesList.indexOf(clNum);
-            if (clIndex > -1) classesList.splice(clIndex, 1);
-            clListPubl(classesList);
-         }
-      })();      
-   }
+   if (!confirm("Вы уверены?")) return;
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "l":  "${uLogin}", "p":  "${uToken}",
+      "f":  "classDel",
+      "z":  "${clNum}"
+   }`};
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+      else {
+         let clIndex = classesList.indexOf(clNum);
+         if (clIndex > -1) classesList.splice(clIndex, 1);
+         clListPubl(classesList);
+      }
+   })();
 }
 
 // Формирование контента странички
