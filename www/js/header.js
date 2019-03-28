@@ -36,7 +36,7 @@ const menuGen = () => {
       res += `<li id="mn${mi[0]}" onClick="blockShow('${mi[0]}')">${mi[1]}</li>\n`;
    res += "</ul>";
    dqs("nav").innerHTML = res;
-   blockShow(menuItems[role][0]);
+   blockShow(menuItems[role][0][0]);
    dqs("#selRole").blur();
 };
 
