@@ -32,13 +32,24 @@ const userFormGen = func => {
       <input type="text" id="newUserOtch"  placeholder="Отчество">
       <input type="text" id="newCateg" readonly value="Учащийся"
              onClick="newCategTurn()">
-      <select id="newClass"><option>Класс</option></select>
+      <select id="newClass">{{clList}}</select>
       <input type="password" id="newUserPwd"   placeholder="Пароль">
       <input type="password" id="newUserPwd1"  placeholder="Повтор пароля">      
       <button type="button" onclick="userAddEdit()">Сохранить</button>
    `;
-   dqs("#addEditUser").innerHTML = formInner;
-   dqs("#newUserLogin").focus();
+   // Получаем список классов с помощью API и публикуем форму
+   let clList = '';
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "l":  "${uLogin}", "p":  "${uToken}",
+      "f":  "classesList"
+   }`};
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      classesList = classSort(JSON.parse(apiResp));
+      for (let cl of classesList) clList += `<option>${cl}</option>`;
+      dqs("#addEditUser").innerHTML = formInner.replace("{{clList}}", clList);
+      dqs("#newUserLogin").focus();
+   })();   
 };
 
 // Добавление/редактирование пользователя
