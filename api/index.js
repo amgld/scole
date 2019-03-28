@@ -10,7 +10,8 @@
 // Подключение необходимых модулей API
 const modReq = [
    "auth", "classAdd", "classesList", "classDel",
-   "subjList", "subjAdd", "subjEdit", "subjDel"
+   "subjList", "subjAdd", "subjEdit", "subjDel",
+   "usAddEdit"
 ];
 const mod = {};
 for (let modName of modReq) mod[modName] = require("./" + modName);
@@ -19,7 +20,9 @@ for (let modName of modReq) mod[modName] = require("./" + modName);
 const RIGHTS = {
    "root":    [
       "classAdd", "classesList", "classDel",
-      "subjList", "subjAdd", "subjEdit", "subjDel"],
+      "subjList", "subjAdd", "subjEdit", "subjDel",
+      "usAddEdit"
+              ],
    "admin":   [],
    "teacher": [],
    "tutor":   [],
@@ -100,6 +103,13 @@ module.exports = async (post, addr) => {
       // Удаление дополнительного предмета из списка предметов
       case "subjDel":         
          return mod.subjDel(postDt.z);
+         break;
+         
+      // Добавление/редактирование пользователя
+      case "usAddEdit":
+         if (!postDt.z) return "none";
+         let usAddEditResp = await mod.usAddEdit(postDt.z);
+         return usAddEditResp;
          break;
       
       default:

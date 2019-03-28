@@ -46,6 +46,7 @@ db.distrib = new nedb({filename: "db/distrib.db", autoload: true});
  * ----------------------------------------------------------------------- */
 
 // Генерирование числового значения капчи по её Id
+// (используется также для генерирования родительских паролей из детских)
 global.captNumGen = str => {
    let captNum = '', s, h = 0;
    for (let j = 0; j < 6; j++) {
@@ -66,6 +67,25 @@ global.dbFind = (collectionName, objFind) => {
       })
    })
 };
+
+// Изготавление хэша длины 24 из строки str с солью slt
+global.hash = (str, slt) => {   
+   let
+      alph = "0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz",
+      char,
+      strNew,
+      h = 0,
+      pass = '';
+   for (let j = 0; j < 24; j++) {
+      strNew = slt + j + str;
+      for (let i = 0; i < strNew.length; i++) {
+         char = strNew.charCodeAt(i);
+         h = ((h << 5) - h) + char;
+      }
+      pass += alph[Math.abs(h) % alph.length];
+   }
+   return pass;
+}
 
 // Отправка ответа (kod - код состояния, contType - mime-тип, content - тело)
 const sendOtvet = (otvet, kod, contType, content) => {

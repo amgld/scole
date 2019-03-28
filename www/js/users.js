@@ -38,12 +38,12 @@ const userFormGen = func => {
    if (!clList) {info(1, "Не получен список классов"); return;}
    const zagol = {add:"Новый пользователь", edit:"Редактирование пользователя"};
    let formInner = `<h3>${zagol[func]}</h3>
+      <input type="text" id="newUcateg" readonly value="Учащийся"
+             onClick="newCategTurn()">
       <input type="text" id="newUlogin" placeholder="Логин">
       <input type="text" id="newUfamil" placeholder="Фамилия">
       <input type="text" id="newUname"  placeholder="Имя">
-      <input type="text" id="newUotch"  placeholder="Отчество">
-      <input type="text" id="newUcateg" readonly value="Учащийся"
-             onClick="newCategTurn()">
+      <input type="text" id="newUotch"  placeholder="Отчество">      
       <select id="newUclass">${clListSel}</select>
       <input type="password" id="newUpwd"   placeholder="Пароль">
       <input type="password" id="newUpwd1"  placeholder="Повтор пароля">      
@@ -78,6 +78,10 @@ const userAddEdit = arg => {
          return;
       }
       delete newUser.Upwd1;
+      if (newUser.Ucateg == "Учащийся") delete newUser.Uotch;
+      else                              delete newUser.Uclass;
+      
+      // Если это добавление, а не редактирование, проверяем, свободен ли логин
    }
    dqs("#addEditUser").innerHTML = '';
    dqs("#addUser").outerHTML     = nuFormButt;
@@ -87,7 +91,7 @@ const userAddEdit = arg => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
       "l":  "${uLogin}", "p":  "${uToken}",
       "f":  "usAddEdit",
-      "z":  ${newUser}
+      "z":  ${JSON.stringify(newUser)}
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();

@@ -7,25 +7,6 @@
  */
 "use strict";
 
-// Функция изготавливает хэш длины 24 из строки str с солью slt
-let hash = (str, slt) => {   
-   let
-      alph = "0123456789AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz",
-      char,
-      strNew,
-      h = 0,
-      pass = '';
-   for (let j = 0; j < 24; j++) {
-      strNew = slt + j + str;
-      for (let i = 0; i < strNew.length; i++) {
-         char = strNew.charCodeAt(i);
-         h = ((h << 5) - h) + char;
-      }
-      pass += alph[Math.abs(h) % alph.length];
-   }
-   return pass;
-}
-
 // Проверка введенного юзером пароля или присланного через транспорт fetch
 // токена путем сверки с хэшем пароля в базе и авторизация (определение
 // полномочий) юзера. Токен отличается от пароля тем, что его первый символ
@@ -80,4 +61,4 @@ module.exports = (tip, login, pwd, cptId, capt, addr) => {
          return 0;
       }
    }
-};
+}
