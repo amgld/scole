@@ -23,8 +23,8 @@ module.exports = async newUser => {
          db[collect].update({Ulogin: newUser.Ulogin}, newUser, {});
       }
       else {
-         newUser.Upwd    = hash(newUser.Upwd, salt); // хэш пароля
-         if (collect == "pupils")                    // хэш родительского пароля
+         newUser.Upwd = hash(newUser.Upwd, salt); // хэш пароля
+         if (collect == "pupils")                 // хэш родительского пароля
             newUser.UpwdPar = hash('p' + captNumGen(newUser.Upwd), salt);
          db[collect].insert(newUser);
       }

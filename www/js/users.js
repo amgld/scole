@@ -115,8 +115,10 @@ getContent.users = () => {
       "f":  "classesList"
    }`};
    (async () => {
-      let apiResp   = await (await fetch("/", apiOpt)).text();
-      let clListArr = classSort(JSON.parse(apiResp));
-      for (let cl of clListArr) clListSel += `<option>${cl}</option>`;
+      if (!clListSel) {
+         let apiResp   = await (await fetch("/", apiOpt)).text();
+         let clListArr = classSort(JSON.parse(apiResp));
+         for (let cl of clListArr) clListSel += `<option>${cl}</option>`;
+      }
    })();   
 }

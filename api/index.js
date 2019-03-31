@@ -7,22 +7,25 @@
  */
 "use strict";
 
-// Подключение необходимых модулей API
-const modReq = [
-   "auth", "classAdd", "classesList", "classDel",
-   "subjList", "subjAdd", "subjEdit", "subjDel",
-   "usAddEdit"
-];
-const mod = {};
-for (let modName of modReq) mod[modName] = require("./" + modName);
+// Подключение необходимых модулей API (модуль авторизации подключен отдельно)
+// Имя модуля - ключ, а значения - это пара вида [0, 1],
+// где первое значение - требуется ли await при вызове модуля,
+//     второе значение - передается ли модулю объект аргументов postDt.z
+const modReq = {
+   "classAdd": [1,1], "classesList": [1,0], "classDel": [0,1],
+   "subjList": [1,0], "subjAdd": [1,1], "subjEdit": [1,1], "subjDel": [0,1],
+   "usAddEdit": [1,1]
+};
+let mod = {};
+mod.auth = require("./auth");
+for (let modName in modReq) mod[modName] = require("./" + modName);
 
-// Полномочия (доступные функции) пользователей в зависимости от их роли
+// Полномочия (доступные модули) пользователей в зависимости от их роли
 const RIGHTS = {
    "root":    [
-      "classAdd", "classesList", "classDel",
-      "subjList", "subjAdd", "subjEdit", "subjDel",
-      "usAddEdit"
-              ],
+      "classAdd", "classesList", "classDel", "subjList", "subjAdd", "subjEdit",
+      "subjDel", "usAddEdit"
+   ],
    "admin":   [],
    "teacher": [],
    "tutor":   [],
@@ -49,72 +52,22 @@ module.exports = async (post, addr) => {
    if (!authResult) return "none";
       
    // Проверяем полномочия юзера на запрашиваемую функцию
-   if (!authResult["roles"].some(r => RIGHTS[r].includes(postDt.f)))
-      return "none";
+   let rolesArr = JSON.parse(authResult)["roles"];
+   if (!rolesArr.some(r => RIGHTS[r].includes(postDt.f))) return "none";
       
    // Проверяем полномочия юзера на запрашиваемые параметры
       
-   // Реализуем соответствующую функцию api в зависимости от переменной f      
-   switch (postDt.f) {
-         
-      // Запрос результатов авторизации
-      case "login":
-         return JSON.stringify(authResult);
-         break;
-         
-      // Добавление номера класса (типа 10Б) в коллекцию curric
-      case "classAdd":
-         if (!postDt.z) return "none";
-         let clAddResp = await mod.classAdd(postDt.z);
-         return clAddResp;
-         break;
-         
-      // Просмотр списка имеющихся классов в коллекции curric
-      case "classesList":
-         let clListResp = await mod.classesList();
-         return JSON.stringify(clListResp);
-         break;
-         
-      // Удаление класса из списка классов в коллекции curric
-      case "classDel":         
-         return mod.classDel(postDt.z);
-         break;
-         
-      // Просмотр списка дополнительных предметов в коллекции curric
-      case "subjList":         
-         let sbListResp = await mod.subjList();
-         return JSON.stringify(sbListResp);
-         break;
-         
-      // Добавление дополнительного предмета в коллекцию curric
-      case "subjAdd":
-         if (!postDt.z) return "none";
-         let sbAddResp = await mod.subjAdd(postDt.z);
-         return sbAddResp;
-         break;
-         
-       // Редактирование наименования дополнительного предмета
-      case "subjEdit":
-         if (!postDt.z) return "none";
-         let sbEditResp = await mod.subjEdit(postDt.z);
-         return sbEditResp;
-         break;
-         
-      // Удаление дополнительного предмета из списка предметов
-      case "subjDel":         
-         return mod.subjDel(postDt.z);
-         break;
-         
-      // Добавление/редактирование пользователя
-      case "usAddEdit":
-         if (!postDt.z) return "none";
-         let usAddEditResp = await mod.usAddEdit(postDt.z);
-         return usAddEditResp;
-         break;
-      
-      default:
-         return "none";
-         break;
+   // Реализуем соответствующую функцию api в зависимости от переменной f
+   // и необходимости использования await и передачи модулю аргументов
+   if (postDt.f == "login") return authResult;
+   if (!Object.keys(modReq).includes(postDt.f)) return "none";
+   
+   let argsObj = {};
+   if (modReq[postDt.f][1]) {
+      if (!postDt.z) return "none"; // аргументы модулю нужны, но они не пришли
+      argsObj = postDt.z;
    }   
+   
+   if (modReq[postDt.f][0]) return (await mod[postDt.f](argsObj));
+   else                     return mod[postDt.f](argsObj);
 }
-

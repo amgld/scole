@@ -12,5 +12,5 @@ module.exports = async () => {
    let res = await dbFind("curric", {type: "class"});
    let clList = [];
    for (let currDoc of res) clList.push(currDoc.className);   
-   return clList;
+   return JSON.stringify(clList);
 };

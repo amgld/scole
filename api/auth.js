@@ -34,7 +34,7 @@ module.exports = (tip, login, pwd, cptId, capt, addr) => {
       if (pwd == tokenTrue) {
          
          // Если он администратор
-         if (login == "admin") return {roles: ["root"]};         
+         if (login == "admin") return JSON.stringify({roles: ["root"]});         
       }
       else return 0;
    }
@@ -52,7 +52,9 @@ module.exports = (tip, login, pwd, cptId, capt, addr) => {
       // Если он утверждает, что он администратор
       if (login == "admin") {
          if (hash(pwd, 'z') == admPwd)
-            return {token: '¤'+hash(dt+addr+login, salt), roles: ["root"]};
+            return JSON.stringify(
+               {token: '¤'+hash(dt+addr+login, salt), roles: ["root"]}
+            );
          else return 0;
       }
       else {
