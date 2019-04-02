@@ -78,7 +78,10 @@ const headerGen = () => {
    menuGen();
    (async () => {
       let adminCont = await (await fetch("/a.a")).text();
-      dqs("footer").innerHTML += `Админ.: ${adminCont}`;
+      let versCont = await (await fetch("/history.html", {method: "GET"})).text();
+      versCont = versCont.split("<pre>")[1].trim().split(' ')[0];
+      dqs("footer").innerHTML += `Адм.: ${adminCont} &bull;
+         <a href="history.html" target="_blank">v.&nbsp;${versCont}</a>`;
       dqs("footer").style.display = "block";
    })();   
 };
