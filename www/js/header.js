@@ -79,9 +79,10 @@ const headerGen = () => {
    (async () => {
       let adminCont = await (await fetch("/a.a")).text();
       let versCont = await (await fetch("/history.html", {method: "GET"})).text();
+      let histUrl = URL.createObjectURL(new Blob([versCont], {type: "text/html"}));
       versCont = versCont.split("<pre>")[1].trim().split(' ')[0];
       dqs("footer").innerHTML += `Адм.: ${adminCont} &bull;
-         <a href="history.html" target="_blank">v.&nbsp;${versCont}</a>`;
+         <a href=${histUrl} target="_blank">v.&nbsp;${versCont}</a>`;
       dqs("footer").style.display = "block";
    })();   
 };
