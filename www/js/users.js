@@ -49,19 +49,34 @@ const userFind = () => {
       let apiResp   = await (await fetch("/", apiOpt)).text();
       
       if (apiResp != "none") {
-         let setAdmin = (usStatus == "Учитель") ?
-            "&#9398;&nbsp;" : '';
-         usFindRes = "<table><tr><th>Логин</th><th>Фамилия</th><th>Имя</th>"
-                   + "<th>Отчество</th><th>Класс</th><th>&nbsp;</th>";
-         for (let currUser of JSON.parse(apiResp))
+         let setAdmTh = "<td>&nbsp;</td>",
+             setAdmInner = "<td title='Назначить администратором'>&#9398;</td>",
+             name2th = "<th>Отчество</th>",
+             name2inner = '',
+             unitTh = '',
+             unitInner  = '';
+         if (usStatus == "Учащийся") {
+            setAdmTh = '';
+            setAdmInner = '';
+            name2th  = '';
+            unitTh = "<th>Класс</th>";
+         }
+         
+         usFindRes = `
+            <table><tr><th>Логин</th><th>Фамилия</th><th>Имя</th>
+            ${name2th}${unitTh}<th>&nbsp;</th>${setAdmTh}<th>&nbsp;</th>`;
+         for (let currUser of JSON.parse(apiResp)) {
+            if (usStatus == "Учащийся")
+               unitInner  = `<td class="un">${currUser.unit}</td>`;
+            else
+               name2inner = `<td>${currUser.name2}</td>`;
             usFindRes += `<tr>
-               <td>${currUser.login}</td>
-               <td>${currUser.famil}</td>
-               <td>${currUser.name}</td>
-               <td>${currUser.name2}</td>
-               <td>${currUser.unit}</td>
-               <td>&#9874;&nbsp;${setAdmin}&#10060;</td>
+               <td>${currUser.login}</td><td>${currUser.famil}</td>
+               <td>${currUser.name}</td>${name2inner}${unitInner}
+               <td title="Редактировать">&#9874;</td>${setAdmInner}
+               <td title="Удалить">&#10060;</td>
             </tr>`;
+         }
          usFindRes += "</table>";
       }
       

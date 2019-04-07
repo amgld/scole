@@ -138,6 +138,19 @@ section#users div#findUser button {
    display:inline-block;}
 section#users div#findUser input#usFindCateg {
    width:6em;}
+section#users table {
+   margin:10px auto; background:white; border-collapse:collapse;
+   border:1px solid #963;}
+section#users th, section#users td {
+   border:1px solid #963; padding:2px 5px; text-align:left;}
+section#users th {
+   text-align:center; color:#963;}
+section#users td.un {
+   text-align:center;}
+section#users td[title="Редактировать"],
+section#users td[title="Назначить администратором"],
+section#users td[title="Удалить"] {
+   color:#963; cursor:pointer;}
    
 /* БЛОК РАБОТЫ СО СПИСКОМ КЛАССОВ
    ----------------------------------------------------- */
