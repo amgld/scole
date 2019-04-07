@@ -36,9 +36,9 @@ for (let item in RIGHTS) RIGHTS[item].push("login");
 
 module.exports = async (post, addr) => {   
    
-   // Разбираем переданные в аргументе POST-данные
+   // Разбираем переданные в аргументе POST-данные   
    let postDt = {};
-   try {postDt = JSON.parse(post);} catch (e) {return "none";}
+   try {postDt = JSON.parse(post);} catch (e) {return "none";}   
    if (!postDt.t)  postDt.t  = "noType";
    if (!postDt.f)  postDt.f  = "noFunc";
    if (!postDt.l)  postDt.l  = "noLogin";

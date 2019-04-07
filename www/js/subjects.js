@@ -148,8 +148,7 @@ createSection("subjects", `
 // и публикуем его на страничке (имя метода = имени пункта меню!)
 getContent.subjects = () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t":  "a", "l":  "${uLogin}", "p":  "${uToken}",
-      "f":  "subjList"
+      "l":  "${uLogin}", "p":  "${uToken}", "f":  "subjList"
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();

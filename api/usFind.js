@@ -7,10 +7,51 @@
  */
 "use strict";
 
-// Возвращает объект
-module.exports = async () => {
-   let res = await dbFind("curric", {type: "subj"});
-   let sbList = {};
-   for (let currDoc of res) sbList[currDoc.sbKod] = currDoc.sbName;   
-   return JSON.stringify(sbList);
+// Запрос имеет вид [Статус, Класс, ФИО] (статус - это Учащийся/Учитель,
+// класс типа 8Б, ФИО это фрагмент для поиска по подстроке)
+// Возвращает none или массив найденных юзеров, где каждый юзер - это объект
+// {login: "vasya", famil: "Пупк", name: "Вас", name2: "Ивано", unit: "8Б"}
+module.exports = async req => {
+   let dbResult = [], res = [];
+   try {
+      // Разбираемся с тем, что пришло в запросе
+      let status = req[0], unit = req[1], fio = req[2];
+      if (!status) return "none";
+
+      // Производим запрос к соответстсвующей коллекции базы данных
+      if (status == "Учащийся")
+         if (unit != '0')
+            dbResult = await dbFind("pupils", {$or: [
+               {Uclass: unit, Ufamil: RegExp(fio, 'i')},
+               {Uclass: unit, Uname:  RegExp(fio, 'i')}
+            ]});
+         else
+            dbResult = await dbFind("pupils", {$or: [
+               {Ufamil: RegExp(fio, 'i')}, {Uname: RegExp(fio, 'i')}
+            ]});
+      else
+         dbResult = await dbFind("staff", {$or: [
+            {Ufamil: RegExp(fio, 'i')},
+            {Uname:  RegExp(fio, 'i')},
+            {Uotch:  RegExp(fio, 'i')}
+         ]});
+
+      // Если ответ непуст, формируем и возвращаем результат
+      if (dbResult.length) {
+         for (let currUser of dbResult) {
+            let respClass = currUser.Uclass || '',
+                respOtch  = currUser.Uotch  || '';
+            res.push({
+               login: currUser.Ulogin,
+               famil: currUser.Ufamil,
+               name:  currUser.Uname,
+               name2: respOtch,
+               unit:  respClass               
+            });
+         }
+         return JSON.stringify(res);
+      }
+      else return "none";
+   }
+   catch(e) {return "none";}
 };

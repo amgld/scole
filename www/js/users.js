@@ -28,8 +28,9 @@ const usFindCategTurn = () => {
 
 // Поиск пользователя и выдача результатов
 const userFind = () => {
-   let usFindClass = dqs("#usFindClass").value || 0;
-   let usFindFIO   = dqs("#usFindFIO").value   || '';
+   let usStatus    = dqs("#usFindCateg").value.trim() || "Учащийся";
+   let usFindClass = dqs("#usFindClass").value.trim() || '0';
+   let usFindFIO   = dqs("#usFindFIO").value.trim()   || '';
    if (usFindClass == '0' && !usFindFIO) {
       info(1, "Задайте условие поиска");
       return;
@@ -38,7 +39,22 @@ const userFind = () => {
       info(1, "В поле «ФИО» должно быть не менее трех символов.");
       return;
    }
-   
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "l":  "${uLogin}", "p":  "${uToken}", "f":  "usFind",
+      "z": ["${usStatus}", "${usFindClass}", "${usFindFIO}"]
+   }`};
+   (async () => {
+      let usFindRes = "Пользователи не найдены";
+      let apiResp   = await (await fetch("/", apiOpt)).text();
+      // if (apiResp != "none") {
+         alert(apiResp);
+         /*
+         usFindRes = '';
+         for (let usLogin in JSON.parse(apiResp))
+            usFindRes += '';
+         */
+      // }
+   })();
 }
 
 // Кнопка для генерирования/отключения формы добавления нового юзера
@@ -119,8 +135,7 @@ const userAddEdit = arg => {
    
    // Посылаем запрос к API на добавление/редактирование
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}",
-      "f":  "usAddEdit",
+      "l":  "${uLogin}", "p":  "${uToken}", "f":  "usAddEdit",
       "z":  ${JSON.stringify(newUser)}
    }`};
    (async () => {
@@ -142,7 +157,8 @@ createSection("users", `
       <select id="usFindClass">
          <option value="0">Любой класс</option>
       </select>
-      <input type="text" id="usFindFIO" placeholder="ФИО">     
+      <input type="text" id="usFindFIO" placeholder="ФИО"
+             onKeyDown="if (event.keyCode == 13) userFind()">     
       <button type="button" onclick="userFind()">Искать</button>
    </div>
    <div id="usFindResult"></div>
