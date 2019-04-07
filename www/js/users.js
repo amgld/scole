@@ -11,13 +11,28 @@
 // (подгружается с помощью API в конце этого модуля)
 let clListSel = '';
 
+// Поиск пользователя и выдача результатов
+const userFind = () => {
+   let usFindClass = dqs("#usFindClass").value || 0;
+   let usFindFIO   = dqs("#usFindFIO").value   || '';
+   if (usFindClass == '0' && !usFindFIO) {
+      info(1, "Задайте хотя бы одно условие поиска");
+      return;
+   }
+   if (usFindClass == '0' && usFindFIO.length < 3) {
+      info(1, "В поле «ФИО» должно быть не менее трех символов.");
+      return;
+   }
+   
+}
+
 // Кнопка для генерирования/отключения формы добавления нового юзера
 const nuFormButt = `
    <button type="button" id="addUser" onclick="userFormGen('add')">
-   + Добавить</button>`;
+   + Добавить пользователя</button>`;
 
-// Циклическое переключение поля категории юзера
-// и отображение полей выбора класса и отчества
+// Циклическое переключение поля категории юзера и отображение полей
+// выбора класса и отчества в форме добавления/редактирования пользователя
 const newCategTurn = () => {
    let ncField = dqs("#newUcateg");
    if (ncField.value == "Учащийся") {
@@ -105,6 +120,15 @@ const userAddEdit = arg => {
 createSection("users", `
    <div id="addEditUser"></div>
    ${nuFormButt}
+   <h3>Поиск пользователей</h3>
+   <div id="findUser">
+      <select id="usFindClass">
+         <option value="0">Класс не задан</option>
+      </select>
+      <input type="text" id="usFindFIO" placeholder="ФИО">     
+      <button type="button" onclick="userFind()">Искать</button>
+   </div>
+   <div id="usFindResult"></div>
 `);
 
 // Динамически подгружаем список классов в строку clList для селекта
@@ -119,6 +143,7 @@ getContent.users = () => {
          let apiResp   = await (await fetch("/", apiOpt)).text();
          let clListArr = classSort(JSON.parse(apiResp));
          for (let cl of clListArr) clListSel += `<option>${cl}</option>`;
+         dqs("#usFindClass").innerHTML += clListSel;
       }
    })();   
 }
