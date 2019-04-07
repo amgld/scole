@@ -4,6 +4,7 @@
    "ERR404":   "<h1>404</h1><hr><address>ScoleServer</address>",
    "MIME":   {
       "svg":   "image/svg+xml",
+      "gif":   "image/gif",
       "css":   "text/css",
       "html":  "text/html",
       "js":    "text/javascript",

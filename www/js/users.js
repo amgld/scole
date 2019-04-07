@@ -44,16 +44,28 @@ const userFind = () => {
       "z": ["${usStatus}", "${usFindClass}", "${usFindFIO}"]
    }`};
    (async () => {
+      dqs("#usFindResult").innerHTML = "Производится поиск...";
       let usFindRes = "Пользователи не найдены";
       let apiResp   = await (await fetch("/", apiOpt)).text();
-      // if (apiResp != "none") {
-         alert(apiResp);
-         /*
-         usFindRes = '';
-         for (let usLogin in JSON.parse(apiResp))
-            usFindRes += '';
-         */
-      // }
+      
+      if (apiResp != "none") {
+         let setAdmin = (usStatus == "Учитель") ?
+            "&#9398;&nbsp;" : '';
+         usFindRes = "<table><tr><th>Логин</th><th>Фамилия</th><th>Имя</th>"
+                   + "<th>Отчество</th><th>Класс</th><th>&nbsp;</th>";
+         for (let currUser of JSON.parse(apiResp))
+            usFindRes += `<tr>
+               <td>${currUser.login}</td>
+               <td>${currUser.famil}</td>
+               <td>${currUser.name}</td>
+               <td>${currUser.name2}</td>
+               <td>${currUser.unit}</td>
+               <td>&#9874;&nbsp;${setAdmin}&#10060;</td>
+            </tr>`;
+         usFindRes += "</table>";
+      }
+      
+      dqs("#usFindResult").innerHTML = usFindRes;
    })();
 }
 
@@ -118,6 +130,12 @@ const userAddEdit = arg => {
             info(1, "Заполнены не все поля!");
             return;
          }
+      }
+      let pLgn = /^[a-z0-9]+$/;
+      if (!pLgn.test(newUser["Ulogin"])) {
+         info(1, "Логин может состоять только из строчных "
+               + "букв латинского алфавита и цифр.");
+         return;
       }
       if (newUser.Upwd != newUser.Upwd1) {
          info(1, "Пароли не совпадают.");
