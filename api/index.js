@@ -14,7 +14,7 @@
 const modReq = {
    "classAdd": [1,1], "classesList": [1,0], "classDel": [0,1],
    "subjList": [1,0], "subjAdd": [1,1], "subjEdit": [1,1], "subjDel": [0,1],
-   "usAddEdit": [1,1]
+   "usAddEdit": [1,1], "usFind": [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -24,7 +24,7 @@ for (let modName in modReq) mod[modName] = require("./" + modName);
 const RIGHTS = {
    "root":    [
       "classAdd", "classesList", "classDel", "subjList", "subjAdd", "subjEdit",
-      "subjDel", "usAddEdit"
+      "subjDel", "usAddEdit", "usFind"
    ],
    "admin":   [],
    "teacher": [],

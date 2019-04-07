@@ -11,12 +11,27 @@
 // (подгружается с помощью API в конце этого модуля)
 let clListSel = '';
 
+// Циклическое переключение поля категории юзера и отображение поля
+// выбора класса в форме поиска пользователя
+const usFindCategTurn = () => {
+   let ucField = dqs("#usFindCateg");
+   if (ucField.value == "Учащийся") {
+      ucField.value = "Учитель";
+      dqs("#usFindClass").value = '0';
+      dqs("#usFindClass").style.display = "none";
+   }
+   else {
+      ucField.value = "Учащийся";
+      dqs("#usFindClass").style.display = "inline-block";
+   }
+}
+
 // Поиск пользователя и выдача результатов
 const userFind = () => {
    let usFindClass = dqs("#usFindClass").value || 0;
    let usFindFIO   = dqs("#usFindFIO").value   || '';
    if (usFindClass == '0' && !usFindFIO) {
-      info(1, "Задайте хотя бы одно условие поиска");
+      info(1, "Задайте условие поиска");
       return;
    }
    if (usFindClass == '0' && usFindFIO.length < 3) {
@@ -122,8 +137,10 @@ createSection("users", `
    ${nuFormButt}
    <h3>Поиск пользователей</h3>
    <div id="findUser">
+      <input type="text" id="usFindCateg" readonly value="Учащийся"
+             onClick="usFindCategTurn()">
       <select id="usFindClass">
-         <option value="0">Класс не задан</option>
+         <option value="0">Любой класс</option>
       </select>
       <input type="text" id="usFindFIO" placeholder="ФИО">     
       <button type="button" onclick="userFind()">Искать</button>

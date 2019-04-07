@@ -50,7 +50,7 @@ article input {
 article input:focus {
    background:#fff; outline:none;}
 article input#uCateg, article input#uCateg:focus {
-   background:#e6ded5; text-align:center; font-size:0.9em;
+   background:#e6ded5; caret-color:#e6ded5; text-align:center; font-size:0.9em;
    font-weight:bold; color:#963; border:none; padding:3px; cursor:pointer;}
 article button, output button {
    background:#963; color:#ff6; border:none;
@@ -120,6 +120,8 @@ section input, section select {
    ----------------------------------------------------- */
 section#users input {
    display:block; width:15em; max-width:98%; margin:3pt auto;}
+section#users input#usFindCateg, section#users input#newUcateg {
+   caret-color:#fff; cursor:pointer;}
 section#users select {
    margin:3pt auto; background:white;}
 section#users button {
@@ -134,6 +136,8 @@ section#users div#findUser input,
 section#users div#findUser select,
 section#users div#findUser button {
    display:inline-block;}
+section#users div#findUser input#usFindCateg {
+   width:6em;}
    
 /* БЛОК РАБОТЫ СО СПИСКОМ КЛАССОВ
    ----------------------------------------------------- */
