@@ -86,11 +86,24 @@ const nuFormButt = `
 const loadUsFile = () => {
    let reader = new FileReader();
    reader.onload = dt => {
-      let impUsStr = dt.target.result;
-      // Что-то делаем с этой строкой содержимого файла
-      alert(impUsStr);
+      let impUsStr = dt.target.result.replace(/\r/g, '').replace(/\n/g, '^');
+      let apiOpt = {method: "POST", cache: "no-cache", body: `{
+         "l":  "${uLogin}", "p":  "${uToken}", "f":  "usImport",
+         "z":  "${impUsStr}"
+      }`};
+      (async () => {
+         let apiResp = await (await fetch("/", apiOpt)).text();
+         if (apiResp == "none") info(1, "Ошибка. Импорт не произведен.");
+         else if (/^[0-9\-]+$/.test(apiResp)) {
+            let usImpVal = apiResp.split('-')[0],
+                usIgnVal = apiResp.split('-')[1];
+            info(0, `Импортировано: ${usImpVal}.<br>Пропущено: ${usIgnVal}.`);
+         }
+         else info(1, `Ошибка. Пользователь ${apiResp} `
+                    + "и последующие не импортированы.");
+      })();
    };
-   reader.onerror = er => info(1, "Ошибка чтения файла");
+   reader.onerror = e => info(1, "Ошибка чтения файла.");
    reader.readAsText(dqs("#loadUsFile").files[0]);
 }
 const nuImportButt = `
