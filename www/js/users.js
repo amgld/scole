@@ -49,34 +49,27 @@ const userFind = () => {
       let apiResp   = await (await fetch("/", apiOpt)).text();
       
       if (apiResp != "none") {
-         let setAdmTh = "<td>&nbsp;</td>",
-             setAdmInner = "<td title='Назначить администратором'>&#9398;</td>",
-             name2th = "<th>Отчество</th>",
-             name2inner = '',
-             unitTh = '',
-             unitInner  = '';
-         if (usStatus == "Учащийся") {
-            setAdmTh = '';
-            setAdmInner = '';
-            name2th  = '';
-            unitTh = "<th>Класс</th>";
-         }
+         let isPup        = (usStatus == "Учащийся"),
+             setAdmTh     = isPup ? '' : "<td>&nbsp;</td>",
+             setAdmInner  = isPup ? '' :
+                            "<td title='Назначить администратором'>&#9398;</td>",
+             name2th      = isPup ? '' : "<th>Отчество</th>",
+             unitTh       = isPup ? "<th>Класс</th>" : '';
          
          usFindRes = `
             <table><tr><th>Логин</th><th>Фамилия</th><th>Имя</th>
             ${name2th}${unitTh}<th>&nbsp;</th>${setAdmTh}<th>&nbsp;</th>`;
+
          for (let currUser of JSON.parse(apiResp)) {
-            if (usStatus == "Учащийся")
-               unitInner  = `<td class="un">${currUser.unit}</td>`;
-            else
-               name2inner = `<td>${currUser.name2}</td>`;
+            let unitInner  = isPup ? `<td class="un">${currUser.unit}</td>` : '',
+                name2inner = isPup ? '' : `<td>${currUser.name2}</td>`;
             usFindRes += `<tr>
                <td>${currUser.login}</td><td>${currUser.famil}</td>
                <td>${currUser.name}</td>${name2inner}${unitInner}
                <td title="Редактировать">&#9874;</td>${setAdmInner}
-               <td title="Удалить">&#10060;</td>
+               <td title="Заблокировать">&#10060;</td>
             </tr>`;
-         }
+         }         
          usFindRes += "</table>";
       }
       
@@ -88,6 +81,24 @@ const userFind = () => {
 const nuFormButt = `
    <button type="button" id="addUser" onclick="userFormGen('add')">
    + Добавить пользователя</button>`;
+   
+// Сервис импорта юзеров из файла
+const loadUsFile = () => {
+   let reader = new FileReader();
+   reader.onload = dt => {
+      let impUsStr = dt.target.result;
+      // Что-то делаем с этой строкой содержимого файла
+      alert(impUsStr);
+   };
+   reader.onerror = er => info(1, "Ошибка чтения файла");
+   reader.readAsText(dqs("#loadUsFile").files[0]);
+}
+const nuImportButt = `
+   <input id="loadUsFile" type="file" onChange="loadUsFile()">
+   <button type="button" id="importUser" onclick="dqs('#loadUsFile').click()">
+      Импорт пользователей из файла</button>
+   <a href="static/impUsTpl.html" target="_blank">(требования к файлу)</a>`;
+   
 
 // Циклическое переключение поля категории юзера и отображение полей
 // выбора класса и отчества в форме добавления/редактирования пользователя
@@ -182,7 +193,7 @@ const userAddEdit = arg => {
 // Формирование контента странички
 createSection("users", `
    <div id="addEditUser"></div>
-   ${nuFormButt}
+   ${nuFormButt}${nuImportButt}
    <h3>Поиск пользователей</h3>
    <div id="findUser">
       <input type="text" id="usFindCateg" readonly value="Учащийся"
