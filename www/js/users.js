@@ -52,7 +52,8 @@ const userFind = () => {
          let isPup        = (usStatus == "Учащийся"),
              setAdmTh     = isPup ? '' : "<td>&nbsp;</td>",
              setAdmInner  = isPup ? '' :
-                            "<td title='Назначить администратором'>&#9398;</td>",
+                            `<td title="Назначить администратором"
+                                 onClick="setAdmin('{{usName}}')">&#9398;</td>`,
              name2th      = isPup ? '' : "<th>Отчество</th>",
              unitTh       = isPup ? "<th>Класс</th>" : '';
          
@@ -71,7 +72,8 @@ const userFind = () => {
                    '${usStatus}', '${currUser.login}', '${currUser.famil}',
                    '${currUser.name}', '${currUser.name2}', '${currUser.unit}',
                    '********', '********'                      
-                   ])">&#9874;</td>${setAdmInner}
+                   ])">&#9874;</td>
+               ${setAdmInner.replace("{{usName}}", currUser.login)}
                <td title="Заблокировать">&#10060;</td>
             </tr>`;
          }         
@@ -240,6 +242,23 @@ const userAddEdit = async (arg) => {
       if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
       else info(0,
          `Пользователь ${newUser.Ulogin} успешно добавлен (отредактирован).`);
+   })();
+}
+
+// Назначение пользователя администратором
+const setAdmin = login => {
+   if (!confirm("Вы уверены?")) return;
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+          "l": "${uLogin}", "p": "${uToken}", "f": "usSetAdmin",
+          "z": "login"
+       }`}; 
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+      else if (apiResp == "already")
+         info(1, `Пользователь ${login} уже является администратором.`);
+      else
+         info(0, `Пользователь ${login} успешно назначен администратором.`);
    })();
 }
 
