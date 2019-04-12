@@ -60,10 +60,16 @@ const userFind = () => {
          usFindRes = `
             <table><tr><th>Логин</th><th>Фамилия</th><th>Имя</th>
             ${name2th}${unitTh}<th>&nbsp;</th>${setAdmTh}<th>&nbsp;</th>`;
+            
+         let apiFindResult = userSort(JSON.parse(apiResp));
 
-         for (let currUser of JSON.parse(apiResp)) {
+         for (let currUser of apiFindResult) {
             let unitInner  = isPup ? `<td class="un">${currUser.unit}</td>` : '',
-                name2inner = isPup ? '' : `<td>${currUser.name2}</td>`;
+                name2inner = isPup ? '' : `<td>${currUser.name2}</td>`,
+                setAdmInnerCurr = currUser.admin ? 
+                   "<td title='Является администратором'>A</td>" :
+                   setAdmInner;
+
             usFindRes += `<tr>
                <td>${currUser.login}</td><td>${currUser.famil}</td>
                <td>${currUser.name}</td>${name2inner}${unitInner}
@@ -73,7 +79,7 @@ const userFind = () => {
                    '${currUser.name}', '${currUser.name2}', '${currUser.unit}',
                    '********', '********'                      
                    ])">&#9874;</td>
-               ${setAdmInner.replace("{{usName}}", currUser.login)}
+               ${setAdmInnerCurr.replace("{{usName}}", currUser.login)}
                <td title="Заблокировать">&#10060;</td>
             </tr>`;
          }         
@@ -147,11 +153,15 @@ const userFormGen =
    if (!clList) {info(1, "Не получен список классов"); return;}
    const zagol = {add:"Новый пользователь", edit:"Редактирование пользователя"},
       passWarnTxt = {add:'',
-         edit:"<p>Если вы не изменяете пароль,<br>не редактируйте эти поля</p>"};
+         edit:"<p>Если вы не изменяете пароль,<br>не редактируйте эти поля</p>"},
+      admWarnTxt = {add:'',
+         edit:"<p>Если пользователь являлся администратором,<br>"
+             +"после редактирования этот статус сбросится!</p>"};
    let formInner = `<h3>${zagol[func]}</h3>
       <input type="hidden" id="addOrEdit" value="${func}">
       <input type="text" id="newUcateg" readonly value="${vals[0]}"
              onClick="newCategTurn()">
+      ${admWarnTxt[func]}
       <input type="text" id="newUlogin" placeholder="Логин"
          value="${vals[1]}">
       <input type="text" id="newUfamil" placeholder="Фамилия"
@@ -246,11 +256,12 @@ const userAddEdit = async (arg) => {
 }
 
 // Назначение пользователя администратором
+// (в вызове API второй аргумент set - назначить, unset - разжаловать)
 const setAdmin = login => {
    if (!confirm("Вы уверены?")) return;
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
           "l": "${uLogin}", "p": "${uToken}", "f": "usSetAdmin",
-          "z": "login"
+          "z": ["${login}", "set"]
        }`}; 
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();

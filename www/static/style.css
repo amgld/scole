@@ -161,6 +161,8 @@ section#users td[title="Назначить администратором"],
 section#users td[title="Заблокировать"],
 section#users td[title="Разблокировать"] {
    color:#963; cursor:pointer;}
+section#users td[title="Является администратором"] {
+   color:red; font-weight:bold; text-align:center;}
    
 /* БЛОК РАБОТЫ СО СПИСКОМ КЛАССОВ
    ----------------------------------------------------- */

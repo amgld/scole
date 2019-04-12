@@ -40,13 +40,15 @@ module.exports = async req => {
       if (dbResult.length) {
          for (let currUser of dbResult) {
             let respClass = currUser.Uclass || '',
-                respOtch  = currUser.Uotch  || '';
+                respOtch  = currUser.Uotch  || '',
+                respAdmin = currUser.admin  || '';
             res.push({
                login: currUser.Ulogin,
                famil: currUser.Ufamil,
                name:  currUser.Uname,
                name2: respOtch,
-               unit:  respClass               
+               unit:  respClass,
+               admin: respAdmin
             });
          }
          return JSON.stringify(res);
