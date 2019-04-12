@@ -13,21 +13,29 @@ module.exports = async newUser => {
       // Определяем имя коллекции, в которую будем писать
       let collect = (newUser.Ucateg == "Учащийся") ? "pupils" : "staff";
       delete newUser.Ucateg;
+      
+      // Не пуст ли пароль? Если не пуст, генерируем хэши
+      newUser.Upwd = newUser.Upwd.trim();
+      if (!newUser.Upwd) return "none";
+      let pwdOrig = newUser.Upwd;
+      newUser.Upwd = hash(newUser.Upwd, salt); // хэш пароля
+      if (collect == "pupils")                 // хэш родительского пароля
+         newUser.UpwdPar = hash('p' + captNumGen(newUser.Upwd), salt);
    
       // Проверяем, нет ли уже юзера с таким же логином,
-      // если нет - добавляем, если есть - обновляем (пароли не обновляем!)
-      let res = await dbFind(collect, {Ulogin: newUser.Ulogin});   
+      // если нет - добавляем, если есть - обновляем
+      // Пароль обновляем только тогда, когда он не равен восьми *
+      // (признак того, что данные редактировались, но пароль не трогали)
+      let res = await dbFind(collect, {Ulogin: newUser.Ulogin}); 
       if (res.length) {
-         newUser.Upwd = res[0].Upwd;
-         if (collect == "pupils") newUser.UpwdPar = res[0].UpwdPar;
+         if (pwdOrig == "********") {
+            newUser.Upwd = res[0].Upwd;
+            if (collect == "pupils") newUser.UpwdPar = res[0].UpwdPar;
+         }
          db[collect].update({Ulogin: newUser.Ulogin}, newUser, {});
       }
-      else {
-         newUser.Upwd = hash(newUser.Upwd, salt); // хэш пароля
-         if (collect == "pupils")                 // хэш родительского пароля
-            newUser.UpwdPar = hash('p' + captNumGen(newUser.Upwd), salt);
-         db[collect].insert(newUser);
-      }
+      else db[collect].insert(newUser);
+      
       return "success";
    }
    catch(e) {return "none";}

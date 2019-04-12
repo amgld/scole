@@ -66,7 +66,12 @@ const userFind = () => {
             usFindRes += `<tr>
                <td>${currUser.login}</td><td>${currUser.famil}</td>
                <td>${currUser.name}</td>${name2inner}${unitInner}
-               <td title="Редактировать">&#9874;</td>${setAdmInner}
+               <td title="Редактировать"
+                   onClick="userFormGen('edit', [
+                   '${usStatus}', '${currUser.login}', '${currUser.famil}',
+                   '${currUser.name}', '${currUser.name2}', '${currUser.unit}',
+                   '********', '********'                      
+                   ])">&#9874;</td>${setAdmInner}
                <td title="Заблокировать">&#10060;</td>
             </tr>`;
          }         
@@ -115,9 +120,12 @@ const nuImportButt = `
 
 // Циклическое переключение поля категории юзера и отображение полей
 // выбора класса и отчества в форме добавления/редактирования пользователя
-const newCategTurn = () => {
+// Аргумент 0 - традиционное переключение, 1 - первичное (не по клику на поле)
+const newCategTurn = (arg = 0) => {
    let ncField = dqs("#newUcateg");
-   if (ncField.value == "Учащийся") {
+   if (
+      (ncField.value == "Учащийся" && !arg) ||
+      (ncField.value == "Учитель" && arg)) {
       ncField.value = "Учитель";
       dqs("#newUclass").style.display = "none";
       dqs("#newUotch").style.display  = "block";
@@ -130,24 +138,37 @@ const newCategTurn = () => {
 }
 
 // Генерирование формы добавления/редактирования пользователя
-// Аргумент: add - добавление, edit - редактирование
-const userFormGen = func => {
+// Первый аргумент: add - добавление, edit - редактирование
+// Второй аргумент: подставляемые значения полей (массив)
+const userFormGen =
+   (func, vals = ["Учащийся", '', '', '', '', 0, '', '']) => {
    if (!clList) {info(1, "Не получен список классов"); return;}
-   const zagol = {add:"Новый пользователь", edit:"Редактирование пользователя"};
+   const zagol = {add:"Новый пользователь", edit:"Редактирование пользователя"},
+      passWarnTxt = {add:'',
+         edit:"<p>Если вы не изменяете пароль,<br>не редактируйте эти поля</p>"};
    let formInner = `<h3>${zagol[func]}</h3>
-      <input type="text" id="newUcateg" readonly value="Учащийся"
+      <input type="text" id="newUcateg" readonly value="${vals[0]}"
              onClick="newCategTurn()">
-      <input type="text" id="newUlogin" placeholder="Логин">
-      <input type="text" id="newUfamil" placeholder="Фамилия">
-      <input type="text" id="newUname"  placeholder="Имя">
-      <input type="text" id="newUotch"  placeholder="Отчество">      
+      <input type="text" id="newUlogin" placeholder="Логин"
+         value="${vals[1]}">
+      <input type="text" id="newUfamil" placeholder="Фамилия"
+         value="${vals[2]}">
+      <input type="text" id="newUname"  placeholder="Имя"
+         value="${vals[3]}">
+      <input type="text" id="newUotch"  placeholder="Отчество"
+         value="${vals[4]}">      
       <select id="newUclass">${clListSel}</select>
-      <input type="password" id="newUpwd"   placeholder="Пароль">
-      <input type="password" id="newUpwd1"  placeholder="Повтор пароля">      
+      ${passWarnTxt[func]}
+      <input type="password" id="newUpwd" placeholder="Пароль"
+         value="${vals[6]}">
+      <input type="password" id="newUpwd1" placeholder="Повтор пароля"
+         value="${vals[7]}">      
       <button type="button" onclick="userAddEdit(0)">Сохранить</button>
-   `;
+   `;   
    dqs("#addEditUser").innerHTML  = formInner;
+   if (vals[5]) dqs("#newUclass").value = vals[5];   
    dqs("#newUotch").style.display = "none";
+   newCategTurn(1);
    dqs("#newUlogin").focus();
    
    dqs("#addUser").outerHTML = `
@@ -185,6 +206,7 @@ const userAddEdit = arg => {
       else                              delete newUser.Uclass;
       
       // Если это добавление, а не редактирование, проверяем, свободен ли логин
+      // if ()
    }
    dqs("#addEditUser").innerHTML = '';
    dqs("#addUser").outerHTML     = nuFormButt;

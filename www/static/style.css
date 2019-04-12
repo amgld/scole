@@ -121,6 +121,8 @@ section input, section select {
 
 /* БЛОК РАБОТЫ С ПОЛЬЗОВАТЕЛЯМИ
    ----------------------------------------------------- */
+section#users p {
+   margin:5px 0px 3px; color:gray;}
 section#users input {
    display:block; width:15em; max-width:98%; margin:3pt auto;}
 section#users input#loadUsFile {
