@@ -20,12 +20,12 @@ module.exports = async impUsStr => {
       for (let currStr of usStrArr) {
          currStr = currStr.trim(); if (!currStr) continue; else n++;
          let usFields = currStr.split(' ');
-         let usLogin = usFields[0],
-             usPassw = usFields[1],
-             usFamil = usFields[2],
-             usName  = usFields[3],
-             usOtch  = usFields[4],
-             usClass = usFields[5];
+         let usLogin = usFields[0].trim(),
+             usPassw = usFields[1].trim(),
+             usFamil = usFields[2].trim(),
+             usName  = usFields[3].trim(),
+             usOtch  = usFields[4].trim(),
+             usClass = usFields[5].trim();
          if (!(usPassw && usFamil && usName && usOtch && usClass))
             return usLogin;
          

@@ -147,6 +147,7 @@ const userFormGen =
       passWarnTxt = {add:'',
          edit:"<p>Если вы не изменяете пароль,<br>не редактируйте эти поля</p>"};
    let formInner = `<h3>${zagol[func]}</h3>
+      <input type="hidden" id="addOrEdit" value="${func}">
       <input type="text" id="newUcateg" readonly value="${vals[0]}"
              onClick="newCategTurn()">
       <input type="text" id="newUlogin" placeholder="Логин"
@@ -179,8 +180,8 @@ const userFormGen =
 
 // Добавление/редактирование пользователя
 // (аргумент 1 - ничего не делать, просто закрыть форму)
-const userAddEdit = arg => {
-   let newUser = {};
+const userAddEdit = async (arg) => {
+   let newUser = {}, checkLogin = true;
    if (!arg) {
       const newUsFields = ["Ulogin", "Ufamil", "Uname", "Uotch", "Ucateg",
                            "Uclass", "Upwd", "Upwd1"];      
@@ -205,9 +206,26 @@ const userAddEdit = arg => {
       if (newUser.Ucateg == "Учащийся") delete newUser.Uotch;
       else                              delete newUser.Uclass;
       
-      // Если это добавление, а не редактирование, проверяем, свободен ли логин
-      // if ()
+      // Если это добавление, а не редактирование, проверяем, свободен ли логин      
+      if (dqs("#addOrEdit").value == "add") { 
+         let apiOpt = {method: "POST", cache: "no-cache", body: `{
+            "l":  "${uLogin}", "p":  "${uToken}", "f":  "usFindLogin",
+            "z":  "${newUser["Ulogin"]}"
+         }`};         
+         await (async () => {
+            let apiResp = await (await fetch("/", apiOpt)).text();
+            if (apiResp == "none") {
+               info(1, "Запрашиваемая операция отклонена.");
+               checkLogin = false;
+            }
+            else if (apiResp == "busy") {
+               info(1, "Пользователь с таким логином уже существует.");
+               checkLogin = false;
+            }
+         })();
+      }
    }
+   if (!checkLogin) return;
    dqs("#addEditUser").innerHTML = '';
    dqs("#addUser").outerHTML     = nuFormButt;
    if (arg) return;
