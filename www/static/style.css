@@ -119,7 +119,7 @@ section button {
 section input, section select {
    font-size:1em; padding:3px; border:1px solid #b0844d; border-radius:3px;}
 
-/* БЛОК РАБОТЫ С ПОЛЬЗОВАТЕЛЯМИ
+/* БЛОКИ РАБОТЫ С ПОЛЬЗОВАТЕЛЯМИ И АДМИНИСТРАТОРАМИ
    ----------------------------------------------------- */
 section#users p {
    margin:5px 0px 3px; color:gray;}
@@ -147,21 +147,22 @@ section#users div#findUser button {
    display:inline-block;}
 section#users div#findUser input#usFindCateg {
    width:6em;}
-section#users table {
+section#users table, section#admins table {
    margin:10px auto; background:white; border-collapse:collapse;
    border:1px solid #963;}
-section#users th, section#users td {
+section#users th, section#users td, section#admins td {
    border:1px solid #963; padding:2px 5px; text-align:left;}
 section#users th {
    text-align:center; color:#963;}
 section#users td.un {
    text-align:center;}
-section#users td[title="Редактировать"],
-section#users td[title="Назначить администратором"],
-section#users td[title="Заблокировать"],
-section#users td[title="Разблокировать"] {
+section#users  td[title="Редактировать"],
+section#users  td[title="Назначить администратором"],
+section#admins td[title="Удалить из администраторов"],
+section#users  td[title="Заблокировать"],
+section#users  td[title="Разблокировать"] {
    color:#963; cursor:pointer;}
-section#users td[title="Является администратором"] {
+section#users  td[title="Является администратором"] {
    color:red; font-weight:bold; text-align:center;}
    
 /* БЛОК РАБОТЫ СО СПИСКОМ КЛАССОВ
