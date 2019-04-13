@@ -68,19 +68,37 @@ const userFind = () => {
                 name2inner = isPup ? '' : `<td>${currUser.name2}</td>`,
                 setAdmInnerCurr = currUser.admin ? 
                    "<td title='Является администратором'>A</td>" :
-                   setAdmInner;
-
-            usFindRes += `<tr>
-               <td>${currUser.login}</td><td>${currUser.famil}</td>
-               <td>${currUser.name}</td>${name2inner}${unitInner}
-               <td title="Редактировать"
+                   setAdmInner,
+                color = '',
+                tdEdit = `
+                   <td title="Редактировать"
                    onClick="userFormGen('edit', [
                    '${usStatus}', '${currUser.login}', '${currUser.famil}',
                    '${currUser.name}', '${currUser.name2}', '${currUser.unit}',
                    '********', '********'                      
                    ])">&#9874;</td>
+                `,
+                tdBlock = `
+                   <td title="Заблокировать"
+                   onClick="usBlock('${currUser.login}', 'block')">&#10060;</td>
+                `;
+                   
+            if (currUser.block) {
+               color = " class='blk'";
+               tdBlock = `
+                  <td title="Разблокировать"
+                  onClick="usBlock('${currUser.login}', 'unblock')">&#10004;</td>
+               `;
+               tdEdit = "<td>&nbsp;</td>";
+               setAdmInnerCurr = "<td>&nbsp;</td>";
+            }
+
+            usFindRes += `<tr${color}>
+               <td>${currUser.login}</td><td>${currUser.famil}</td>
+               <td>${currUser.name}</td>${name2inner}${unitInner}
+               ${tdEdit}
                ${setAdmInnerCurr.replace("{{usName}}", currUser.login)}
-               <td title="Заблокировать">&#10060;</td>
+               ${tdBlock}
             </tr>`;
          }         
          usFindRes += "</table>";
@@ -123,7 +141,8 @@ const nuImportButt = `
    <input id="loadUsFile" type="file" onChange="loadUsFile()">
    <button type="button" id="importUser" onclick="dqs('#loadUsFile').click()">
       Импорт пользователей из файла</button>
-   <a href="static/impUsTpl.html" target="_blank">(требования к файлу)</a>`;
+   <a href="static/impUsTpl.html"
+      target="_blank" class="btn">(требования&nbsp;к&nbsp;файлу)</a>`;
    
 
 // Циклическое переключение поля категории юзера и отображение полей
@@ -193,7 +212,7 @@ const userFormGen =
 // Добавление/редактирование пользователя
 // (аргумент 1 - ничего не делать, просто закрыть форму)
 const userAddEdit = async (arg) => {
-   let newUser = {}, checkLogin = true;
+   let newUser = {}, checkLogin = true, operAdd = 0;
    if (!arg) {
       const newUsFields = ["Ulogin", "Ufamil", "Uname", "Uotch", "Ucateg",
                            "Uclass", "Upwd", "Upwd1"];      
@@ -219,7 +238,8 @@ const userAddEdit = async (arg) => {
       else                              delete newUser.Uclass;
       
       // Если это добавление, а не редактирование, проверяем, свободен ли логин      
-      if (dqs("#addOrEdit").value == "add") { 
+      if (dqs("#addOrEdit").value == "add") {
+         operAdd = 1;
          let apiOpt = {method: "POST", cache: "no-cache", body: `{
             "l":  "${uLogin}", "p":  "${uToken}", "f":  "usFindLogin",
             "z":  "${newUser["Ulogin"]}"
@@ -250,8 +270,11 @@ const userAddEdit = async (arg) => {
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
       if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
-      else info(0,
-         `Пользователь ${newUser.Ulogin} успешно добавлен (отредактирован).`);
+      else {
+         if (!operAdd) userFind();
+         info(0,
+         `Пользователь ${newUser.Ulogin} успешно добавлен (отредактирован).`);         
+      }
    })();
 }
 
@@ -268,8 +291,31 @@ const setAdmin = login => {
       if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
       else if (apiResp == "already")
          info(1, `Пользователь ${login} уже является администратором.`);
-      else
+      else {
+         userFind();
          info(0, `Пользователь ${login} успешно назначен администратором.`);
+      }
+   })();
+}
+
+// Блокирование/разблокирование юзера
+// (в вызове API второй аргумент block либо unblock)
+const usBlock = (login, func) => {
+   if (!confirm("Вы уверены?")) return;
+   const warn = {"block": "заблокирован", "unblock": "разблокирован"};
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+          "l": "${uLogin}", "p": "${uToken}", "f": "usBlock",
+          "z": ["${login}", "${func}"]
+       }`}; 
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+      else if (apiResp == "already")
+         info(1, `Пользователь ${login} уже ${warn[func]}.`);
+      else {
+         userFind();
+         info(0, `Пользователь ${login} успешно ${warn[func]}.`);
+      }
    })();
 }
 

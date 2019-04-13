@@ -11,8 +11,8 @@
 // класс типа 8Б, ФИО это фрагмент для поиска по подстроке)
 // Возвращает none или массив найденных юзеров, где каждый юзер - это объект
 // {
-//    login: "vasya", famil: "Пупкин", name: "Василий",
-//    name2: "Иванович", unit: "8Б", admin: false
+//    login: "vasya", famil: "Пупкин", name: "Василий", name2: "Иванович",
+//    unit: "8Б", admin: false, block: false
 // }
 module.exports = async req => {
    let dbResult = [], res = [];
@@ -44,14 +44,16 @@ module.exports = async req => {
          for (let currUser of dbResult) {
             let respClass = currUser.Uclass || '',
                 respOtch  = currUser.Uotch  || '',
-                respAdmin = currUser.admin  || '';
+                respAdmin = currUser.admin  || '',
+                respBlock = currUser.block  || '';
             res.push({
                login: currUser.Ulogin,
                famil: currUser.Ufamil,
                name:  currUser.Uname,
                name2: respOtch,
                unit:  respClass,
-               admin: respAdmin
+               admin: respAdmin,
+               block: respBlock
             });
          }
          return JSON.stringify(res);

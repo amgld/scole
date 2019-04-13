@@ -25,6 +25,8 @@ h3:first-child {
 select {
    -webkit-appearance: none; -moz-appearance: none;
    -ms-appearance: none; appearance: none;}
+button {
+   font-size: 100%;}
    
 /* ОКНА С ФОРМОЙ АВТОРИЗАЦИИ И ИНФОРМАЦИОННЫМ СООБЩЕНИЕМ
    ----------------------------------------------------- */
@@ -156,14 +158,17 @@ section#users th {
    text-align:center; color:#963;}
 section#users td.un {
    text-align:center;}
+section#users tr.blk td {
+   color:gray;}
 section#users  td[title="Редактировать"],
 section#users  td[title="Назначить администратором"],
 section#admins td[title="Удалить из администраторов"],
 section#users  td[title="Заблокировать"],
-section#users  td[title="Разблокировать"] {
-   color:#963; cursor:pointer;}
+section#users  tr.blk td[title="Разблокировать"] {
+   color:#963; cursor:pointer; text-align:center;}
 section#users  td[title="Является администратором"] {
    color:red; font-weight:bold; text-align:center;}
+}
    
 /* БЛОК РАБОТЫ СО СПИСКОМ КЛАССОВ
    ----------------------------------------------------- */

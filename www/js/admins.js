@@ -45,6 +45,7 @@ getContent.admins = () => {
          if (!admListArr.length)
             tableInner = "<tr><td>Администраторов не найдено</td></tr>";
          else for (let currAdm of admListArr) {
+            if (currAdm.block) continue;
             tableInner += `<tr>
                <td>${currAdm.Ulogin}</td>
                <td>${currAdm.Ufamil}</td>

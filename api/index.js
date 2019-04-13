@@ -12,11 +12,11 @@
 // где первое значение - требуется ли await при вызове модуля,
 //     второе значение - передается ли модулю объект аргументов postDt.z
 const modReq = {
-   "classAdd": [1,1],    "classesList": [1,0], "classDel": [0,1],
-   "subjList": [1,0],    "subjAdd": [1,1],     "subjEdit": [1,1],
-   "subjDel": [0,1],     "usAddEdit": [1,1],   "usFind": [1,1],
-   "usFindLogin": [1,1], "usImport": [1,1],    "usSetAdmin": [1,1],
-   "adminsList": [1,0]
+   "classAdd":    [1,1], "classesList": [1,0], "classDel":   [0,1],
+   "subjList":    [1,0], "subjAdd":     [1,1], "subjEdit":   [1,1],
+   "subjDel":     [0,1], "usAddEdit":   [1,1], "usFind":     [1,1],
+   "usFindLogin": [1,1], "usImport":    [1,1], "usSetAdmin": [1,1],
+   "adminsList":  [1,0], "usBlock":     [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -27,7 +27,7 @@ const RIGHTS = {
    "root":    [
       "classAdd", "classesList", "classDel", "subjList", "subjAdd", "subjEdit",
       "subjDel",  "usAddEdit",   "usFind",   "usFindLogin", "usImport",
-      "usSetAdmin", "adminsList"
+      "usSetAdmin", "adminsList", "usBlock"
    ],
    "admin":   [],
    "teacher": [],
