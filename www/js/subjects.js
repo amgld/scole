@@ -62,9 +62,8 @@ const subjAdd = () => {
    }
    
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}",
-      "f":  "subjAdd",
-      "z":  ["${newSubjKey}", "${newSubjName}"]
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjAdd",
+      "z": ["${newSubjKey}", "${newSubjName}"]
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
@@ -80,9 +79,8 @@ const subjAdd = () => {
 const subjDel = sbDelKey => {
    if (!confirm("Вы уверены?")) return;
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}",
-      "f":  "subjDel",
-      "z":  "${sbDelKey}"
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjDel",
+      "z": "${sbDelKey}"
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
@@ -114,9 +112,8 @@ const subjEdit = {
       // Отправляем запрос к API на редактирование,
       // в случае успеха публикуем обновленные данные
       let apiOpt = {method: "POST", cache: "no-cache", body: `{
-         "l":  "${uLogin}", "p":  "${uToken}",
-         "f":  "subjEdit",
-         "z":  ["${sbKey}", "${newName}"]
+         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjEdit",
+         "z": ["${sbKey}", "${newName}"]
       }`};
       (async () => {
          let apiResp = await (await fetch("/", apiOpt)).text();
@@ -148,7 +145,7 @@ createSection("subjects", `
 // и публикуем его на страничке (имя метода = имени пункта меню!)
 getContent.subjects = () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}", "f":  "subjList"
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjList"
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();

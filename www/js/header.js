@@ -58,6 +58,63 @@ const showMenuMob = () => {
       (mmiDisp == "none") ? "static/menuMobClose.svg" : "static/menuMob.svg";
 }
 
+// Запрос к API для смены пароля и сообщение о результате
+const chPwdApi = () => {
+   let pwd  = dqs("#newPwd").value.trim(),
+       pwd1 = dqs("#newPwd1").value.trim();
+       
+   dqs("#chPwdWarn").style.display = "none";
+   if (pwd != pwd1) {
+      dqs("#chPwdWarn").innerHTML = "Пароли не совпадают!";
+      dqs("#chPwdWarn").style.display = "block";
+      return;
+   }
+   if (pwd.length < 8) {
+      dqs("#chPwdWarn").innerHTML =
+         "Пароль должен содержать<br>не менее 8 символов!";
+      dqs("#chPwdWarn").style.display = "block";
+      return;
+   }
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usChPwd",
+      "z": ["${uLogin}", "${pwd}"]      
+   }`};
+   (async () => {
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+      else {
+         dqs("#chPwdWin").style.display = "none";
+         info(0,
+           "Пароль успешно заменен.<br>Авторизуйтесь заново с новым паролем.");
+         document.body.onclick = () => location.reload();
+      }
+   })();
+}
+
+// Показ модального окна для смены пароля
+const chPwd = () => {
+   let role = dqs("#selRole").value;
+   if (role == "root") info(1,
+      "Смена пароля главного администратора веб-интерфейсом невозможна.");
+   else if (role == "pupil" || role == "parent") info(0,
+      "Для смены пароля обратитесь к администратору электронного журнала.");
+   else {
+      elems.chPwdElem = document.createElement("div");
+      elems.chPwdElem.innerHTML = `
+         <h1>Смена пароля</h1>
+         <input type="password" id="newPwd" placeholder="Пароль">
+         <input type="password" id="newPwd1" placeholder="Повторите пароль"
+                onKeyDown="if (event.keyCode == 13) chPwdApi()">
+         <button type="button" onClick="chPwdApi()">Сменить пароль</button>
+         <div id="chPwdWarn"></div>
+      `;
+      elems.chPwdElem.id = "chPwdWin";
+      dqs("#content").appendChild(elems.chPwdElem);
+      elems.chPwdElem.style.display = "block";
+      dqs("#newPwd").focus();
+   }
+}
+
 // Формирование хидера и включение футера
 const headerGen = () => {
    let apiRespObj = JSON.parse(apiResp);
@@ -70,7 +127,7 @@ const headerGen = () => {
          <select id="selRole" onChange="menuGen()" title="Роль пользователя">
             ${headerOptGen(rl)}
          </select>
-         <span id="chPwd" title="Сменить пароль">&#9874;</span>
+         <span id="chPwd" title="Сменить пароль" onClick="chPwd()">&#9874;</span>
          <a href='' title="Выход">&#9635;</a>
       </header>
       <nav></nav>

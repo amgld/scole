@@ -12,8 +12,8 @@
 const unsetAdmin = login => {
    if (!confirm("Вы уверены?")) return;
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-          "l": "${uLogin}", "p": "${uToken}", "f": "usSetAdmin",
-          "z": ["${login}", "unset"]
+          "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
+          "f": "usSetAdmin", "z": ["${login}", "unset"]
        }`}; 
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
@@ -34,7 +34,7 @@ createSection("admins", `<h3>Администраторы</h3><table></table>`);
 // Имя метода = имени пункта меню!
 getContent.admins = () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l": "${uLogin}", "p": "${uToken}", "f": "adminsList"
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "adminsList"
    }`};
    (async () => {
       let apiResp   = await (await fetch("/", apiOpt)).text();

@@ -28,36 +28,38 @@ select {
 button {
    font-size: 100%;}
    
-/* ОКНА С ФОРМОЙ АВТОРИЗАЦИИ И ИНФОРМАЦИОННЫМ СООБЩЕНИЕМ
+/* ОКНА С ФОРМОЙ АВТОРИЗАЦИИ, ФОРМОЙ СМЕНЫ ПАРОЛЯ И ИНФОРМАЦИОННЫМ СООБЩЕНИЕМ
    ----------------------------------------------------- */
-article, output {
+article, output, div#chPwdWin {
    display: none; width:18em; position:absolute; top:30%; left:50%;
    margin-top:-5em; margin-left:-9em; padding:0px; border:1px solid #963;
    border-radius:10px; box-shadow: 2px 2px 3px 2px #999;
    text-align:center; background:#f6f3ee;}
 output {
    position:fixed; top:40%; z-index:99999;}
-article h1, article input, article button, output button, article div {
+article h1, article input, article button, output button, article div,
+div#chPwdWin h1, div#chPwdWin input, div#chPwdWin button {
    font-size:14pt;}
-article h1 {
+article h1, div#chPwdWin h1 {
    background:#963; color:#ff6; margin:0px 0px 20px; padding:5px;
    border:1px solid #963; border-radius:10px 10px 0px 0px;
    font-weight:bold;}
-article div {
+article div, div#chPwdWin div#chPwdWarn {
    font-size:12pt; color:red; text-align:center;
    margin-bottom:20px; display:none;}
 output div {
    font-size:14pt; text-align:center; margin:20px 5px 0px;}
-article input, article button, output button {
+article input, article button, output button,
+div#chPwdWin input, div#chPwdWin button {
    display:inline-block; width:80%; margin:5px 0px; padding:3px;}
-article input {
+article input, div#chPwdWin input {
    background:#f6f3f0; border:none; border-bottom:1px solid #963;}
-article input:focus {
+article input:focus, div#chPwdWin input:focus {
    background:#fff; outline:none;}
 article input#uCateg, article input#uCateg:focus {
    background:#e6ded5; caret-color:#e6ded5; text-align:center; font-size:0.9em;
    font-weight:bold; color:#963; border:none; padding:3px; cursor:pointer;}
-article button, output button {
+article button, output button, div#chPwdWin button {
    background:#963; color:#ff6; border:none;
    margin:20px 0px; font-weight:bold; cursor: pointer;}
 article img {

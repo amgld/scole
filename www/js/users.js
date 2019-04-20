@@ -40,7 +40,7 @@ const userFind = () => {
       return;
    }
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}", "f":  "usFind",
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usFind",
       "z": ["${usStatus}", "${usFindClass}", "${usFindFIO}"]
    }`};
    (async () => {
@@ -119,8 +119,8 @@ const loadUsFile = () => {
    reader.onload = dt => {
       let impUsStr = dt.target.result.replace(/\r/g, '').replace(/\n/g, '^');
       let apiOpt = {method: "POST", cache: "no-cache", body: `{
-         "l":  "${uLogin}", "p":  "${uToken}", "f":  "usImport",
-         "z":  "${impUsStr}"
+         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usImport",
+         "z": "${impUsStr}"
       }`};
       (async () => {
          let apiResp = await (await fetch("/", apiOpt)).text();
@@ -241,8 +241,8 @@ const userAddEdit = async (arg) => {
       if (dqs("#addOrEdit").value == "add") {
          operAdd = 1;
          let apiOpt = {method: "POST", cache: "no-cache", body: `{
-            "l":  "${uLogin}", "p":  "${uToken}", "f":  "usFindLogin",
-            "z":  "${newUser["Ulogin"]}"
+            "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
+            "f": "usFindLogin", "z": "${newUser["Ulogin"]}"
          }`};         
          await (async () => {
             let apiResp = await (await fetch("/", apiOpt)).text();
@@ -264,8 +264,8 @@ const userAddEdit = async (arg) => {
    
    // Посылаем запрос к API на добавление/редактирование
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}", "f":  "usAddEdit",
-      "z":  ${JSON.stringify(newUser)}
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usAddEdit",
+      "z": ${JSON.stringify(newUser)}
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
@@ -283,8 +283,8 @@ const userAddEdit = async (arg) => {
 const setAdmin = login => {
    if (!confirm("Вы уверены?")) return;
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-          "l": "${uLogin}", "p": "${uToken}", "f": "usSetAdmin",
-          "z": ["${login}", "set"]
+          "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
+          "f": "usSetAdmin", "z": ["${login}", "set"]
        }`}; 
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
@@ -304,7 +304,7 @@ const usBlock = (login, func) => {
    if (!confirm("Вы уверены?")) return;
    const warn = {"block": "заблокирован", "unblock": "разблокирован"};
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-          "l": "${uLogin}", "p": "${uToken}", "f": "usBlock",
+          "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usBlock",
           "z": ["${login}", "${func}"]
        }`}; 
    (async () => {
@@ -341,8 +341,7 @@ createSection("users", `
 // Имя метода = имени пункта меню!
 getContent.users = () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}",
-      "f":  "classesList"
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classesList"
    }`};
    (async () => {
       if (!clListSel) {

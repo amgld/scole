@@ -16,7 +16,7 @@ const modReq = {
    "subjList":    [1,0], "subjAdd":     [1,1], "subjEdit":   [1,1],
    "subjDel":     [0,1], "usAddEdit":   [1,1], "usFind":     [1,1],
    "usFindLogin": [1,1], "usImport":    [1,1], "usSetAdmin": [1,1],
-   "adminsList":  [1,0], "usBlock":     [1,1]
+   "adminsList":  [1,0], "usBlock":     [1,1], "usChPwd":    [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -30,7 +30,7 @@ const RIGHTS = {
       "usSetAdmin", "adminsList", "usBlock"
    ],
    "admin":   [],
-   "teacher": [],
+   "teacher": ["usChPwd"],
    "tutor":   [],
    "pupil":   [],
    "parent":  []
@@ -54,7 +54,7 @@ module.exports = async (post, addr) => {
       postDt.t, postDt.l, postDt.p, postDt.ci, postDt.c, addr);
    if (!authResult) return "none";
       
-   // Проверяем полномочия юзера на запрашиваемую функцию
+   // Проверяем полномочия юзера на запрашиваемую функцию   
    let rolesArr = JSON.parse(authResult)["roles"];
    if (!rolesArr.some(r => RIGHTS[r].includes(postDt.f))) return "none";
       

@@ -40,9 +40,8 @@ const classAdd = () => {
    dqs("#addClassNum").value = '1';
    dqs("#addClassLit").value = 'А';
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}",
-      "f":  "classAdd",
-      "z":  "${newClassName}"
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classAdd",
+      "z": "${newClassName}"
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
@@ -58,9 +57,8 @@ const classAdd = () => {
 const classNumDel = clNum => {
    if (!confirm("Вы уверены?")) return;
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}",
-      "f":  "classDel",
-      "z":  "${clNum}"
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classDel",
+      "z": "${clNum}"
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
@@ -95,8 +93,7 @@ dqs("#addClassLit").innerHTML = clLitOpt;
 // с помощью API и публикуем его на страничке (имя метода = имени пункта меню!)
 getContent.classes = () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "l":  "${uLogin}", "p":  "${uToken}",
-      "f":  "classesList"
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classesList"
    }`};
    (async () => {
       let apiResp = await (await fetch("/", apiOpt)).text();
