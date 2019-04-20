@@ -15,6 +15,7 @@
 // {
 //    "token": "¤abcde",
 //    "roles": ["admin", "teacher"],
+//    "tutClss": ["8Б", "10Ж"]
 // }
 // Переменные salt и admPwd являются глобальными; addr - это ip юзера
 // tip          - staff, pupil либо par (родитель)
@@ -22,45 +23,95 @@
 // capt         - собственно капча (6 цифр)
 // captchaIdArr - глобальный массив, содержащий активные Id капчей
 // captNumGen   - глобальная функция, генерирующая капчу по ее Id
-module.exports = (tip, login, pwd, cptId, capt, addr) => {
+module.exports = async (tip, login, pwd, cptId, capt, addr) => {
+   
+   // Функция проверяет капчу и возвращает 1 или 0;
+   // в любом случае убивает капчу
+   const captCheck = () => {
+      let cptIdIndex = captchaIdArr.indexOf(Number(cptId));
+      if (cptIdIndex > -1) {
+         captchaIdArr.splice(cptIdIndex, 1);
+         if (captNumGen(cptId) != capt) return 0;
+         return 1;
+      }
+      else return 0;
+   }
+   
+   // Ответ, возвращаемый в случае успешной авторизации
+   let resp = {};
+   
+   // В какой коллекции базы искать пользователя
+   // И его роль (в зависимости от tip)
+   const collect = {"staff": "staff", "pupil": "pupils", "par": "pupils"};
+   const uRoles  = {"staff": "teacher", "pupil": "pupil", "par": "parent"};
    
    // Номер дня от начала юникс-эры
    let dt = ~~(Date.now()/(1000 * 3600 * 24));
    
-   let tokenTrue = '¤' + hash(dt+addr+login, salt);   
+   let tokenTrue = '¤' + hash(dt+addr+login, salt);
    
-   // Если пришел токен
-   if (pwd[0] == '¤') {
-      if (pwd == tokenTrue) {
-         
-         // Если он администратор
-         if (login == "admin") return JSON.stringify({roles: ["root"]});         
-      }
-      else return 0;
-   }
-   
-   // Если пришел пароль
-   else {
-      // Сначала проверяем капчу; в любом случае убиваем ее
-      let cptIdIndex = captchaIdArr.indexOf(Number(cptId));
-      if (cptIdIndex > -1) {
-         captchaIdArr.splice(cptIdIndex, 1);
-         if (captNumGen(cptId) != capt) return 0;         
-      }
-      else return 0;
-      
-      // Если он утверждает, что он администратор
-      if (login == "admin") {
-         if (hash(pwd, 'z') == admPwd)
-            return JSON.stringify(
-               {token: '¤'+hash(dt+addr+login, salt), roles: ["root"]}
-            );
+   // Если он главный администратор
+   if (login == "admin") {
+      // Если пришел токен
+      if (pwd[0] == '¤') {
+         if (pwd == tokenTrue) resp.roles = ["root"];
          else return 0;
       }
+      // Если пришел пароль
       else {
-         // Получаем из базы соответствующую запись по логину
-         // uRecord = '';
-         return 0;
+         // Проверяем капчу
+         if (!captCheck) return 0;
+         // Проверяем пароль
+         if (hash(pwd, 'z') == admPwd) resp.roles = ["root"];
+         else return 0;
+         // Генерируем ему токен
+         resp.token = '¤' + hash(dt+addr+login, salt);
       }
+   }   
+   
+   // Если он не главный администратор
+   else {      
+      // Получаем из базы соответствующую запись по логину
+      if (!collect[tip]) return 0;
+      let uRecord = await dbFind(collect[tip], {Ulogin: login});
+      if (!uRecord.length) return 0;
+         
+      // Проверяем, не заблокирован ли он
+      if (uRecord[0].block) return 0;
+      
+      // Если пришел токен
+      if (pwd[0] == '¤') {
+         if (pwd == tokenTrue) resp.roles = [uRoles[tip]];
+         else return 0;         
+      }
+      
+      // Если пришел пароль
+      else {      
+         if (!captCheck) return 0;       // проверка капчи    
+         let userHash = hash(pwd, salt); // хэш пароля         
+         // Если он утверждает, что он родитель
+         if (tip == "par") {
+            let parHash  = hash('p' + captNumGen(pwd), salt);
+            if (uRecord[0].UpwdPar == parHash) resp.roles = ["parent"];
+            else return 0;
+         }            
+         // Иначе он сотрудник или учащийся
+         else {
+            if (uRecord[0].Upwd == userHash) resp.roles = [uRoles[tip]];
+            else return 0;
+         }
+         // Генерируем ему токен
+         resp.token = '¤' + hash(dt+addr+login, salt);
+      }     
+      
+      // Проверяем, не является ли он администратором
+      if (tip == "staff" && uRecord[0].admin) resp.roles.push("admin");
+      
+      // Проверяем, не является ли он классным руководителем,
+      // и если да, то в каких именно классах
+      // resp.roles.push("tutor"); resp.tutClss = [];
+      
+      // Если он учитель, смотрим и возвращаем распределение его нагрузки
    }
+   return JSON.stringify(resp);
 }
