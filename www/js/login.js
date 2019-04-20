@@ -46,6 +46,7 @@ const turnCateg = () => {
    let valNew = (cond == "Учащийся") ?
       "Сотрудник" : ((cond == "Сотрудник") ? "Родитель" : "Учащийся");
    dqs("#uCateg").value = valNew;
+   dqs("#uLogin").focus();
 }
 
 // Обработка отправки логина, пароля и капчи

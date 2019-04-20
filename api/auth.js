@@ -32,7 +32,7 @@ module.exports = async (tip, login, pwd, cptId, capt, addr) => {
       if (cptIdIndex > -1) {
          captchaIdArr.splice(cptIdIndex, 1);
          if (captNumGen(cptId) != capt) return 0;
-         return 1;
+         else return 1;
       }
       else return 0;
    }
@@ -60,7 +60,7 @@ module.exports = async (tip, login, pwd, cptId, capt, addr) => {
       // Если пришел пароль
       else {
          // Проверяем капчу
-         if (!captCheck) return 0;
+         if (!captCheck()) return 0;
          // Проверяем пароль
          if (hash(pwd, 'z') == admPwd) resp.roles = ["root"];
          else return 0;
@@ -87,11 +87,12 @@ module.exports = async (tip, login, pwd, cptId, capt, addr) => {
       
       // Если пришел пароль
       else {      
-         if (!captCheck) return 0;       // проверка капчи    
+         if (!captCheck()) return 0;     // проверка капчи    
          let userHash = hash(pwd, salt); // хэш пароля         
          // Если он утверждает, что он родитель
+         // Пароль родителя - это captNumGen(hash(детский_пароль, salt))
          if (tip == "par") {
-            let parHash  = hash('p' + captNumGen(pwd), salt);
+            let parHash  = hash('p' + pwd, salt);
             if (uRecord[0].UpwdPar == parHash) resp.roles = ["parent"];
             else return 0;
          }            
@@ -112,6 +113,6 @@ module.exports = async (tip, login, pwd, cptId, capt, addr) => {
       // resp.roles.push("tutor"); resp.tutClss = [];
       
       // Если он учитель, смотрим и возвращаем распределение его нагрузки
-   }
+   }   
    return JSON.stringify(resp);
 }

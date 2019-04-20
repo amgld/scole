@@ -29,7 +29,7 @@ const menuItems = {
       ["subjects", "Предметы"]
    ],
    "admin": [
-      ["users", "Пользователи"]
+      ["tmpItem", "Затычка"]
    ],
    "teacher": [
       ["tmpItem", "Затычка"]
