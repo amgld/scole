@@ -31,6 +31,7 @@ const menuItems = {
    "admin": [
       ["register", "Журнал"],
       ["absent",   "Посещаемость"],
+      ["notes",    "Заметки"],
       ["distrib",  "Нагрузка"],
       ["groups",   "Группы"],
       ["export",   "Экспорт"],
