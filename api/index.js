@@ -16,7 +16,8 @@ const modReq = {
    "subjList":    [1,0], "subjAdd":     [1,1], "subjEdit":   [1,1],
    "subjDel":     [0,1], "usAddEdit":   [1,1], "usFind":     [1,1],
    "usFindLogin": [1,1], "usImport":    [1,1], "usSetAdmin": [1,1],
-   "adminsList":  [1,0], "usBlock":     [1,1], "usChPwd":    [1,1]
+   "adminsList":  [1,0], "usBlock":     [1,1], "usChPwd":    [1,1],
+   "teachList":   [1,0], "setTutor":    [0,1], "tutorsList": [1,0]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -26,10 +27,12 @@ for (let modName in modReq) mod[modName] = require("./" + modName);
 const RIGHTS = {
    "root":    [
       "classAdd", "classesList", "classDel", "subjList", "subjAdd", "subjEdit",
-      "subjDel",  "usAddEdit",   "usFind",   "usFindLogin", "usImport",
-      "usSetAdmin", "adminsList", "usBlock"
+      "subjDel", "usAddEdit", "usFind", "usFindLogin", "usImport", "usSetAdmin",
+      "adminsList", "usBlock"
    ],
-   "admin":   [],
+   "admin":   [
+      "classesList", "subjList", "teachList", "setTutor", "tutorsList"
+   ],
    "teacher": ["usChPwd"],
    "tutor":   [],
    "pupil":   [],

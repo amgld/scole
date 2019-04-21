@@ -206,6 +206,15 @@ section#subjects span div:hover {
 section#subjects span div.noCur:hover {
    cursor:default;}
    
+/* БЛОК РАСПРЕДЕЛЕНИЯ ПЕДАГОГИЧЕСКОЙ НАГРУЗКИ
+   ----------------------------------------------------- */
+section#distrib table {
+   margin:auto;}
+section#distrib td:first-child {
+   font-weight:bold; padding-right:10px;}
+section#distrib select {
+   background:#f6f3f0; border:none; cursor:pointer;}
+   
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
 @media (max-width: 960px) {

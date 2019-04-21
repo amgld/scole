@@ -25,7 +25,8 @@ elems.loginElem.innerHTML = `
 dqs("#content").appendChild(elems.loginElem);
 
 let uToken = '', uCateg = '', uLogin = '', uCpt = '', apiResp = '', captId = 0,
-    uTipes = {"Учащийся": "pupil", "Сотрудник": "staff", "Родитель": "par"};
+    uTipes = {"Учащийся": "pupil", "Сотрудник": "staff", "Родитель": "par"},
+    uTutorCls = [], uTeachLoad = {}; 
 if (!uLogin) dqs("article").style.display = "block";
 
 // Параметры запроса к API сервера
@@ -77,8 +78,15 @@ const submLogin = () => {
             dqs('#uPwd').value = '';
             apiOpt.body = '';
             captId = 0;
-            // Сохраняем токен и публикуем контент страницы
-            uToken = JSON.parse(apiResp).token;
+            
+            // Сохраняем токен, перечень классов, где он классный руководитель,
+            // его педагогическую нагрузку
+            let apiRespObj = JSON.parse(apiResp);
+            uToken         = apiRespObj.token;
+            uTutorCls      = apiRespObj.tutClss   || [];
+            uTeachLoad     = apiRespObj.teachLoad || {};
+            
+            // Публикуем контент страницы
             dqs("article").style.display = "none";
             headerGen();
          }

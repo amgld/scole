@@ -13,9 +13,10 @@
 // это символ '¤'. Возвращает 0, либо JSON-строку с токеном (при первичной
 // авторизации по паролю) и полномочиями:
 // {
-//    "token": "¤abcde",
-//    "roles": ["admin", "teacher"],
-//    "tutClss": ["8Б", "10Ж"]
+//    "token":     "¤abcde",
+//    "roles":     ["admin", "teacher"],
+//    "tutClss":   ["8Б", "10Ж"],
+//    "teachLoad": {"8Б": ["s230", "d710"], "10Ж": ["s110"]}
 // }
 // Переменные salt и admPwd являются глобальными; addr - это ip юзера
 // tip          - staff, pupil либо par (родитель)
@@ -114,9 +115,18 @@ module.exports = async (tip, login, pwd, cptId, capt, addr) => {
       
       // Проверяем, не является ли он классным руководителем,
       // и если да, то в каких именно классах
-      // resp.roles.push("tutor"); resp.tutClss = [];
+      let tutCl = [];
+      let clListArr = await dbFind("curric", {type: "class"});      
+      for (let currDoc of clListArr)
+         if (currDoc.tutor)
+            if (currDoc.tutor == login) tutCl.push(currDoc.className);
+      if (tutCl.length) {
+         resp.roles.push("tutor");
+         resp.tutClss = tutCl;
+      }
       
       // Если он учитель, смотрим и возвращаем распределение его нагрузки
+      // resp.teachLoad = {"8Б": ["s230", "d710"], "10Ж": ["s110"]}
    }   
    return JSON.stringify(resp);
 }
