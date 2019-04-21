@@ -7,7 +7,7 @@
  */
 "use strict";
 
-// Формат импортируемого файла - см www/static/impUsTpl.html
+// Формат импортируемого файла - см. www/static/impUsTpl.html
 // Возвращает строку вида "12-3" (количество добавленных и пропущенных),
 // либо "none". Если формат какой-либо строки неверен, возвращает строку вида
 // "pupkin" (логин пользователя, на котором возникла ошибка)
@@ -15,8 +15,7 @@ module.exports = async impUsStr => {
    try {
       let n = 0, m = 0; // добавленные и пропущенные пользователи
       let usStrArr = impUsStr.trim().replace(/\s{2,}/g, ' ').split('^');
-
-      // 
+      
       for (let currStr of usStrArr) {
          currStr = currStr.trim(); if (!currStr) continue; else n++;
          let usFields = currStr.split(' ');

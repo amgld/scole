@@ -90,7 +90,7 @@ const userFind = () => {
                   onClick="usBlock('${currUser.login}', 'unblock')">&#10004;</td>
                `;
                tdEdit = "<td>&nbsp;</td>";
-               setAdmInnerCurr = "<td>&nbsp;</td>";
+               setAdmInnerCurr = isPup ? '' : "<td>&nbsp;</td>";
             }
 
             usFindRes += `<tr${color}>
