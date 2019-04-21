@@ -25,6 +25,10 @@
 // captNumGen   - глобальная функция, генерирующая капчу по ее Id
 module.exports = async (tip, login, pwd, cptId, capt, addr) => {
    
+   // Проверяем корректность формата логина
+   const pattLogin = /^[a-z0-9]+$/;
+   if (!pattLogin.test(login)) return 0;
+   
    // Функция проверяет капчу и возвращает 1 или 0;
    // в любом случае убивает капчу
    const captCheck = () => {
