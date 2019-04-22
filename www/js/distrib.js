@@ -10,15 +10,64 @@
 let distrClList  = [], distrSbList = {}, distrThList = [],
     distrTutList = {}, distrObject = {};
     
+// Добавление/удаление элемента учебной нагрузки
+const editLoad = (func, teacher, subj, className) => {
+   let data = `{"t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", `
+            + `"f": "editLoad", "z": ["${func}", "^t^", "^s^", "^c^"]}`;
+   data = data.replace("^t^", teacher).replace("^s^", subj)
+              .replace("^c^", className);   
+
+   if (func == "add") {
+      teacher   = dqs("#distSelTeach").value;
+      subj      = dqs("#distSelSubj" ).value;
+      className = dqs("#distSelClass").value;
+      
+      if (!distrObject[teacher]) distrObject[teacher] = {};
+      if (!distrObject[teacher][subj]) distrObject[teacher][subj] = [];
+      
+      if (!distrObject[teacher][subj].includes(className)) {
+         navigator.sendBeacon('/', data);
+         distrObject[teacher][subj].push(className);
+      }
+      else info(1, "Эти предмет и класс уже есть в нагрузке.");
+   }
+   else {
+      navigator.sendBeacon('/', data);
+      distrObject[teacher][subj] =
+      distrObject[teacher][subj].filter(c => c != className);
+   }
+   
+   setThLoadTable();
+}
+    
 // Формирование таблицы с педагогической нагрузкой данного учителя
 const setThLoadTable = () => {
-   let teach = dqs("#distSelTeach").value,
-       pedLoad = distrObject.teach,
-       inner = "<tr><td>Педагогической нагрузки не найдено.</td></tr>";
+   let teach   = dqs("#distSelTeach").value,
+       pedLoad = distrObject[teach],
+       inner   = '';
+       
+   if (!teach) {
+      dqs("#teachLoad").innerHTML =
+         "<tr><td style='border:none'>Учитель не выбран.</td></tr>";
+      return;
+   }
    
    if (pedLoad) {
-      
+      for (let subjKod of Object.keys(pedLoad)) {
+         pedLoad[subjKod] = classSort(pedLoad[subjKod]);
+         for (let currClass of pedLoad[subjKod]) {
+            inner += `<tr>
+               <td>${distrSbList[subjKod]}</td><td>${currClass}</td>
+               <td title="Удалить"
+                   onClick="editLoad('del',
+                   '${teach}', '${subjKod}', '${currClass}')">&#10060;</td>
+            </tr>`.replace(/\n/g, ' ');
+         }
+      }
    }
+   inner = inner ? inner :
+      "<tr><td style='border:none'>Нагрузки не найдено.</td></tr>";
+      
    dqs("#teachLoad").innerHTML = inner;
 }
 
@@ -62,7 +111,7 @@ createSection("distrib", `
    <select id="distSelSubj"></select>
    <select id="distSelClass"></select>
    <button type="button"
-      id="addTeachLoad" onClick="teachLoadAdd()">Добавить</button>
+      id="addTeachLoad" onClick="editLoad('add')">Добавить</button>
       
    <h3>Классное руководство</h3>
    <table id="tutTbl"><tr><td><img src="static/preloader.gif"></td></tr></table>   
@@ -123,5 +172,6 @@ getContent.distrib = async () => {
    dqs("#distSelClass").innerHTML = dSelClInner;
    
    // Очищаем таблицу с педагогической нагрузкой
-   dqs("#teachLoad").innerHTML = "<tr><td>Учитель не выбран.</td></tr>";
+   dqs("#teachLoad").innerHTML =
+      "<tr><td style='border:none'>Учитель не выбран.</td></tr>";
 }
