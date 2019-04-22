@@ -59,7 +59,7 @@ const showMenuMob = () => {
 }
 
 // Запрос к API для смены пароля и сообщение о результате
-const chPwdApi = () => {
+const chPwdApi = async () => {
    let pwd  = dqs("#newPwd").value.trim(),
        pwd1 = dqs("#newPwd1").value.trim();
        
@@ -79,16 +79,14 @@ const chPwdApi = () => {
       "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usChPwd",
       "z": ["${uLogin}", "${pwd}"]      
    }`};
-   (async () => {
-      let apiResp = await (await fetch("/", apiOpt)).text();
-      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
-      else {
-         dqs("#chPwdWin").style.display = "none";
-         info(0,
-           "Пароль успешно заменен.<br>Авторизуйтесь заново с новым паролем.");
-         document.body.onclick = () => location.reload();
-      }
-   })();
+   let apiResp = await (await fetch("/", apiOpt)).text();
+   if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+   else {
+      dqs("#chPwdWin").style.display = "none";
+      info(0,
+        "Пароль успешно заменен.<br>Авторизуйтесь заново с новым паролем.");
+      document.body.onclick = () => location.reload();
+   }
 }
 
 // Показ модального окна для смены пароля
@@ -116,7 +114,7 @@ const chPwd = () => {
 }
 
 // Формирование хидера и включение футера
-const headerGen = () => {
+const headerGen = async () => {
    let apiRespObj = JSON.parse(apiResp);
    let rl = apiRespObj.roles;
    dqs("#content").innerHTML += `
@@ -133,13 +131,12 @@ const headerGen = () => {
       <nav></nav>
    `;
    menuGen();
-   (async () => {
-      let adminCont = await (await fetch("/a.a")).text();
-      let versCont = await (await fetch("/history.html", {method: "GET"})).text();
-      let histUrl = URL.createObjectURL(new Blob([versCont], {type: "text/html"}));
-      versCont = versCont.split("<pre>")[1].trim().split(' ')[0];
-      dqs("footer").innerHTML += `Адм.: ${adminCont} &bull;
-         <a href=${histUrl} target="_blank">v.&nbsp;${versCont}</a>`;
-      dqs("footer").style.display = "block";
-   })();   
+   
+   let adminCont = await (await fetch("/a.a")).text();
+   let versCont = await (await fetch("/history.html", {method: "GET"})).text();
+   let histUrl = URL.createObjectURL(new Blob([versCont], {type: "text/html"}));
+   versCont = versCont.split("<pre>")[1].trim().split(' ')[0];
+   dqs("footer").innerHTML += `Адм.: ${adminCont} &bull;
+      <a href=${histUrl} target="_blank">v.&nbsp;${versCont}</a>`;
+   dqs("footer").style.display = "block";
 };

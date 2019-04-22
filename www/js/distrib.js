@@ -11,30 +11,44 @@ let distrClList  = [], distrSbList = {}, distrThList = [],
     distrTutList = {}, distrObject = {};
     
 // Добавление/удаление элемента учебной нагрузки
-const editLoad = (func, teacher, subj, className) => {
-   let data = `{"t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", `
-            + `"f": "distrEdit", "z": ["${func}", "^t^", "^s^", "^c^"]}`;
-   data = data.replace("^t^", teacher).replace("^s^", subj)
-              .replace("^c^", className);   
-
+const editLoad = async (func, teacher, subj, className) => {
+   let apiOpt  = {method: "POST", cache: "no-cache", body: ''},
+       apiResp = '';
+   
    if (func == "add") {
-      teacher   = dqs("#distSelTeach").value;
-      subj      = dqs("#distSelSubj" ).value;
-      className = dqs("#distSelClass").value;
+      let t = dqs("#distSelTeach").value;
+      let s = dqs("#distSelSubj" ).value;
+      let c = dqs("#distSelClass").value;
+      apiOpt.body = `{
+         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
+         "f": "distrEdit", "z": ["${func}", "${t}", "${s}", "${c}"]
+      }`;
       
-      if (!distrObject[teacher]) distrObject[teacher] = {};
-      if (!distrObject[teacher][subj]) distrObject[teacher][subj] = [];
+      if (!distrObject[t])    distrObject[t]    = {};
+      if (!distrObject[t][s]) distrObject[t][s] = [];
       
-      if (!distrObject[teacher][subj].includes(className)) {
-         navigator.sendBeacon('/', data);
-         distrObject[teacher][subj].push(className);
+      if (!distrObject[t][s].includes(c)) {
+         apiResp = await (await fetch("/", apiOpt)).text();
+         if (apiResp == "none") {
+            info(1, "Запрашиваемая операция отклонена.");
+            return;
+         }
+         distrObject[t][s].push(c);
       }
       else info(1, "Эти предмет и класс уже есть в нагрузке.");
    }
    else {
-      navigator.sendBeacon('/', data);
-      distrObject[teacher][subj] =
-      distrObject[teacher][subj].filter(c => c != className);
+      apiOpt.body = `{
+         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "distrEdit",
+         "z": ["${func}", "${teacher}", "${subj}", "${className}"]
+      }`;
+      apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") {
+         info(1, "Запрашиваемая операция отклонена.");
+         return;
+      }
+      distrObject[teacher][subj] = distrObject[teacher][subj]
+                                  .filter(c => c != className);
    }
    
    setThLoadTable();
@@ -72,10 +86,16 @@ const setThLoadTable = () => {
 }
 
 // Назначение классного руководителя классу
-const setTutor = (className, tutorLogin) => {
-   let data = `{"t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", `
-            + `"f": "tutorSet", "z": ["${className}", "${tutorLogin}"]}`;
-   navigator.sendBeacon('/', data);
+const setTutor = async (className, tutorLogin) => {
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
+      "f": "tutorSet", "z": ["${className}", "${tutorLogin}"]
+   }`};
+   let apiResp = await (await fetch("/", apiOpt)).text();
+   if (apiResp == "none") {
+      info(1, "Запрашиваемая операция отклонена.");
+      return;
+   }
 }
 
 // Формирование innerHTML таблицы "Классное руководство"

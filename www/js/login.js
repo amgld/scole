@@ -51,46 +51,44 @@ const turnCateg = () => {
 }
 
 // Обработка отправки логина, пароля и капчи
-const submLogin = () => {
+const submLogin = async () => {
    uLogin = dqs("#uLogin").value.trim();
    uCateg = uTipes[dqs("#uCateg").value];
    uCpt = dqs("#uCpt").value.trim();
    if (!uLogin || !uPwd || !uCpt) dqs("#loginWarn").style.display = "block";
    else {
       dqs("#loginWarn").style.display = "none";
-      (async () => {
-         apiOpt.body = `{
-            "t":  "${uCateg}",
-            "l":  "${uLogin}",
-            "p":  "${dqs('#uPwd').value.trim()}",
-            "f":  "login",
-            "ci": "${captId}",
-            "c":  "${uCpt}"
-         }`;         
-         apiResp = await (await fetch("/", apiOpt)).text();
-         if (apiResp == "none") {
-            dqs("#loginWarn").innerHTML = "Неверный логин/пароль/код!";
-            dqs("#loginWarn").style.display = "block";
-            getCapt();
-         }
-         else {
-            // Чистим все переменные, содержащие пароль и Id капчи
-            dqs('#uPwd').value = '';
-            apiOpt.body = '';
-            captId = 0;
+      apiOpt.body = `{
+         "t":  "${uCateg}",
+         "l":  "${uLogin}",
+         "p":  "${dqs('#uPwd').value.trim()}",
+         "f":  "login",
+         "ci": "${captId}",
+         "c":  "${uCpt}"
+      }`;         
+      apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp == "none") {
+         dqs("#loginWarn").innerHTML = "Неверный логин/пароль/код!";
+         dqs("#loginWarn").style.display = "block";
+         getCapt();
+      }
+      else {
+         // Чистим все переменные, содержащие пароль и Id капчи
+         dqs('#uPwd').value = '';
+         apiOpt.body = '';
+         captId = 0;
             
-            // Сохраняем токен, перечень классов, где он классный руководитель,
-            // его педагогическую нагрузку
-            let apiRespObj = JSON.parse(apiResp);
-            uToken         = apiRespObj.token;
-            uTutorCls      = apiRespObj.tutClss   || [];
-            uTeachLoad     = apiRespObj.teachLoad || {};
+         // Сохраняем токен, перечень классов, где он классный руководитель,
+         // его педагогическую нагрузку
+         let apiRespObj = JSON.parse(apiResp);
+         uToken         = apiRespObj.token;
+         uTutorCls      = apiRespObj.tutClss   || [];
+         uTeachLoad     = apiRespObj.teachLoad || {};
             
-            // Публикуем контент страницы
-            dqs("article").style.display = "none";
-            headerGen();
-         }
-      })();
+         // Публикуем контент страницы
+         dqs("article").style.display = "none";
+         headerGen();
+      }
    }
 }
 dqs("#uLogin").focus();

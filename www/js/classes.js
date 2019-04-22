@@ -34,7 +34,7 @@ const clListPubl = clArr => {
 };
 
 // Отправка запроса к API для добавления класса
-const classAdd = () => {
+const classAdd = async () => {
    let newClassName = dqs("#addClassNum").value.toString()
                     + dqs("#addClassLit").value;
    dqs("#addClassNum").value = '1';
@@ -43,32 +43,28 @@ const classAdd = () => {
       "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classAdd",
       "z": "${newClassName}"
    }`};
-   (async () => {
-      let apiResp = await (await fetch("/", apiOpt)).text();
-      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
-      else {
-         classesList.push(newClassName);
-         clListPubl(classesList);
-      }
-   })();
+   let apiResp = await (await fetch("/", apiOpt)).text();
+   if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+   else {
+      classesList.push(newClassName);
+      clListPubl(classesList);
+   }
 };
 
 // Удаление класса
-const classNumDel = clNum => {
+const classNumDel = async (clNum) => {
    if (!confirm("Вы уверены?")) return;
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
       "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classDel",
       "z": "${clNum}"
    }`};
-   (async () => {
-      let apiResp = await (await fetch("/", apiOpt)).text();
-      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
-      else {
-         let clIndex = classesList.indexOf(clNum);
-         if (clIndex > -1) classesList.splice(clIndex, 1);
-         clListPubl(classesList);
-      }
-   })();
+   let apiResp = await (await fetch("/", apiOpt)).text();
+   if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+   else {
+      let clIndex = classesList.indexOf(clNum);
+      if (clIndex > -1) classesList.splice(clIndex, 1);
+      clListPubl(classesList);
+   }
 }
 
 // Формирование контента странички
@@ -91,13 +87,11 @@ dqs("#addClassLit").innerHTML = clLitOpt;
 
 // Динамически подгружаем список классов в массив classesList
 // с помощью API и публикуем его на страничке (имя метода = имени пункта меню!)
-getContent.classes = () => {
+getContent.classes = async () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
       "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classesList"
    }`};
-   (async () => {
-      let apiResp = await (await fetch("/", apiOpt)).text();
-      classesList = JSON.parse(apiResp);
-      clListPubl(classesList);
-   })();
+   let apiResp = await (await fetch("/", apiOpt)).text();
+   classesList = JSON.parse(apiResp);
+   clListPubl(classesList);
 }

@@ -31,7 +31,7 @@ const sbListPubl = sbObj => {
 };
 
 // Отправка запроса к API для добавления дополнительного предмета
-const subjAdd = () => {
+const subjAdd = async () => {
    let newSubjKey  = 'd' + dqs("#sbNewKod").value.trim();
    let newSubjName = dqs("#sbNewName").value.trim();
    dqs("#sbNewKod").value  = '';
@@ -65,31 +65,27 @@ const subjAdd = () => {
       "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjAdd",
       "z": ["${newSubjKey}", "${newSubjName}"]
    }`};
-   (async () => {
-      let apiResp = await (await fetch("/", apiOpt)).text();
-      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
-      else {
-         subjList[newSubjKey] = newSubjName;
-         sbListPubl(subjList);
-      }
-   })();
+   let apiResp = await (await fetch("/", apiOpt)).text();
+   if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+   else {
+      subjList[newSubjKey] = newSubjName;
+      sbListPubl(subjList);
+   }
 };
 
 // Удаление дополнительного предмета
-const subjDel = sbDelKey => {
+const subjDel = async (sbDelKey) => {
    if (!confirm("Вы уверены?")) return;
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
       "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjDel",
       "z": "${sbDelKey}"
    }`};
-   (async () => {
-      let apiResp = await (await fetch("/", apiOpt)).text();
-      if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
-      else {
-         delete subjList[sbDelKey];
-         sbListPubl(subjList);
-      }
-   })();      
+   let apiResp = await (await fetch("/", apiOpt)).text();
+   if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
+   else {
+      delete subjList[sbDelKey];
+      sbListPubl(subjList);
+   }
 }
 
 // Редактирование названия предмета
@@ -143,14 +139,12 @@ createSection("subjects", `
 // Динамически подгружаем список предметов в объект subjList (сливаем объект
 // названий предметов по умолчанию subjDef и то, что получено с помощью API)
 // и публикуем его на страничке (имя метода = имени пункта меню!)
-getContent.subjects = () => {
+getContent.subjects = async () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
       "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjList"
    }`};
-   (async () => {
-      let apiResp = await (await fetch("/", apiOpt)).text();
-      let subjListDop = JSON.parse(apiResp);
-      subjList = {...subjDef, ...subjListDop};
-      sbListPubl(subjList);
-   })();
+   let apiResp = await (await fetch("/", apiOpt)).text();
+   let subjListDop = JSON.parse(apiResp);
+   subjList = {...subjDef, ...subjListDop};
+   sbListPubl(subjList);
 }

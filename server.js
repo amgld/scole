@@ -158,7 +158,7 @@ https.createServer(httpsOpt, (zapros, otvet) => {
       zapros.on("data", dann => postData += dann.toString());
       zapros.on("end",  async () => {
          let cont = await api(postData, ADDR);
-         if (cont != "noreply") sendOtvet(otvet, 200, "text/plain", cont);
+         sendOtvet(otvet, 200, "text/plain", cont);
          // Здесь еще блок определения логина и запрашиваемой функции
          // (вычленяем их из postData, если они там есть), пишем вместо '/'
          putlog(ADDR, "POST", '/', 200, cont.length);
