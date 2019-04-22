@@ -13,7 +13,7 @@ let distrClList  = [], distrSbList = {}, distrThList = [],
 // Добавление/удаление элемента учебной нагрузки
 const editLoad = (func, teacher, subj, className) => {
    let data = `{"t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", `
-            + `"f": "editLoad", "z": ["${func}", "^t^", "^s^", "^c^"]}`;
+            + `"f": "distrEdit", "z": ["${func}", "^t^", "^s^", "^c^"]}`;
    data = data.replace("^t^", teacher).replace("^s^", subj)
               .replace("^c^", className);   
 
@@ -74,7 +74,7 @@ const setThLoadTable = () => {
 // Назначение классного руководителя классу
 const setTutor = (className, tutorLogin) => {
    let data = `{"t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", `
-            + `"f": "setTutor", "z": ["${className}", "${tutorLogin}"]}`;
+            + `"f": "tutorSet", "z": ["${className}", "${tutorLogin}"]}`;
    navigator.sendBeacon('/', data);
 }
 
@@ -147,7 +147,7 @@ getContent.distrib = async () => {
    
    // Объект с педагогической нагрузкой всех учителей
    // {"pupkin": {"s110": ["8Б", "10Ж"], "d830": ["8Б"]}, "ivanov": ...}
-   apiOpt.body = apiOpt.body.replace("teachList", "getDistr");
+   apiOpt.body = apiOpt.body.replace("teachList", "distrGet");
    apiResp = await (await fetch("/", apiOpt)).text();
    if (apiResp != "none") distrObject = JSON.parse(apiResp);
    
