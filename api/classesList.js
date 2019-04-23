@@ -9,8 +9,11 @@
 
 // Возвращает массив имен классов
 module.exports = async () => {
-   let res = await dbFind("curric", {type: "class"});
-   let clList = [];
-   for (let currDoc of res) clList.push(currDoc.className);   
-   return JSON.stringify(clList);
+   try {
+      let res = await dbFind("curric", {type: "class"});
+      let clList = [];
+      for (let currDoc of res) clList.push(currDoc.className);   
+      return JSON.stringify(clList);
+   }
+   catch(e) {return "[]";}
 };

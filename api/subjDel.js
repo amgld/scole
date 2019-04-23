@@ -7,8 +7,11 @@
  */
 "use strict";
 
-// Возвращает "success" :)
+// Возвращает "success" или "none"
 module.exports = sbDelKey => {
-   db.curric.remove({type: "subj", sbKod: sbDelKey}, {});
-   return "success";
+   try {
+      db.curric.remove({type: "subj", sbKod: sbDelKey}, {});
+      return "success";
+   }
+   catch(e) {return "none";}
 };

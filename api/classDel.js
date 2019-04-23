@@ -7,8 +7,11 @@
  */
 "use strict";
 
-// Возвращает "success" :)
+// Возвращает "success" или "none"
 module.exports = clDelName => {
-   db.curric.remove({type: "class", className: clDelName}, {});
-   return "success";
+   try {
+      db.curric.remove({type: "class", className: clDelName}, {});
+      return "success";
+   }
+   catch(e) {return "none";}
 };

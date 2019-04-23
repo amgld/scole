@@ -25,7 +25,7 @@
 // captchaIdArr - глобальный массив, содержащий активные Id капчей
 // captNumGen   - глобальная функция, генерирующая капчу по ее Id
 module.exports = async (tip, login, pwd, cptId, capt, addr) => {
-   
+try {
    // Проверяем корректность формата логина
    const pattLogin = /^[a-z0-9]+$/;
    if (!pattLogin.test(login)) return 0;
@@ -129,4 +129,6 @@ module.exports = async (tip, login, pwd, cptId, capt, addr) => {
       // resp.teachLoad = {"8Б": ["s230", "d710"], "10Ж": ["s110"]}
    }   
    return JSON.stringify(resp);
-}
+} // end of "try"
+catch(e) {return 0;}
+} // end of module
