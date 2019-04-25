@@ -1,19 +1,22 @@
 /**
- *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: БЛОК РЕДАКТИРОВАНИЯ СПИСКА КЛАССОВ
+ *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: БЛОК РЕДАКТИРОВАНИЯ УЧЕБНЫХ ПЕРИОДОВ
  *   Copyright © 2019, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 
-// Массив названий классов
-let classesList = [];
+// Массив учебных периодов (для главного администратора)
+// Каждый период - это что-то типа ["1 четверть", "p001", "p230"]
+// где p230 - это 30 ноября (сентябрь это 0-й месяц, май это 8-й месяц)
+let rootPerList = [];
 
-// Публикация списка классов на страничке из массива clArr
-const clListPubl = clArr => {
-   if (!clArr.length) {
-      dqs("#clList").innerHTML = "Классов не найдено.";
+// Публикация списка периодов на страничке из массива perObj
+const perListPubl = perObj => {
+   if (!perObj.length) {
+      dqs("#perList").innerHTML = "Учебных периодов не найдено.";
       return;
    }
-   // Сначала сортируем массив классов правильным образом,
+   /*
+   // Сначала сортируем массив периодов правильным образом,
    // затем публикуем с иконками удаления
    let massiv = classSort(clArr); // определена в ini.js
    let cont = '',
@@ -27,9 +30,11 @@ const clListPubl = clArr => {
       cont += `<span>
          <div onclick=classNumDel("${currCl}")>&#10060;</div>${currCl}</span>`;
    }
-   dqs("#clList").innerHTML = cont;  
+   dqs("#clList").innerHTML = cont;
+   */
 };
 
+/*
 // Отправка запроса к API для добавления класса
 const classAdd = async () => {
    let newClassName = dqs("#addClassNum").value.toString()
@@ -63,32 +68,28 @@ const classNumDel = async (clNum) => {
       clListPubl(classesList);
    }
 }
+*/
 
 // Формирование контента странички
-createSection("classes", `
-   <h3>Список классов</h3>
-   <div id="clList"></div><br>
-   <select id="addClassNum"></select>
-   <select id="addClassLit"></select>
-   <button type="button" onclick="classAdd()">Добавить</button>
+createSection("periods", `
+   <h3>Учебные периоды</h3>
+   <div id="perList"></div><br>
+   <input type="text" id="addPerName" placeholder="Название">
+    с&nbsp;<select id="addPerDstart"></select>
+           <select id="addPerMstart"></select>
+   по&nbsp;<select id="addPerDfin"></select>
+           <select id="addPerMfin"></select>
+   <button type="button" onclick="periodAdd()">Добавить</button>
 `);
 
-// Формирование опций селектов для добавления класса
-let clNumOpt = '', clLitOpt = '', clLiters = "АБВГДЕЖЗИКЛМНОПРСТУФХЦЧШЩЭЮЯ";
-for (let i = 1; i < 12; i++)
-   clNumOpt += `<option>${i}</option>`;
-for (let i = 0; i < clLiters.length; i++)
-   clLitOpt += `<option>${clLiters.charAt(i)}</option>`;
-dqs("#addClassNum").innerHTML = clNumOpt;
-dqs("#addClassLit").innerHTML = clLitOpt;
-
-// Динамически подгружаем список классов в массив classesList
+// Динамически подгружаем список периодов в массив rootPerList
 // с помощью API и публикуем его на страничке (имя метода = имени пункта меню!)
-getContent.classes = async () => {
+getContent.periods = async () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classesList"
+      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "getPers"
    }`};
    let apiResp = await (await fetch("/", apiOpt)).text();
-   if (apiResp != "none") classesList = JSON.parse(apiResp);
-   clListPubl(classesList);
+   if (apiResp != "none") rootPerList = JSON.parse(apiResp);
+   perListPubl(rootPerList);
+   dqs("#addPerName").focus();
 }

@@ -22,7 +22,7 @@ const DOCROOT  = __dirname + "/www/",
       captGen  = require("./api/captchaGen"),
 
       httpsOpt = {
-         key: fs.readFileSync(__dirname  + "/ssl/" + KEYPATH),
+         key:  fs.readFileSync(__dirname + "/ssl/" + KEYPATH),
          cert: fs.readFileSync(__dirname + "/ssl/" + CERTPATH)      
       };
 
@@ -92,7 +92,6 @@ const sendOtvet = (otvet, kod, contType, content) => {
    });
    otvet.end(content);
 }
-
 
 /* ОБЪЕКТЫ, ОБСЛУЖИВАЮЩИЕ РАБОТУ С КАПЧЕЙ
  * ----------------------------------------------------------------------- */
