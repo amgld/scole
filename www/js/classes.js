@@ -1,9 +1,6 @@
 /**
  *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: БЛОК РЕДАКТИРОВАНИЯ СПИСКА КЛАССОВ
- * 
- *   Copyright © А. М. Гольдин, 2019. a@goldin.su
- *   Лицензия CC BY-NC-ND Version 4.0
- *   https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.ru
+ *   Copyright © 2019, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 
