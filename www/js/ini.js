@@ -23,8 +23,7 @@ const menuItems = {
       ["users",    "Пользователи"],
       ["admins",   "Администраторы"],
       ["classes",  "Классы"],
-      ["subjects", "Предметы"],
-      ["periods",  "Учебные периоды"]
+      ["subjects", "Предметы"]
    ],
    "admin": [
       ["register", "Журнал"],
