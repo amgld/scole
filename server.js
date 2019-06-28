@@ -38,6 +38,7 @@ db.staff    = new nedb({filename: "db/staff.db",    autoload: true});
 db.pupils  = new nedb({filename: "db/pupils.db",  autoload: true});
 db.curric  = new nedb({filename: "db/curric.db",  autoload: true});
 db.distrib = new nedb({filename: "db/distrib.db", autoload: true});
+db.tmtbl   = new nedb({filename: "db/tmtbl.db",   autoload: true});
 
 
 /* ОПРЕДЕЛЕНИЯ ФУНКЦИЙ
