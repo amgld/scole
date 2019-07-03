@@ -28,20 +28,26 @@ const checkDayFilter = day => {
 
 // Формирование контента страницы
 createSection("register", `
-   <select id="regClassSel"></select>
-   <select id="regPageSel"></select>
+   <select id="regClassSel"></select> <select id="regPageSel"></select>
    <div id="regFilter"></div><br>
-   <div id="regGrades">grades</div>
-   <div id="regTopics">topics</div>
+   <div id="regGrades">grades</div> <div id="regTopics">topics</div>
 `);
 
+// Формирование списка классов в селекте
+
+// Формирование списка журальных страничек в селекте
+
 // Формирование фильтра дней недели, показываемого на странице
-(() => {
-   let daysFilterCont = '',
-       dN = ['', "пн", "вт", "ср", "чт", "пт", "сб"];
-   for (let i=1; i<7; i++) daysFilterCont +=
+let daysFilterCont = '', dN = ['', "пн", "вт", "ср", "чт", "пт", "сб"];
+for (let i=1; i<7; i++) {
+   daysFilterCont +=
       `<span id="rf${i}" onClick="checkDayFilter(${i})">${dN[i]}</span> `;
-   dqs("#regFilter").innerHTML = daysFilterCont;
-})();
+}
+dqs("#regFilter").innerHTML = daysFilterCont;
 
 checkDayFilter(0);
+
+// Загрузка отметок
+
+// Загрузка тем уроков
+
