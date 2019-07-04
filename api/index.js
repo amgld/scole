@@ -32,10 +32,10 @@ const RIGHTS = {
       "classesList", "subjList", "teachList", "tutorSet", "tutorsList",
       "distrGet", "distrEdit"
    ],
-   "teacher": ["usChPwd"],
-   "tutor":   [],
-   "pupil":   [],
-   "parent":  []
+   "teacher": ["usChPwd", "subjList"],
+   "tutor":   ["subjList", "distrGet"],
+   "pupil":   ["subjList", "distrGet"],
+   "parent":  ["subjList", "distrGet"]
 };
 for (let item in RIGHTS) RIGHTS[item].push("login");
 

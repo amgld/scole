@@ -4,6 +4,60 @@
  */
 "use strict";
 
+// Формирование списка журальных страничек в селекте выбора странички
+const regPagesSelLoad = async (className) => {
+   
+   let regRole = dqs("#selRole").value,
+       regSelPgInner = '';
+   
+   // Получение объекта со списком всех предметов
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjList"
+      }`};
+   let apiResp = await (await fetch("/", apiOpt)).text();
+   let subjListDop = JSON.parse(apiResp);
+   let sbListFull  = {...subjDef, ...subjListDop};   
+
+   if (regRole == "admin" || regRole == "tutor") {
+      
+      // Получаем объект с логинами и ФИО сотрудников
+      // {"pupkin": "Пупкин В. И.", "ivanov": "Иванов И. И.", ...}
+      // apiOpt.body = apiOpt.body.replace("subjList", "usStaff");
+      // apiResp = await (await fetch("/", apiOpt)).text();
+      // let teachFIO = JSON.parse(apiResp);      
+      
+      // Получаем всю педагогическую нагрузку и формируем объект
+      // regDistr = {"8Б": [["s110", "ivanov"], ["d830", "petrov"], ...], ...}
+      let regDistr = {};
+      apiOpt.body = apiOpt.body.replace("subjList", "distrGet");
+      apiResp = await (await fetch("/", apiOpt)).text();
+      let distrApi = JSON.parse(apiResp);
+      for (let teacher of Object.keys(distrApi)) {
+         for (let subj of Object.keys(distrApi[teacher])) {
+            for (let className of distrApi[teacher][subj]) {
+               if (regDistr[className])
+                  regDistr[className].push([subj, teacher]);
+               else regDistr[className] = [[subj, teacher]];
+            }
+         }
+      }
+      
+      // Формируем внутренность селекта выбора предметной странички журнала
+      for (let sbPairs of regDistr[className])
+         regSelPgInner +=
+            `<option value="${sbPairs[0]}^${sbPairs[1]}">`
+          + `${sbListFull[sbPairs[0]]} (${sbPairs[1]})</option>`;      
+   }
+   else if (regRole == "teacher") {
+      for (let sbCode of uTeachLoad[className])
+         regSelPgInner +=
+            `<option value="${sbCode}^${uLogin}">`
+          + `${sbListFull[sbCode]}</option>`;
+   }
+
+   dqs("#regPageSel").innerHTML = regSelPgInner;
+}
+
 // Фильтр дней недели (показывать день или нет); индексы: пн=1, ..., сб=6
 let daysFilter = [0, 1, 1, 1, 1, 1, 1];
 
@@ -28,7 +82,7 @@ const checkDayFilter = day => {
 
 // Формирование контента страницы
 createSection("register", `
-   <select id="regClassSel"></select>
+   <select id="regClassSel" onChange="regPagesSelLoad(this.value)"></select>
    <select id="regPageSel"></select>
    <div id="regFilter"></div><br>
    <div id="regGrades"></div>
@@ -78,7 +132,6 @@ getContent.register = async () => {
    else if (regRole == "teacher") { // учителю только свои классы
       if (Object.keys(uTeachLoad).length == 0) regNoContent();
       else regClList = classSort(Object.keys(uTeachLoad));
-      // педнагрузка: uTeachLoad = {"8Б": ["s230", "d710"], "10Ж": ["s110"]}
    }
    else regNoContent();
    
@@ -87,10 +140,7 @@ getContent.register = async () => {
    dqs("#regClassSel").innerHTML = regSelClInner;
 
    // Формирование списка журальных страничек в селекте
-   // {"pupkin": {"s110": ["8Б", "10Ж"], "d830": ["8Б"]}, "ivanov": ...}   
-   if (regIsContent) {
-      apiOpt.body = apiOpt.body.replace("classesList", "distrGet");      
-   }   
+   if (regIsContent) regPagesSelLoad(regClList[0]);
    
    if (!regIsContent) return;
       
