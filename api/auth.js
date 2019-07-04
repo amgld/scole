@@ -87,7 +87,7 @@ module.exports = async (tip, login, pwd, cptId, capt, addr) => {
          }
          
          // Если пришел пароль
-         else {      
+         else {            
             if (!captCheck()) return 0;     // проверка капчи    
             let userHash = hash(pwd, salt); // хэш пароля         
             // Если он утверждает, что он родитель
@@ -123,6 +123,17 @@ module.exports = async (tip, login, pwd, cptId, capt, addr) => {
          
          // Если он учитель, смотрим и возвращаем распределение его нагрузки
          // resp.teachLoad = {"8Б": ["s230", "d710"], "10Ж": ["s110"]}
+         resp.teachLoad = {};
+         let uDistrArr = await dbFind("distrib", {tLogin: login});
+         if (uDistrArr.length) {
+            let uDistrObj = uDistrArr[0].tLoad;
+            for (let subj of Object.keys(uDistrObj)) {
+               for(let clName of uDistrObj[subj]) {
+                  if (resp.teachLoad[clName]) resp.teachLoad[clName].push(subj);
+                  else resp.teachLoad[clName] = [subj];
+               }
+            }
+         }
       }   
       return JSON.stringify(resp);
    }

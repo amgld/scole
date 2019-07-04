@@ -77,6 +77,7 @@ const submLogin = async () => {
             
          // Сохраняем токен, его роли, перечень классов, где он
          // классный руководитель, его педагогическую нагрузку
+         // типа {"8Б": ["s230", "d710"], "10Ж": ["s110"]}
          let apiRespObj = JSON.parse(apiResp);
          uRoles         = apiRespObj.roles;
          uToken         = apiRespObj.token;
