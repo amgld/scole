@@ -113,14 +113,13 @@ const chPwd = () => {
 // Формирование хидера и включение футера
 const headerGen = async () => {
    let apiRespObj = JSON.parse(apiResp);
-   let rl = apiRespObj.roles;
    dqs("#content").innerHTML += `
       <header>
          <img src="static/menuMob.svg" title="Меню" onClick="showMenuMob()">
          <span id="progName">ЭЖ «Шкала»</span>
          <span>${uLogin}:<span>
          <select id="selRole" onChange="menuGen()" title="Роль пользователя">
-            ${headerOptGen(rl)}
+            ${headerOptGen(uRoles)}
          </select>
          <span id="chPwd" title="Сменить пароль" onClick="chPwd()">&#9874;</span>
          <a href='' title="Выход">&#9635;</a>

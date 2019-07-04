@@ -23,7 +23,7 @@ dqs("#content").appendChild(elems.loginElem);
 
 let uToken = '', uCateg = '', uLogin = '', uCpt = '', apiResp = '', captId = 0,
     uTipes = {"Учащийся": "pupil", "Сотрудник": "staff", "Родитель": "par"},
-    uTutorCls = [], uTeachLoad = {}; 
+    uTutorCls = [], uTeachLoad = {}, uRoles = []; 
 if (!uLogin) dqs("article").style.display = "block";
 
 // Параметры запроса к API сервера
@@ -75,9 +75,10 @@ const submLogin = async () => {
          apiOpt.body = '';
          captId = 0;
             
-         // Сохраняем токен, перечень классов, где он классный руководитель,
-         // его педагогическую нагрузку
+         // Сохраняем токен, его роли, перечень классов, где он
+         // классный руководитель, его педагогическую нагрузку
          let apiRespObj = JSON.parse(apiResp);
+         uRoles         = apiRespObj.roles;
          uToken         = apiRespObj.token;
          uTutorCls      = apiRespObj.tutClss   || [];
          uTeachLoad     = apiRespObj.teachLoad || {};
