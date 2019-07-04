@@ -8,7 +8,7 @@
 const regPagesSelLoad = async (className) => {
    
    let regRole = dqs("#selRole").value,
-       regSelPgInner = '';
+       regSelPgInner = '';   
    
    // Получение объекта со списком всех предметов
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
@@ -22,14 +22,14 @@ const regPagesSelLoad = async (className) => {
       
       // Получаем объект с логинами и ФИО сотрудников
       // {"pupkin": "Пупкин В. И.", "ivanov": "Иванов И. И.", ...}
-      // apiOpt.body = apiOpt.body.replace("subjList", "usStaff");
-      // apiResp = await (await fetch("/", apiOpt)).text();
-      // let teachFIO = JSON.parse(apiResp);      
+      apiOpt.body = apiOpt.body.replace("subjList", "usStaff");
+      apiResp = await (await fetch("/", apiOpt)).text();
+      let teachFIO = JSON.parse(apiResp);      
       
       // Получаем всю педагогическую нагрузку и формируем объект
       // regDistr = {"8Б": [["s110", "ivanov"], ["d830", "petrov"], ...], ...}
       let regDistr = {};
-      apiOpt.body = apiOpt.body.replace("subjList", "distrGet");
+      apiOpt.body = apiOpt.body.replace("usStaff", "distrGet");
       apiResp = await (await fetch("/", apiOpt)).text();
       let distrApi = JSON.parse(apiResp);
       for (let teacher of Object.keys(distrApi)) {
@@ -43,12 +43,14 @@ const regPagesSelLoad = async (className) => {
       }
       
       // Формируем внутренность селекта выбора предметной странички журнала
+      if (!regDistr[className]) {dqs("#regPageSel").innerHTML = ''; return;}
       for (let sbPairs of regDistr[className])
          regSelPgInner +=
             `<option value="${sbPairs[0]}^${sbPairs[1]}">`
-          + `${sbListFull[sbPairs[0]]} (${sbPairs[1]})</option>`;      
+          + `${sbListFull[sbPairs[0]]} (${teachFIO[sbPairs[1]]})</option>`;      
    }
    else if (regRole == "teacher") {
+      if (!uTeachLoad[className]) {dqs("#regPageSel").innerHTML = ''; return;}
       for (let sbCode of uTeachLoad[className])
          regSelPgInner +=
             `<option value="${sbCode}^${uLogin}">`

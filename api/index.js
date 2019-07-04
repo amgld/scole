@@ -15,7 +15,7 @@ const modReq = {
    "usFindLogin": [1,1], "usImport":    [1,1], "usSetAdmin": [1,1],
    "adminsList":  [1,0], "usBlock":     [1,1], "usChPwd":    [1,1],
    "teachList":   [1,0], "tutorSet":    [0,1], "tutorsList": [1,0],
-   "distrGet":    [1,0], "distrEdit":   [1,1]
+   "distrGet":    [1,0], "distrEdit":   [1,1], "usStaff":     [1,0]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -30,12 +30,12 @@ const RIGHTS = {
    ],
    "admin":   [
       "classesList", "subjList", "teachList", "tutorSet", "tutorsList",
-      "distrGet", "distrEdit"
+      "distrGet", "distrEdit", "usStaff"
    ],
    "teacher": ["usChPwd", "subjList"],
-   "tutor":   ["subjList", "distrGet"],
-   "pupil":   ["subjList", "distrGet"],
-   "parent":  ["subjList", "distrGet"]
+   "tutor":   ["subjList", "distrGet", "usStaff"],
+   "pupil":   ["subjList", "distrGet", "usStaff"],
+   "parent":  ["subjList", "distrGet", "usStaff"]
 };
 for (let item in RIGHTS) RIGHTS[item].push("login");
 
