@@ -6,7 +6,9 @@
 #register {
    margin-top:-25px;}
 #register div {
-   margin:5px 2px; display:inline-block; /* background:yellow; */}
+   margin:5px 2px; display:inline-block;}
+#register select {
+   margin:2px;}
    
 /* ФИЛЬТР ДНЕЙ НЕДЕЛИ
    ----------------------------------------------------- */
