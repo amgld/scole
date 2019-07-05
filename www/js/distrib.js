@@ -95,6 +95,19 @@ const setTutor = async (className, tutorLogin) => {
    }
 }
 
+// Формирование innerHTML селекта выбора подгрупп после пред. выбора класса
+const distSelClLoad = className => {
+   // Массив подгрупп данного класса (включая сам класс)
+   let groups = distrClGroups.filter(x => x.includes(className));
+   
+   let selInner = '';
+   for (let group of groups) {
+      let prim = group.includes('-') ? '' : " (весь)";
+      selInner += `<option value="${group}">${group + prim}</option>`;
+   }
+   dqs("#distSelClass").innerHTML = selInner;
+}
+
 // Формирование innerHTML таблицы "Классное руководство"
 const createTutorTable = () => {
    let res = '', optList = "<option value='none'>Не назначен</option>";
@@ -126,6 +139,7 @@ createSection("distrib", `
    <select id="distSelTeach" onChange="setThLoadTable()"></select>
    <table id="teachLoad"></table>
    <select id="distSelSubj"></select>
+   <select id="distSelClassPredv" onChange="distSelClLoad(this.value)"></select>
    <select id="distSelClass"></select>
    <button type="button"
       id="addTeachLoad" onClick="editLoad('add')">Добавить</button>
@@ -186,10 +200,11 @@ getContent.distrib = async () => {
       dSelSbInner += `<option value="${kod}">${distrSbList[kod]}</option>`;
    dqs("#distSelSubj").innerHTML = dSelSbInner;
    
-   // Формируем селект выбора класса или подгруппы класса
+   // Формируем селект предварительного выбора класса
    let dSelClInner = '';
-   for (let cls of distrClGroups) dSelClInner += `<option>${cls}</option>`;
-   dqs("#distSelClass").innerHTML = dSelClInner;
+   for (let cls of distrClList) dSelClInner += `<option>${cls}</option>`;
+   dqs("#distSelClassPredv").innerHTML = dSelClInner;
+   distSelClLoad(distrClList[0]);
    
    // Очищаем таблицу с педагогической нагрузкой
    dqs("#teachLoad").innerHTML =

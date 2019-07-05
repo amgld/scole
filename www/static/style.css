@@ -213,7 +213,8 @@ section#distrib select {
    background:#f6f3f0; border:none; cursor:pointer;}
 section#distrib select#distSelTeach,
 section#distrib select#distSelSubj,
-section#distrib select#distSelClass {
+section#distrib select#distSelClass,
+section#distrib select#distSelClassPredv {
    background:#e6ded5; border:1px solid #963; margin:3px;}
 section#distrib table#teachLoad {
    border-collapse:collapse; margin-top:10px;}
