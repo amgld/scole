@@ -4,8 +4,8 @@
  */
 "use strict";
 
-let distrClList  = [], distrSbList = {}, distrThList = [],
-    distrTutList = {}, distrObject = {};
+let distrClList = [], distrClGroups = [], distrSbList = {},
+    distrThList = [], distrTutList  = {}, distrObject = {};
     
 // Добавление/удаление элемента учебной нагрузки
 const editLoad = async (func, teacher, subj, className) => {
@@ -147,13 +147,16 @@ getContent.distrib = async () => {
    if (apiResp != "none") subjListDop = JSON.parse(apiResp);
    distrSbList = subjSort({...subjDef, ...subjListDop});
    
-   // Массив со списком классов
-   apiOpt.body = apiOpt.body.replace("subjList", "classesList");
+   // Массив со списком классов и их подгрупп
+   apiOpt.body = apiOpt.body.replace("subjList", "classesGroups");
    apiResp = await (await fetch("/", apiOpt)).text();
-   if (apiResp != "none") distrClList = classSort(JSON.parse(apiResp));
+   if (apiResp != "none") distrClGroups = classSort(JSON.parse(apiResp));
+   
+   // Массив со списком классов (без подгрупп)
+   distrClList = distrClGroups.filter(x => !x.includes('-'));
    
    // Объект со списком классных руководителей
-   apiOpt.body = apiOpt.body.replace("classesList", "tutorsList");
+   apiOpt.body = apiOpt.body.replace("classesGroups", "tutorsList");
    apiResp = await (await fetch("/", apiOpt)).text();
    if (apiResp != "none") distrTutList = JSON.parse(apiResp);
    
@@ -183,9 +186,9 @@ getContent.distrib = async () => {
       dSelSbInner += `<option value="${kod}">${distrSbList[kod]}</option>`;
    dqs("#distSelSubj").innerHTML = dSelSbInner;
    
-   // Формируем селект выбора класса
+   // Формируем селект выбора класса или подгруппы класса
    let dSelClInner = '';
-   for (let cls of distrClList) dSelClInner += `<option>${cls}</option>`;
+   for (let cls of distrClGroups) dSelClInner += `<option>${cls}</option>`;
    dqs("#distSelClass").innerHTML = dSelClInner;
    
    // Очищаем таблицу с педагогической нагрузкой

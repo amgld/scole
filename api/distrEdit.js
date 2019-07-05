@@ -16,7 +16,7 @@ module.exports = async argsObj => {
       let func      = argsObj[0].trim(),
           teacher   = argsObj[1].substr(0, 50).trim(),
           subj      = argsObj[2].substr(0,  4).trim(),
-          className = argsObj[3].substr(0,  3).trim();
+          className = argsObj[3].substr(0, 20).trim();
       if (!func || !teacher || !subj || !className) return "none";      
       
       // Получаем нагрузку данного учителя по данному предмету (если есть)

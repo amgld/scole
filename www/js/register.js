@@ -20,7 +20,7 @@ const regPagesSelLoad = async (className) => {
 
    if (regRole == "admin" || regRole == "tutor") {
       
-      // Получаем объект с логинами и ФИО сотрудников
+      // Получаем объект с логинами и ФИО учителей
       // {"pupkin": "Пупкин В. И.", "ivanov": "Иванов И. И.", ...}
       let teachFIO = {};
       apiOpt.body = apiOpt.body.replace("subjList", "teachList");
@@ -57,8 +57,7 @@ const regPagesSelLoad = async (className) => {
       if (!uTeachLoad[className]) {dqs("#regPageSel").innerHTML = ''; return;}
       for (let sbCode of uTeachLoad[className])
          regSelPgInner +=
-            `<option value="${sbCode}^${uLogin}">`
-          + `${sbListFull[sbCode]}</option>`;
+           `<option value="${sbCode}^${uLogin}">${sbListFull[sbCode]}</option>`;
    }
 
    dqs("#regPageSel").innerHTML = regSelPgInner;

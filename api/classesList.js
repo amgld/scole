@@ -4,12 +4,12 @@
  */
 "use strict";
 
-// Возвращает массив имен классов
+// Возвращает несортированный массив имен классов
 module.exports = async () => {
    try {
-      let res = await dbFind("curric", {type: "class"});
       let clList = [];
-      for (let currDoc of res) clList.push(currDoc.className);   
+      let res = await dbFind("curric", {type: "class"});      
+      for (let currDoc of res) clList.push(currDoc.className);
       return JSON.stringify(clList);
    }
    catch(e) {return "[]";}

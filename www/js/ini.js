@@ -114,9 +114,14 @@ const createSection = (newId, inner) => {
    dqs("#content").appendChild(elems[newId]);
 };
 
-// Сортировка массива названий классов правильным образом (11А > 1А)
-const classSort = classArr => classArr.map(x => x.padStart(3, '0')).sort()
-                . map(x => x.replace(/^0/, ''));
+// Сортировка массива названий классов и подгрупп правильным образом (11А > 1А,
+// подгруппы следуют непосредственно за своими классами)
+const classSort = classArr => classArr
+   .map(x => {
+      let xArr = x.split('-'),
+          grName = xArr[1] ? `-${xArr[1]}` : ''; 
+      return xArr[0].padStart(3, '0') + grName;      
+   }).sort().map(x => x.replace(/^0/, ''));
 
 // Сортировка списка предметов правильным образом по ключам (d480 > s110)
 const subjSort = sbObj => {
