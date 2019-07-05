@@ -11,8 +11,8 @@ let daysFilter = [0, 1, 1, 1, 1, 1, 1];
 
 // Формирование контента страницы
 createSection("register", `
-   <select id="regClassSel" onChange="regPagesSelLoad(this.value)"></select>
-   <select id="regPageSel"></select>
+   <select id="regClassSel" onChange="regPagesSelLoad(this.value);"></select>
+   <select id="regPageSel"  onChange="checkDayFilter(0); loadGrades()"></select>
    <div id="regFilter"></div><br>
    <div id="regGrades"></div>
    <div id="regTopics"></div>
@@ -68,7 +68,7 @@ getContent.register = async () => {
    dqs("#regClassSel").innerHTML = regSelClInner;
 
    // Формирование списка журальных страничек в селекте
-   if (regIsContent) regPagesSelLoad(regClList[0]);
+   if (regIsContent) await regPagesSelLoad(regClList[0]);
    
    if (!regIsContent) return;
       
@@ -79,9 +79,8 @@ getContent.register = async () => {
          `<span id="rf${i}" onClick="checkDayFilter(${i})">${dN[i]}</span> `;
    }
    dqs("#regFilter").innerHTML = daysFilterCont;
-   checkDayFilter(0);
+   await checkDayFilter(0);
 
-   // Загрузка отметок
-
-   // Загрузка тем уроков   
+   // Загрузка списка класса, отметок и тем уроков
+   loadGrades();
 }

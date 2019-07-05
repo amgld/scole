@@ -3,7 +3,7 @@
  *   БИБЛИОТЕКА ФУНКЦИЙ ДЛЯ СТРАНИЦ С ОТМЕТКАМИ И ТЕМАМИ УРОКОВ
  *   Copyright © 2019, А.М.Гольдин. Modified BSD License
  * 
- *   Библиотека используется скриптaми register.js и journal.js
+ *   Библиотека используется скриптом register.js
  */
 "use strict";
 
@@ -84,13 +84,17 @@ const regPagesSelLoad = async (className) => {
    }
 
    dqs("#regPageSel").innerHTML = regSelPgInner;
+   
+   // После прогрузки списка доступных страничек данного класса
+   // загружаем контент первой в списке странички (функцию см. ниже)
+   loadGrades();
 }
 
 // **************************************************************************
 // Загрузка и переключение фильтра дней недели в зависимости от действий
 // пользователя и запись нового фильтра в базу с помощью API;
 // одновременно показ на странице (если аргумент = 0, то только показ)
-const checkDayFilter = day => {
+const checkDayFilter = async (day) => {
    if (![0,1,2,3,4,5,6].includes(day)) return;
    if (day) {
       daysFilter[day] = (daysFilter[day] + 1) % 2;
@@ -110,3 +114,26 @@ const checkDayFilter = day => {
    }
 }
 
+// **************************************************************************
+// Загрузка списка класса, отметок и тем уроков
+// Аргумент имеет вид класс^предмет^учитель, например 10Ж-мальч^s220^ivanov
+const loadGrades = async () => {
+   dqs("#regGrades").innerHTML = "<img src='/static/preloader.gif'>";
+   dqs("#regTopics").innerHTML = "<img src='/static/preloader.gif'>";
+   let params = dqs("#regPageSel").value.trim();
+   if (!params) {
+      dqs("#regGrades").innerHTML =
+         "<h3>Для этого класса пока нет журнальных страничек</h3>";
+      dqs("#regTopics").innerHTML = '';
+      return;
+   }
+   let paramsArr = params.split('^'),
+       className = paramsArr[0],
+       subjCode  = paramsArr[1],
+       teachLgn  = paramsArr[2];
+
+   dqs("#regGrades").innerHTML =
+      `Класс: ${className}<br>Предмет: ${subjCode}<br>Учитель: ${teachLgn}`;
+   
+   dqs("#regTopics").innerHTML = "Темы уроков";
+}

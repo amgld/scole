@@ -9,6 +9,8 @@
    margin:5px 2px; display:inline-block;}
 #register select {
    margin:2px;}
+#register img {
+   margin-top:100px;}
    
 /* ФИЛЬТР ДНЕЙ НЕДЕЛИ
    ----------------------------------------------------- */
@@ -26,7 +28,8 @@ div#regGrades {
 /* ТЕМЫ УРОКОВ
    ----------------------------------------------------- */
 div#regTopics {
-   width:400px; max-height:calc(100vh - 150px); overflow-y:auto;}
+   width:400px; vertical-align:top;
+   max-height:calc(100vh - 150px); overflow-y:auto;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
