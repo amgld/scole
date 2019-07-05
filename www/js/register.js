@@ -6,29 +6,23 @@
  */
 "use strict";
 
-// Фильтр дней недели (показывать день или нет); индексы: пн=1, ..., сб=6
-let daysFilter = [0, 1, 1, 1, 1, 1, 1];
-
 // Формирование контента страницы
 createSection("register", `
    <select id="regClassSel" onChange="regPagesSelLoad(this.value);"></select>
-   <select id="regPageSel"  onChange="checkDayFilter(0); loadGrades()"></select>
-   <div id="regFilter"></div><br>
+   <select id="regPageSel"  onChange="loadGrades()"></select><br>
    <div id="regGrades"></div>
-   <div id="regTopics"></div>
+   <div id="regTopics">
+      <div id="regNewTopic"></div>
+      <div id="regJustTopics"></div>
+   </div>
    <h3 id="regIsContent">У вас нет доступных журнальных страниц</h3>
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
-getContent.register = async () => {
-   
-   let apiOpt = {
-      method: "POST",
-      cache: "no-cache",
-      body: `{
-         "t":"${uCateg}", "l":"${uLogin}", "p":"${uToken}", "f":"classesList"
-      }`      
-   };
+getContent.register = async () => {   
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+      "t":"${uCateg}", "l":"${uLogin}", "p":"${uToken}", "f":"classesList"
+   }`};
    
    // Выдача сообщения и скрытие контента страницы, если нет
    // доступных юзеру журнальных страниц
@@ -36,7 +30,6 @@ getContent.register = async () => {
       regIsContent = false;
       dqs("#regClassSel") .style.display = "none";
       dqs("#regPageSel")  .style.display = "none";
-      dqs("#regFilter")   .style.display = "none";
       dqs("#regIsContent").style.display = "block";
    }
    
@@ -46,7 +39,6 @@ getContent.register = async () => {
        regIsContent = true; // есть ли у юзера доступные журнальные страницы
    dqs("#regClassSel") .style.display = "inline";
    dqs("#regPageSel")  .style.display = "inline";
-   dqs("#regFilter")   .style.display = "inline-block";
    dqs("#regIsContent").style.display = "none";
    
    if (regRole == "admin") { // администратору показываем все классы
@@ -67,20 +59,8 @@ getContent.register = async () => {
    for (let cls of regClList) regSelClInner += `<option>${cls}</option>`;
    dqs("#regClassSel").innerHTML = regSelClInner;
 
-   // Формирование списка журальных страничек в селекте
-   if (regIsContent) await regPagesSelLoad(regClList[0]);
-   
-   if (!regIsContent) return;
-      
-   // Формирование фильтра дней недели, показываемого на странице
-   let daysFilterCont = '', dN = ['', "пн", "вт", "ср", "чт", "пт", "сб"];
-   for (let i=1; i<7; i++) {
-      daysFilterCont +=
-         `<span id="rf${i}" onClick="checkDayFilter(${i})">${dN[i]}</span> `;
+   if (regIsContent) {
+      await regPagesSelLoad(regClList[0]); // список журальных страничек
+      loadGrades(); // список класса, отметки и темы уроков
    }
-   dqs("#regFilter").innerHTML = daysFilterCont;
-   await checkDayFilter(0);
-
-   // Загрузка списка класса, отметок и тем уроков
-   loadGrades();
 }

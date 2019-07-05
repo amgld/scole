@@ -13,8 +13,7 @@ a {
 a:hover {
    text-decoration:underline;}
 h1, h2, h3 {
-   color:#963; text-align:center; margin:12pt 0px 6pt;
-}
+   color:#963; text-align:center; margin:12pt 0px 6pt;}
 h3 {
    font-size:1.1em;}
 h3:first-child {
