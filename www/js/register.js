@@ -5,10 +5,11 @@
 "use strict";
 
 // Формирование списка журальных страничек в селекте выбора странички
+// (показываем также список журнальных страничек всех подгрупп данного класса)
 const regPagesSelLoad = async (className) => {
    
-   let regRole = dqs("#selRole").value,
-       regSelPgInner = '';   
+   dqs("#regPageSel").innerHTML = '';   
+   let regRole = dqs("#selRole").value, regSelPgInner = '';   
    
    // Получение объекта со списком всех предметов
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
@@ -20,10 +21,16 @@ const regPagesSelLoad = async (className) => {
 
    if (regRole == "admin" || regRole == "tutor") {
       
+      // Получаем массив groups названий подгрупп и самого класса
+      apiOpt.body = apiOpt.body.replace("subjList", "classesGroups");
+      apiResp = await (await fetch("/", apiOpt)).text();
+      let groupsList = JSON.parse(apiResp);
+      let groups = classSort(groupsList.filter(x => x.includes(className)));
+      
       // Получаем объект с логинами и ФИО учителей
       // {"pupkin": "Пупкин В. И.", "ivanov": "Иванов И. И.", ...}
       let teachFIO = {};
-      apiOpt.body = apiOpt.body.replace("subjList", "teachList");
+      apiOpt.body = apiOpt.body.replace("classesGroups", "teachList");
       apiResp = await (await fetch("/", apiOpt)).text();
       let teachList = JSON.parse(apiResp);
       for (let teach of teachList) {teachFIO[teach.login] = teach.fio;}
@@ -45,19 +52,31 @@ const regPagesSelLoad = async (className) => {
       }
       
       // Формируем внутренность селекта выбора предметной странички журнала
-      if (!regDistr[className]) {dqs("#regPageSel").innerHTML = ''; return;}
-      for (let sbPairs of regDistr[className]) {
-         let tFIO = teachFIO[sbPairs[1]] ?
-                    `(${teachFIO[sbPairs[1]]})` : `(учитель ув.)`;
-         regSelPgInner += `<option value="${sbPairs[0]}^${sbPairs[1]}">`
-                        + `${sbListFull[sbPairs[0]]} ${tFIO}</option>`;
+      // (как странички самого класса, так и странички его подгрупп)
+      for (let currClass of groups) {
+         if (!regDistr[currClass]) continue;
+         for (let sbPairs of regDistr[currClass]) {
+            
+            // Если это не целый класс, а подгруппа, добавляем ее название
+            let grName =
+               currClass.includes('-') ? currClass.split('-')[1] + ": " : '';
+            
+            // Формируем фамилию И. О. учителя
+            let tFIO = teachFIO[sbPairs[1]] ?
+                     `(${teachFIO[sbPairs[1]]})` : `(учитель ув.)`;
+            
+            regSelPgInner +=
+               `<option value="${currClass}^${sbPairs[0]}^${sbPairs[1]}">`
+             + `${grName}${sbListFull[sbPairs[0]]} ${tFIO}</option>`;
+         }
       }
    }
+   
    else if (regRole == "teacher") {
       if (!uTeachLoad[className]) {dqs("#regPageSel").innerHTML = ''; return;}
       for (let sbCode of uTeachLoad[className])
-         regSelPgInner +=
-           `<option value="${sbCode}^${uLogin}">${sbListFull[sbCode]}</option>`;
+         regSelPgInner += `<option value="${className}^${sbCode}^${uLogin}">`
+                        + `${sbListFull[sbCode]}</option>`;
    }
 
    dqs("#regPageSel").innerHTML = regSelPgInner;
