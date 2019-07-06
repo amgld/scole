@@ -14,6 +14,9 @@ let regDt = new Date(),
 // Начало и окончание учебного года
 let regYst  = regDt.getMonth() > 7 ? `${regY}-09-01` : `${regY - 1}-09-01`,
     regYfin = regDt.getMonth() > 7 ? `${regY + 1}-06-30` : `${regY}-06-30`;
+    
+// Текст placeholder'а в поле редактирования темы урока
+let regTopPH = `Введите тему урока\n(если тема пуста, колонка будет удалена)`;
 
 // Формирование контента страницы
 createSection("register", `
@@ -24,12 +27,11 @@ createSection("register", `
       <div id="regNewTopic">
          <input id="regTopDt" type="date"
                 min="${regYst}" max="${regYfin}" value="${regNow}">
-         <textarea
-            placeholder="Создать новую колонку: введите тему урока"></textarea>
+         <textarea placeholder="${regTopPH}"></textarea>
          <input id="regTopHTask" type="text" placeholder="Домашнее задание">
          <span>Вес отметок (от 1 до 8)</span>
          <input id="regTopWeight" type="number" min=1 max=8 value=2>
-         <button onClick="">Создать</button>
+         <button onClick="topicEdit()">Создать</button>
       </div>
       <div id="regJustTopics"></div>
    </div>

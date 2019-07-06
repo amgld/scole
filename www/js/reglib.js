@@ -7,6 +7,9 @@
  */
 "use strict";
 
+const regWarn = "Тема не указана. Новая колонка не будет создана, "
+   + "имеющаяся колонка и все отметки будут удалены.\n\nВы уверены?";
+
 // **************************************************************************
 // Формирование списка журальных страничек в селекте выбора странички
 // (показываем также список журнальных страничек всех подгрупп данного класса)
@@ -91,11 +94,52 @@ const regPagesSelLoad = async (className) => {
 }
 
 // **************************************************************************
+// Добавление, удаление или редактирование темы урока, дз и веса отметок
+const topicEdit = async () => {
+   try {
+      // Получаем класс^предмет^учитель, например 10Ж-мальч^s220^ivanov,
+      // разбираем это, получаем данные из формы редактирования темы урока
+      let findArr = dqs("#regPageSel").value.trim().split('^'),
+          className = findArr[0], subj = findArr[1], teacher = findArr[2],
+          dtArr = dqs("#regTopDt").value.split('-'),
+          dtMesStr = Number(dtArr[1]),
+          dtMes = dtMesStr > 8 ? dtMesStr - 9 : dtMesStr + 3,
+          dtDay = dtArr[2],
+          dt    = `d${dtMes}${dtDay}`,
+          topic = dqs("#regNewTopic textarea").value.replace(/\s+/g, ' ').trim(),
+          hometask = dqs("#regTopHTask").value.replace(/\s+/g, ' ').trim(),
+          weight = dqs("#regTopWeight").value.toString().trim();
+      if (dtMes > 9 || dtDay > 31) {info(1, "Неверная дата."); return;}
+      if (!/^[1-8]{1}$/.test(weight)) {
+         info(1, "Вес может быть целым<br>числом от 1 до 8.");
+         return;         
+      }
+      if (!topic) if (!confirm(regWarn)) return;
+      
+      // Производим запрос к API
+      let apiOpt = {method: "POST", cache: "no-cache", body: `{
+         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "topicEdit",
+         "z": ["${className}", "${subj}", "${teacher}", "${dt}",
+               "${topic}", "${hometask}", "${weight}"]
+      }`};
+      let apiResp = await (await fetch("/", apiOpt)).text();
+      if (apiResp !== "success") {
+         info(1, "Ошибка на сервере."); return;         
+      }
+      else {
+         alert("Успешно.");
+      }
+   }
+   catch(e) {info(1, "Ошибка!<br>Действие не выполнено."); return;}
+}
+
+// **************************************************************************
 // Загрузка списка класса, отметок и тем уроков
-// Аргумент имеет вид класс^предмет^учитель, например 10Ж-мальч^s220^ivanov
 const loadGrades = async () => {
    dqs("#regGrades").innerHTML     = "<img src='/static/preloader.gif'>";
    dqs("#regJustTopics").innerHTML = "<img src='/static/preloader.gif'>";
+   
+   // Получаем класс^предмет^учитель, например 10Ж-мальч^s220^ivanov
    let params = dqs("#regPageSel").value.trim();
    if (!params) {
       dqs("#regGrades").innerHTML =
