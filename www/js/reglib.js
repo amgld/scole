@@ -111,6 +111,5 @@ const loadGrades = async () => {
    dqs("#regGrades").innerHTML =
       `Класс: ${className}<br>Предмет: ${subjCode}<br>Учитель: ${teachLgn}`;
    
-   dqs("#regNewTopic").innerHTML   = "Новый урок";
    dqs("#regJustTopics").innerHTML = "Темы уроков";
 }

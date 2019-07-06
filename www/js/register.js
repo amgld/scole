@@ -5,6 +5,15 @@
  *   Скрипт использует библиотеку reglib.js !
  */
 "use strict";
+let regDt = new Date(),
+    regY  = regDt.getFullYear(),
+    regM  = (regDt.getMonth() + 1).toString().padStart(2, '0'),
+    regD  = regDt.getDate().toString().padStart(2, '0'),
+    regNow = `${regY}-${regM}-${regD}`;
+
+// Начало и окончание учебного года
+let regYst  = regDt.getMonth() > 7 ? `${regY}-09-01` : `${regY - 1}-09-01`,
+    regYfin = regDt.getMonth() > 7 ? `${regY + 1}-06-30` : `${regY}-06-30`;
 
 // Формирование контента страницы
 createSection("register", `
@@ -12,7 +21,16 @@ createSection("register", `
    <select id="regPageSel"  onChange="loadGrades()"></select><br>
    <div id="regGrades"></div>
    <div id="regTopics">
-      <div id="regNewTopic"></div>
+      <div id="regNewTopic">
+         <input id="regTopDt" type="date"
+                min="${regYst}" max="${regYfin}" value="${regNow}">
+         <textarea
+            placeholder="Создать новую колонку: введите тему урока"></textarea>
+         <input id="regTopHTask" type="text" placeholder="Домашнее задание">
+         <span>Вес отметок (от 1 до 8)</span>
+         <input id="regTopWeight" type="number" min=1 max=8 value=2>
+         <button onClick="">Создать</button>
+      </div>
       <div id="regJustTopics"></div>
    </div>
    <h3 id="regIsContent">У вас нет доступных журнальных страниц</h3>
@@ -42,16 +60,22 @@ getContent.register = async () => {
    dqs("#regIsContent").style.display = "none";
    
    if (regRole == "admin") { // администратору показываем все классы
+      dqs("#regNewTopic").style.display = "none";
       apiOpt.f = "classesList";
       let apiResp   = await (await fetch("/", apiOpt)).text();
       if (apiResp != "none") regClList = classSort(JSON.parse(apiResp));
    }
-   else if (regRole == "tutor") // кл. руководителю только свои классы
+   else if (regRole == "tutor") {// кл. руководителю только свои классы
+      dqs("#regNewTopic").style.display = "none";
       regClList = uTutorCls;
+   }
    
    else if (regRole == "teacher") { // учителю только свои классы
       if (Object.keys(uTeachLoad).length == 0) regNoContent();
-      else regClList = classSort(Object.keys(uTeachLoad));
+      else {
+         dqs("#regNewTopic").style.display = "block";
+         regClList = classSort(Object.keys(uTeachLoad));
+      }
    }
    else regNoContent();
    
