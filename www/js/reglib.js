@@ -142,7 +142,8 @@ const topicsShow = () => {
    else {
       let dates = Object.keys(topicsObj).sort();
       for (let dt of dates)
-         content += `<p><b>${dateConv(dt)}</b> ${topicsObj[dt].t}</p>`;
+         content += `<p><b onClick="dtFocus('${dt}')">${dateConv(dt)}</b> `
+                  + `${topicsObj[dt].t}</p>`;
    }
    dqs("#regJustTopics").innerHTML = content;
 }
@@ -157,6 +158,14 @@ const gradesGet = async (className, subjCode, teachLgn) => {
 // Показ списка детей и отметок на странице (из объекта topicsObj)
 const gradesShow = () => {
    dqs("#regGrades").innerHTML = "Здесь что-то будет";
+}
+
+// **************************************************************************
+// Перемещение выбранной даты (типа d729) в фокус (колонки отметок, темы)
+// и заполнение формы редактирования темы актуальными для этой даты данными
+// При вызове без аргумента - фокусировка на последней по дате теме
+const dtFocus = dt => {
+   alert("Выбрана дата " + dateConv(dt));
 }
 
 // **************************************************************************

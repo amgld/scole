@@ -39,8 +39,17 @@ div#regNewTopic input[type=number] {
 div#regNewTopic button {
    margin:0px;}
 div#regJustTopics {
-   display:block; margin: 5px 0px 0px;
+   display:block; margin: 5px 0px 0px; padding:3px;
+   border:1px solid #963; border-radius:3px; background:white;
    height:calc(100% - 155px); overflow-y:auto;}
+div#regJustTopics p {
+   font-size:11pt; text-align:left; margin:0px 0px 5px 3em;
+   text-indent:-3em;
+   -webkit-hyphens:auto; -moz-hyphens:auto; -ms-hyphens:auto; hiphens:auto;}
+div#regJustTopics p b {
+   color:#963;}
+div#regJustTopics p b:hover {
+   text-decoration:underline; cursor:pointer;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
