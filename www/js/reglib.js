@@ -94,7 +94,7 @@ const topicEdit = async () => {
       // Получаем класс^предмет^учитель, например 10Ж-мальч^s220^ivanov,
       // разбираем это, получаем данные из формы редактирования темы урока
       let findArr = dqs("#regPageSel").value.trim().split('^'),
-          className = findArr[0], subj = findArr[1], teacher = findArr[2],
+          className = findArr[0], subj = findArr[1],
           dtArr = dqs("#regTopDt").value.split('-'),
           dtMesStr = Number(dtArr[1]),
           dtMes = dtMesStr > 8 ? dtMesStr - 9 : dtMesStr + 3,
@@ -110,9 +110,10 @@ const topicEdit = async () => {
       }
       if (!topic) if (!confirm(regWarn)) return;
       
-      // Производим запрос к API
+      // Производим запрос к API (логин учителя не передается,
+      // берется из данных авторизации модулем API index.js)
       let apiResp = await apireq(
-         "topicEdit", [className, subj, teacher, dt, topic, hometask, weight]
+         "topicEdit", [className, subj, dt, topic, hometask, weight]
       );
       if (apiResp !== "success") {
          info(1, "Ошибка на сервере."); return;         

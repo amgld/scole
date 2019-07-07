@@ -51,17 +51,19 @@ module.exports = async (post, addr) => {
    if (!postDt.p)  postDt.p  = "noPassw";
    if (!postDt.ci) postDt.ci = "noCptId";
    if (!postDt.c)  postDt.c  = "noCapt";
-      
+   
    // Проверяем результаты аутентификации юзера
    let authResult = await mod.auth(
       postDt.t, postDt.l, postDt.p, postDt.ci, postDt.c, addr);
    if (!authResult) return "none";
+   
+   // Подписываем логин юзера в объект аргументов, передающийся модулю API
+   // (для некоторых функций API, требующих валидного логина юзера)
+   if (postDt.f == "topicEdit" && postDt.z) postDt.z.push(postDt.l);
       
    // Проверяем полномочия юзера на запрашиваемую функцию   
    let rolesArr = JSON.parse(authResult)["roles"];
    if (!rolesArr.some(r => RIGHTS[r].includes(postDt.f))) return "none";
-      
-   // Проверяем полномочия юзера на запрашиваемые параметры
       
    // Реализуем соответствующую функцию api в зависимости от переменной f
    // и необходимости использования await и передачи модулю аргументов

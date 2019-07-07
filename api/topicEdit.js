@@ -4,11 +4,13 @@
  */
 "use strict";
 
-// В запросе приходят класс, предмет, учитель, дата, тема, дз, вес
+// В запросе приходят класс, предмет, дата, тема, дз, вес, учитель
+// (последний параметр из фронтенда в массиве аргументов не передается,
+// подписывается модулем API index.js)
 // Вес приходит как строка, но в базу пишется как число!
 // Дата приходит в формате "d607", где 6 - номер месяца
 // (сентябрь = 0, май = 8), 07 - число месяца
-// Пример: ["8Ж-дев", "s110", "ivanov", "d113", "Тема", "ДЗ", "4"]
+// Пример: ["8Ж-дев", "s110", "d113", "Тема", "ДЗ", "4", "ivanov"]
 // Возвращает success или none
 // Данные хранятся в коллекции topics (одна запись - один урок):
 // {
@@ -18,12 +20,12 @@
 module.exports = async argsObj => {   
    try {
       let gr = argsObj[0].substr(0,  20).trim(),
-          sb = argsObj[1].substr(0,   4).trim(),
-          lg = argsObj[2].substr(0,  20).trim(),
-          dt = argsObj[3].substr(0,   4).trim(),
-          tp = argsObj[4].substr(0, 200).trim(),
-          ht = argsObj[5].substr(0, 200).trim() || "Не указано",
-          wt = argsObj[6].substr(0,   1).trim();
+          sb = argsObj[1].substr(0,   4).trim(),          
+          dt = argsObj[2].substr(0,   4).trim(),
+          tp = argsObj[3].substr(0, 200).trim(),
+          ht = argsObj[4].substr(0, 200).trim() || "Не указано",
+          wt = argsObj[5].substr(0,   1).trim(),
+          lg = argsObj[6].substr(0,  20).trim();
 
       if (!gr || !sb || !lg || !dt || !wt) return "none";
       if (!/^[1-8]{1}$/.test(wt))          return "none"; wt = Number(wt);
