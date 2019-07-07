@@ -39,10 +39,7 @@ createSection("register", `
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
-getContent.register = async () => {   
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t":"${uCateg}", "l":"${uLogin}", "p":"${uToken}", "f":"classesList"
-   }`};
+getContent.register = async () => {
    
    // Выдача сообщения и скрытие контента страницы, если нет
    // доступных юзеру журнальных страниц
@@ -63,8 +60,7 @@ getContent.register = async () => {
    
    if (regRole == "admin") { // администратору показываем все классы
       dqs("#regNewTopic").style.display = "none";
-      apiOpt.f = "classesList";
-      let apiResp   = await (await fetch("/", apiOpt)).text();
+      let apiResp = await apireq("classesList");
       if (apiResp != "none") regClList = classSort(JSON.parse(apiResp));
    }
    else if (regRole == "tutor") {// кл. руководителю только свои классы

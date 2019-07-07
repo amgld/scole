@@ -72,11 +72,7 @@ const chPwdApi = async () => {
       dqs("#chPwdWarn").style.display = "block";
       return;
    }
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usChPwd",
-      "z": ["${uLogin}", "${pwd}"]      
-   }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("usChPwd", [uLogin, pwd]);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else {
       dqs("#chPwdWin").style.display = "none";
@@ -112,7 +108,7 @@ const chPwd = () => {
 
 // Формирование хидера и включение футера
 const headerGen = async () => {
-   let apiRespObj = JSON.parse(apiResp);
+   
    dqs("#content").innerHTML += `
       <header>
          <img src="static/menuMob.svg" title="Меню" onClick="showMenuMob()">

@@ -58,11 +58,7 @@ const subjAdd = async () => {
       return;
    }
    
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjAdd",
-      "z": ["${newSubjKey}", "${newSubjName}"]
-   }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("subjAdd", [newSubjKey, newSubjName]);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else {
       subjList[newSubjKey] = newSubjName;
@@ -73,11 +69,7 @@ const subjAdd = async () => {
 // Удаление дополнительного предмета
 const subjDel = async (sbDelKey) => {
    if (!confirm("Вы уверены?")) return;
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjDel",
-      "z": "${sbDelKey}"
-   }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("subjDel", sbDelKey);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else {
       delete subjList[sbDelKey];
@@ -104,12 +96,8 @@ const subjEdit = {
       }
       // Отправляем запрос к API на редактирование,
       // в случае успеха публикуем обновленные данные
-      let apiOpt = {method: "POST", cache: "no-cache", body: `{
-         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjEdit",
-         "z": ["${sbKey}", "${newName}"]
-      }`};
       (async () => {
-         let apiResp = await (await fetch("/", apiOpt)).text();
+         let apiResp = await apireq("subjEdit", [sbKey, newName]);
          if (apiResp == "none") {
             info(1, "Запрашиваемая операция отклонена.");
             sbListPubl(subjList);
@@ -137,10 +125,7 @@ createSection("subjects", `
 // названий предметов по умолчанию subjDef и то, что получено с помощью API)
 // и публикуем его на страничке (имя метода = имени пункта меню!)
 getContent.subjects = async () => {
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjList"
-   }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("subjList");
    let subjListDop = JSON.parse(apiResp);
    subjList = {...subjDef, ...subjListDop};
    sbListPubl(subjList);

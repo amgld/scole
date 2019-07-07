@@ -114,7 +114,7 @@ const createSection = (newId, inner) => {
    dqs("#content").appendChild(elems[newId]);
 };
 
-// Запрос к API. Вызов: let apiResp = await apireq(f, z) или await apireq(f)
+// Запрос к API. Вызов: let apiResp = await apireq(f, z); или await apireq(f);
 // Аргументы: f (имя функции API) и z (строка или объект параметров API)
 // Если параметров нет, функция вызывается с одним аргументом f
 // Переменные uCateg, uLogin, uToken берутся из замыкания
