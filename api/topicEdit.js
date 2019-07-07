@@ -23,7 +23,7 @@ module.exports = async argsObj => {
           sb = argsObj[1].substr(0,   4).trim(),          
           dt = argsObj[2].substr(0,   4).trim(),
           tp = argsObj[3].substr(0, 200).trim(),
-          ht = argsObj[4].substr(0, 200).trim() || "Не указано",
+          ht = argsObj[4].substr(0, 200).trim() || "n",
           wt = argsObj[5].substr(0,   1).trim(),
           lg = argsObj[6].substr(0,  20).trim();
 

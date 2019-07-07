@@ -125,6 +125,37 @@ const apireq = async (f, z) => {
    return await (await fetch("/", opt)).text();
 }
 
+// Преобразование даты из формата d613 в формат 13.03 (второго аргумента нет),
+// либо в формат 2019-03-13 (второй аргумент ненулевой), а также обратно
+// (при обратном преобразовании фторой аргумент не указывается)
+const dateConv = (dtInp, full) => {
+   let dtOut = '';
+   if (dtInp.includes('-')) {
+      let dtArr = dtInp.split('-'),
+          y = dtArr[0], m = dtArr[1], mNum = Number(m), d = dtArr[2];
+      m = mNum > 8 ? mNum - 9 : mNum + 3;
+      return `d${m}${d}`;
+   }
+   else if (dtInp.includes('.')) {
+      let dtArr = dtInp.split('.'),
+          d = dtArr[0], m = dtArr[1], mNum = Number(m);
+      m = mNum > 8 ? mNum - 9 : mNum + 3;
+      return `d${m}${d}`;
+   }
+   else {
+      let mNum = Number(dtInp.substr(1,1)), d = dtInp.substr(2,2);
+      let m = mNum < 4 ? mNum + 9 : mNum - 3;
+      m = m.toString().padStart(2, '0');
+      if (full) {         
+         let dateObj = new Date(),
+             y = dateObj.getFullYear(), currM = dateObj.getMonth() + 1;
+         if (mNum < 4 && currM < 8) y--; 
+         return `${y}-${m}-${d}`;         
+      }
+      else return `${d}.${m}`;
+   }
+}
+
 // Сортировка массива названий классов и подгрупп правильным образом (11А > 1А,
 // подгруппы следуют непосредственно за своими классами)
 const classSort = classArr => classArr

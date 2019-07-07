@@ -5,6 +5,12 @@
  *   Скрипт использует библиотеку reglib.js !
  */
 "use strict";
+
+// Объекты с темами уроков, дз и весами отметок, а также
+// со списком детей и отметками (оба - для текущей отображаемой страницы)
+let topicsObj = {},
+    gradesObj = {};
+
 let regDt = new Date(),
     regY  = regDt.getFullYear(),
     regM  = (regDt.getMonth() + 1).toString().padStart(2, '0'),
@@ -31,7 +37,7 @@ createSection("register", `
          <input id="regTopHTask" type="text" placeholder="Домашнее задание">
          <span>Вес отметок (от 1 до 8)</span>
          <input id="regTopWeight" type="number" min=1 max=8 value=2>
-         <button onClick="topicEdit()">Создать</button>
+         <button onClick="topicEdit()">Добавить</button>
       </div>
       <div id="regJustTopics"></div>
    </div>

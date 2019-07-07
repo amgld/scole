@@ -95,15 +95,12 @@ const topicEdit = async () => {
       // разбираем это, получаем данные из формы редактирования темы урока
       let findArr = dqs("#regPageSel").value.trim().split('^'),
           className = findArr[0], subj = findArr[1],
-          dtArr = dqs("#regTopDt").value.split('-'),
-          dtMesStr = Number(dtArr[1]),
-          dtMes = dtMesStr > 8 ? dtMesStr - 9 : dtMesStr + 3,
-          dtDay = dtArr[2],
-          dt    = `d${dtMes}${dtDay}`,
+          dt = dateConv(dqs("#regTopDt").value),
+          dtDay = Number(dt.substr(-2,2)),
           topic = dqs("#regNewTopic textarea").value.replace(/\s+/g, ' ').trim(),
           hometask = dqs("#regTopHTask").value.replace(/\s+/g, ' ').trim(),
           weight = dqs("#regTopWeight").value.toString().trim();
-      if (dtMes > 9 || dtDay > 31) {info(1, "Неверная дата."); return;}
+      if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}
       if (!/^[1-8]{1}$/.test(weight)) {
          info(1, "Вес может быть целым<br>числом от 1 до 8.");
          return;         
@@ -119,10 +116,47 @@ const topicEdit = async () => {
          info(1, "Ошибка на сервере."); return;         
       }
       else {
-         alert("Успешно.");
+         // Добавляем или редактируем новую тему в объекте тем topicsObj
+         // (либо удаляем) и обновляем показ тем на странице из этого объекта
+         if (topicsObj[dt] && !topic) delete topicsObj[dt];
+         else topicsObj[dt] = {t:topic, h:hometask, w:Number(weight)};
+         topicsShow();
       }
    }
    catch(e) {info(1, "Ошибка!<br>Действие не выполнено."); return;}
+}
+
+// **************************************************************************
+// Загрузка тем уроков, дз и весов отметок из базы
+const topicsGet = async (className, subjCode, teachLgn) => {
+   let apiResp = await apireq("topicsGet", [className, subjCode, teachLgn]);
+   if (apiResp != "none") return JSON.parse(apiResp);
+   else {info(1, "Ошибка на сервере."); return {}};
+}
+
+// **************************************************************************
+// Показ тем уроков, дз и весов отметок на странице (из объекта topicsObj)
+const topicsShow = () => {
+   let content = '';
+   if (!Object.keys(topicsObj).length) content = "<b>Уроков не найдено</b>";
+   else {
+      let dates = Object.keys(topicsObj).sort();
+      for (let dt of dates)
+         content += `<p><b>${dateConv(dt)}</b> ${topicsObj[dt].t}</p>`;
+   }
+   dqs("#regJustTopics").innerHTML = content;
+}
+
+// **************************************************************************
+// Загрузка списка детей и отметок из базы
+const gradesGet = async (className, subjCode, teachLgn) => {
+   return {};
+}
+
+// **************************************************************************
+// Показ списка детей и отметок на странице (из объекта topicsObj)
+const gradesShow = () => {
+   dqs("#regGrades").innerHTML = "Здесь что-то будет";
 }
 
 // **************************************************************************
@@ -142,10 +176,13 @@ const loadGrades = async () => {
    let paramsArr = params.split('^'),
        className = paramsArr[0],
        subjCode  = paramsArr[1],
-       teachLgn  = paramsArr[2];
-
-   dqs("#regGrades").innerHTML =
-      `Класс: ${className}<br>Предмет: ${subjCode}<br>Учитель: ${teachLgn}`;
+       teachLgn  = paramsArr[2];   
    
-   dqs("#regJustTopics").innerHTML = "Темы уроков";
+   // Загружаем темы уроков из базы и показываем на странице
+   topicsObj = await topicsGet(className, subjCode, teachLgn);
+   topicsShow();
+   
+   // Загружаем список детей и отметки из базы и показываем на странице
+   gradesObj = await gradesGet(className, subjCode, teachLgn);
+   gradesShow();   
 }

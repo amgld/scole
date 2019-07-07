@@ -77,9 +77,6 @@ dqs("#addClassLit").innerHTML = clLitOpt;
 // Динамически подгружаем список классов в массив classesList
 // с помощью API и публикуем его на страничке (имя метода = имени пункта меню!)
 getContent.classes = async () => {
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classesList"
-   }`};
    let apiResp = await apireq("classesList");
    if (apiResp != "none") classesList = JSON.parse(apiResp);
    clListPubl(classesList);
