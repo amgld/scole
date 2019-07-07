@@ -36,11 +36,7 @@ const classAdd = async () => {
                     + dqs("#addClassLit").value;
    dqs("#addClassNum").value = '1';
    dqs("#addClassLit").value = 'А';
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classAdd",
-      "z": "${newClassName}"
-   }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("classAdd", newClassName);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else {
       classesList.push(newClassName);
@@ -51,11 +47,7 @@ const classAdd = async () => {
 // Удаление класса
 const classNumDel = async (clNum) => {
    if (!confirm("Вы уверены?")) return;
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classDel",
-      "z": "${clNum}"
-   }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("classDel", clNum);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else {
       let clIndex = classesList.indexOf(clNum);
@@ -88,7 +80,7 @@ getContent.classes = async () => {
    let apiOpt = {method: "POST", cache: "no-cache", body: `{
       "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classesList"
    }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("classesList");
    if (apiResp != "none") classesList = JSON.parse(apiResp);
    clListPubl(classesList);
 }

@@ -9,23 +9,19 @@ let distrClList = [], distrClGroups = [], distrSbList = {},
     
 // Добавление/удаление элемента учебной нагрузки
 const editLoad = async (func, teacher, subj, className) => {
-   let apiOpt  = {method: "POST", cache: "no-cache", body: ''},
-       apiResp = '';
+   
+   let apiResp = '';
    
    if (func == "add") {
       let t = dqs("#distSelTeach").value;
       let s = dqs("#distSelSubj" ).value;
       let c = dqs("#distSelClass").value;
-      apiOpt.body = `{
-         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
-         "f": "distrEdit", "z": ["${func}", "${t}", "${s}", "${c}"]
-      }`;
       
       if (!distrObject[t])    distrObject[t]    = {};
       if (!distrObject[t][s]) distrObject[t][s] = [];
       
       if (!distrObject[t][s].includes(c)) {
-         apiResp = await (await fetch("/", apiOpt)).text();
+         apiResp = await apireq("distrEdit", [func, t, s, c]);
          if (apiResp == "none") {
             info(1, "Запрашиваемая операция отклонена.");
             return;
@@ -35,11 +31,7 @@ const editLoad = async (func, teacher, subj, className) => {
       else info(1, "Эти предмет и класс уже есть в нагрузке.");
    }
    else {
-      apiOpt.body = `{
-         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "distrEdit",
-         "z": ["${func}", "${teacher}", "${subj}", "${className}"]
-      }`;
-      apiResp = await (await fetch("/", apiOpt)).text();
+      apiResp = await apireq("distrEdit", [func, teacher, subj, className]);
       if (apiResp == "none") {
          info(1, "Запрашиваемая операция отклонена.");
          return;
@@ -84,11 +76,7 @@ const setThLoadTable = () => {
 
 // Назначение классного руководителя классу
 const setTutor = async (className, tutorLogin) => {
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
-      "f": "tutorSet", "z": ["${className}", "${tutorLogin}"]
-   }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("tutorSet", [className, tutorLogin]);
    if (apiResp == "none") {
       info(1, "Запрашиваемая операция отклонена.");
       return;
@@ -151,38 +139,31 @@ createSection("distrib", `
 // Динамически подгружаем списки предметов, классов, классных руководителей
 // и всех учителей (имя метода = имени пункта меню!)
 getContent.distrib = async () => {
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjList"
-   }`};
    
    // Объект со списком предметов
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("subjList");
    let subjListDop = {};
    if (apiResp != "none") subjListDop = JSON.parse(apiResp);
    distrSbList = subjSort({...subjDef, ...subjListDop});
    
    // Массив со списком классов и их подгрупп
-   apiOpt.body = apiOpt.body.replace("subjList", "classesGroups");
-   apiResp = await (await fetch("/", apiOpt)).text();
+   apiResp = await apireq("classesGroups");
    if (apiResp != "none") distrClGroups = classSort(JSON.parse(apiResp));
    
    // Массив со списком классов (без подгрупп)
    distrClList = distrClGroups.filter(x => !x.includes('-'));
    
    // Объект со списком классных руководителей
-   apiOpt.body = apiOpt.body.replace("classesGroups", "tutorsList");
-   apiResp = await (await fetch("/", apiOpt)).text();
+   apiResp = await apireq("tutorsList");
    if (apiResp != "none") distrTutList = JSON.parse(apiResp);
    
    // Объект со списком всех учителей
-   apiOpt.body = apiOpt.body.replace("tutorsList", "teachList");
-   apiResp = await (await fetch("/", apiOpt)).text();
+   apiResp = await apireq("teachList");
    if (apiResp != "none") distrThList = userSort(JSON.parse(apiResp));
    
    // Объект с педагогической нагрузкой всех учителей
    // {"pupkin": {"s110": ["8Б", "10Ж"], "d830": ["8Б"]}, "ivanov": ...}
-   apiOpt.body = apiOpt.body.replace("teachList", "distrGet");
-   apiResp = await (await fetch("/", apiOpt)).text();
+   apiResp = await apireq("distrGet");
    if (apiResp != "none") distrObject = JSON.parse(apiResp);
    
    // Формируем контент таблицы с классными руководителями

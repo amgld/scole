@@ -8,11 +8,7 @@
 // (в вызове API второй аргумент set - назначить, unset - разжаловать)
 const unsetAdmin = async (login) => {
    if (!confirm("Вы уверены?")) return;
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-          "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
-          "f": "usSetAdmin", "z": ["${login}", "unset"]
-       }`};   
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("usSetAdmin", [login, "unset"]);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else if (apiResp == "already")
       info(1, `Пользователь ${login} не является администратором.`);
@@ -28,10 +24,7 @@ createSection("admins", `<h3>Администраторы</h3><table></table>`);
 // Динамически подгружаем список администраторов в таблицу
 // Имя метода = имени пункта меню!
 getContent.admins = async () => {
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "adminsList"
-   }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("adminsList");
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else {
       let tableInner = '';
