@@ -36,13 +36,9 @@ const userFind = async () => {
       info(1, "В поле «ФИО» должно быть не менее трех символов.");
       return;
    }
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usFind",
-      "z": ["${usStatus}", "${usFindClass}", "${usFindFIO}"]
-   }`};
    dqs("#usFindResult").innerHTML = "Производится поиск...";
    let usFindRes = "Пользователи не найдены";
-   let apiResp   = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("usFind", [usStatus, usFindClass, usFindFIO]);
       
    if (apiResp != "none") {
       let isPup        = (usStatus == "Учащийся"),
@@ -113,11 +109,7 @@ const loadUsFile = () => {
    let reader = new FileReader();
    reader.onload = async (dt) => {
       let impUsStr = dt.target.result.replace(/\r/g, '').replace(/\n/g, '^');
-      let apiOpt = {method: "POST", cache: "no-cache", body: `{
-         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usImport",
-         "z": "${impUsStr}"
-      }`};
-      let apiResp = await (await fetch("/", apiOpt)).text();
+      let apiResp = await apireq("usImport", impUsStr);
       if (apiResp == "none") info(1, "Ошибка. Импорт не произведен.");
       else if (/^[0-9\-]+$/.test(apiResp)) {
          let usImpVal = apiResp.split('-')[0],
@@ -232,12 +224,8 @@ const userAddEdit = async (arg) => {
       // Если это добавление, а не редактирование, проверяем, свободен ли логин      
       if (dqs("#addOrEdit").value == "add") {
          operAdd = 1;
-         let apiOpt = {method: "POST", cache: "no-cache", body: `{
-            "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
-            "f": "usFindLogin", "z": "${newUser["Ulogin"]}"
-         }`};         
          await (async () => {
-            let apiResp = await (await fetch("/", apiOpt)).text();
+            let apiResp = await apireq("usFindLogin", newUser["Ulogin"]);
             if (apiResp == "none") {
                info(1, "Запрашиваемая операция отклонена.");
                checkLogin = false;
@@ -255,11 +243,7 @@ const userAddEdit = async (arg) => {
    if (arg) return;
    
    // Посылаем запрос к API на добавление/редактирование
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usAddEdit",
-      "z": ${JSON.stringify(newUser)}
-   }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("usAddEdit", newUser);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else {
       if (!operAdd) userFind();
@@ -272,11 +256,7 @@ const userAddEdit = async (arg) => {
 // (в вызове API второй аргумент set - назначить, unset - разжаловать)
 const setAdmin = async (login) => {
    if (!confirm("Вы уверены?")) return;
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-          "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}",
-          "f": "usSetAdmin", "z": ["${login}", "set"]
-       }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("usSetAdmin", [login, "set"]);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else if (apiResp == "already")
       info(1, `Пользователь ${login} уже является администратором.`);
@@ -291,11 +271,7 @@ const setAdmin = async (login) => {
 const usBlock = async (login, func) => {
    if (!confirm("Вы уверены?")) return;
    const warn = {"block": "заблокирован", "unblock": "разблокирован"};
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-       "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "usBlock",
-       "z": ["${login}", "${func}"]
-    }`};
-   let apiResp = await (await fetch("/", apiOpt)).text();
+   let apiResp = await apireq("usBlock", [login, func]);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else if (apiResp == "already")
       info(1, `Пользователь ${login} уже ${warn[func]}.`);
@@ -326,11 +302,8 @@ createSection("users", `
 // Динамически подгружаем список классов в строку clList для селекта
 // Имя метода = имени пункта меню!
 getContent.users = async () => {
-   let apiOpt = {method: "POST", cache: "no-cache", body: `{
-      "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "classesList"
-   }`};
    if (!clListSel) {
-      let apiResp   = await (await fetch("/", apiOpt)).text();
+      let apiResp = await apireq("classesList");
       let clListArr = classSort(JSON.parse(apiResp));
       for (let cl of clListArr) clListSel += `<option>${cl}</option>`;
       dqs("#usFindClass").innerHTML += clListSel;
