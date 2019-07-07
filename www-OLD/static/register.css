@@ -1,0 +1,54 @@
+/**  
+ *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: СТИЛИ СТРАНИЦ С ОТМЕТКАМИ И ТЕМАМИ УРОКОВ
+ *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ */
+
+#register {
+   margin-top:-25px; padding-bottom:0px;}
+#register div {
+   margin:5px 2px; display:inline-block;}
+#register select {
+   margin:2px;}
+#register img {
+   margin-top:100px;}
+   
+/* ОТМЕТКИ
+   ----------------------------------------------------- */
+div#regGrades {
+   width:calc(100% - 430px); overflow-x:auto;}
+
+/* ТЕМЫ УРОКОВ
+   ----------------------------------------------------- */
+div#regTopics {
+   width:400px; vertical-align:top;
+   height:calc(100vh - 150px);}
+div#regNewTopic {
+   display:block; margin:0px; height:150px;}
+div#regNewTopic h3 {
+   font-size:12pt; margin-bottom:0px;}
+div#regNewTopic textarea {
+   display:block; width:calc(100% - 10px); height:55px; font-size:11pt;
+   resize:none; margin:3px; padding:2px; overflow:auto;
+   border:1px solid #963; border-radius:3px;}
+div#regNewTopic input[type=text] {
+   display:block; width:calc(100% - 10px); font-size:11pt;
+   margin:0px 3px 3px 3px; padding:2px;
+   border:1px solid #963; border-radius:3px;}
+div#regNewTopic input[type=number] {
+   width:2em; font-size:11pt; margin:0px 10px 0px 0px;}
+div#regNewTopic button {
+   margin:0px;}
+div#regJustTopics {
+   display:block; margin: 5px 0px 0px;
+   height:calc(100% - 155px); overflow-y:auto;}
+   
+/* МОБИЛЬНАЯ ВЕРСИЯ
+   ----------------------------------------------------- */
+@media (max-width: 960px) {
+   #register div {
+      display:block;}
+   div#regGrades, div#regTopics {
+      width:98%; margin:5px auto;}
+   div#regTopics {
+      height:800px;}   
+}

@@ -19,28 +19,34 @@ const regPagesSelLoad = async (className) => {
    let regRole = dqs("#selRole").value, regSelPgInner = '';   
    
    // Получение объекта со списком всех предметов
-   let apiResp     = await apireq("subjList");
+   let apiOpt = {method: "POST", cache: "no-cache", body: `{
+         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "subjList"
+      }`};
+   let apiResp = await (await fetch("/", apiOpt)).text();
    let subjListDop = JSON.parse(apiResp);
    let sbListFull  = {...subjDef, ...subjListDop};   
 
    if (regRole == "admin" || regRole == "tutor") {
       
       // Получаем массив groups названий подгрупп и самого класса
-      apiResp        = await apireq("classesGroups");
+      apiOpt.body = apiOpt.body.replace("subjList", "classesGroups");
+      apiResp = await (await fetch("/", apiOpt)).text();
       let groupsList = JSON.parse(apiResp);
-      let groups     = classSort(groupsList.filter(x => x.includes(className)));
+      let groups = classSort(groupsList.filter(x => x.includes(className)));
       
       // Получаем объект с логинами и ФИО учителей
       // {"pupkin": "Пупкин В. И.", "ivanov": "Иванов И. И.", ...}
       let teachFIO = {};
-      apiResp       = await apireq("teachList");
+      apiOpt.body = apiOpt.body.replace("classesGroups", "teachList");
+      apiResp = await (await fetch("/", apiOpt)).text();
       let teachList = JSON.parse(apiResp);
       for (let teach of teachList) {teachFIO[teach.login] = teach.fio;}
       
       // Получаем всю педагогическую нагрузку и формируем объект
       // regDistr = {"8Б": [["s110", "ivanov"], ["d830", "petrov"], ...], ...}
       let regDistr = {};
-      apiResp      = await apireq("distrGet");
+      apiOpt.body = apiOpt.body.replace("teachList", "distrGet");
+      apiResp = await (await fetch("/", apiOpt)).text();
       let distrApi = JSON.parse(apiResp);
       for (let teacher of Object.keys(distrApi)) {
          for (let subj of Object.keys(distrApi[teacher])) {
@@ -111,9 +117,12 @@ const topicEdit = async () => {
       if (!topic) if (!confirm(regWarn)) return;
       
       // Производим запрос к API
-      let apiResp = await apireq(
-         "topicEdit", [className, subj, teacher, dt, topic, hometask, weight]
-      );
+      let apiOpt = {method: "POST", cache: "no-cache", body: `{
+         "t": "${uCateg}", "l": "${uLogin}", "p": "${uToken}", "f": "topicEdit",
+         "z": ["${className}", "${subj}", "${teacher}", "${dt}",
+               "${topic}", "${hometask}", "${weight}"]
+      }`};
+      let apiResp = await (await fetch("/", apiOpt)).text();
       if (apiResp !== "success") {
          info(1, "Ошибка на сервере."); return;         
       }

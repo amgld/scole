@@ -1,0 +1,246 @@
+/**
+ *   ГЛАВНАЯ ТАБЛИЦА СТИЛЕЙ ЭЛЕКТРОННОГО ЖУРНАЛА «ШКАЛА»
+ *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ */
+
+@font-face {
+   font-family:fnt; src:url("ptsans.otf");}
+body {
+   background:#f6f3f0; font:12pt fnt, sans-serif;
+   margin:0px; padding:0px;}
+a {
+   color:#963; text-decoration:none;}
+a:hover {
+   text-decoration:underline;}
+h1, h2, h3 {
+   color:#963; text-align:center; margin:12pt 0px 6pt;}
+h3 {
+   font-size:1.1em;}
+h3:first-child {
+   margin-top:0px;}
+select {
+   -webkit-appearance: none; -moz-appearance: none;
+   -ms-appearance: none; appearance: none;}
+button {
+   font-size: 100%;}
+   
+/* ОКНА С ФОРМОЙ АВТОРИЗАЦИИ, ФОРМОЙ СМЕНЫ ПАРОЛЯ И ИНФОРМАЦИОННЫМ СООБЩЕНИЕМ
+   ----------------------------------------------------- */
+article, output, div#chPwdWin {
+   display: none; width:18em; position:absolute; top:30%; left:50%;
+   margin-top:-5em; margin-left:-9em; padding:0px; border:1px solid #963;
+   border-radius:10px; box-shadow: 2px 2px 3px 2px #999;
+   text-align:center; background:#f6f3ee;}
+output {
+   position:fixed; top:40%; z-index:99999;}
+article h1, article input, article button, output button, article div,
+div#chPwdWin h1, div#chPwdWin input, div#chPwdWin button {
+   font-size:14pt;}
+article h1, div#chPwdWin h1 {
+   background:#963; color:#ff6; margin:0px 0px 20px; padding:5px;
+   border:1px solid #963; border-radius:10px 10px 0px 0px;
+   font-weight:bold;}
+article div, div#chPwdWin div#chPwdWarn {
+   font-size:12pt; color:red; text-align:center;
+   margin-bottom:20px; display:none;}
+output div {
+   font-size:14pt; text-align:center; margin:20px 5px 0px;}
+article input, article button, output button,
+div#chPwdWin input, div#chPwdWin button {
+   display:inline-block; width:80%; margin:5px 0px; padding:3px;}
+article input, div#chPwdWin input {
+   background:#f6f3f0; border:none; border-bottom:1px solid #963;}
+article input:focus, div#chPwdWin input:focus {
+   background:#fff; outline:none;}
+article input#uCateg, article input#uCateg:focus {
+   background:#e6ded5; caret-color:#e6ded5; text-align:center; font-size:0.9em;
+   font-weight:bold; color:#963; border:none; padding:3px; cursor:pointer;}
+article button, output button, div#chPwdWin button {
+   background:#963; color:#ff6; border:none;
+   margin:20px 0px; font-weight:bold; cursor: pointer;}
+article img {
+   display:block; margin:5px auto -2px;}
+
+/* ХИДЕР (ЗАГОЛОВОЧНАЯ СТРОКА И МЕНЮ)
+   ----------------------------------------------------- */
+header, nav {
+   position:fixed; width:100%; height:22pt; left:0px; top:0px;
+   z-index:99998; background:#963; color:#ff6; font-size:14pt;
+   padding:2pt 6pt 0px; text-align:right;
+}
+header span {
+   padding:0px 3pt;}
+header span#progName {
+   position:absolute; left:10px; top:2pt; font-weight:bold;}
+header span#chPwd, header a {
+   text-decoration:none; color:#ff6;}
+header a {
+   padding-right:10px;}
+header select {
+   background:#963; color:#ff6; font-size:12pt; border:none; padding-top:0px;}
+nav {
+   top:22pt; background:#b0844d; text-align:center;}
+nav ul {
+   margin:0px; padding:0px;}
+nav li {
+   list-style:none; display:inline; padding:3pt 12pt 0px;}
+nav li.sel {
+   background:#f6f3ee; color:#963; font-weight:bold;
+   box-shadow:inset 0px 2px 0px 0px #b0844d; border-bottom:5pt solid #f6f3ee;
+   border-radius:5px 5px 0px 0px;}
+header span#chPwd:hover, header a:hover, header select:hover, nav li:hover {
+   cursor:pointer;}
+header img {
+   height:14pt; position:fixed; top:5px; left:5px; display:none;}
+header img:hover {
+   cursor:pointer;}
+   
+/* ФУТЕР
+   ----------------------------------------------------- */
+footer {
+   position:fixed; width:100%; left:0px; bottom:0px;
+   z-index:99997; background:#963; color:#ff6; font-size:11pt;
+   padding:2pt 2px; text-align:center; display:none;
+}
+footer a {
+   color:#ff6; text-decoration:none}
+footer a:hover {
+   text-decoration:underline}
+
+/* СОДЕРЖАТЕЛЬНЫЕ БЛОКИ СТРАНИЦЫ: ОБЩИЕ СТИЛИ
+   ----------------------------------------------------- */
+section {
+   display:none; position:absolute; width:100%; left:0px; top:70pt;
+   text-align:center; padding-bottom:60px;}
+section button {
+   background:#963; color:#ff6; border:none; cursor: pointer;
+   margin:20px 0px; padding:3px 10px; font-weight:bold;
+   border-radius:3px;}
+section input, section select {
+   font-size:1em; padding:3px; border:1px solid #b0844d; border-radius:3px;}
+
+/* БЛОКИ РАБОТЫ С ПОЛЬЗОВАТЕЛЯМИ И АДМИНИСТРАТОРАМИ
+   ----------------------------------------------------- */
+section#users p {
+   margin:5px 0px 3px; color:gray;}
+section#users input {
+   display:block; width:15em; max-width:98%; margin:3pt auto;}
+section#users input#loadUsFile {
+   display:none;}
+section#users input#usFindCateg, section#users input#newUcateg {
+   caret-color:#fff; cursor:pointer;}
+section#users select {
+   margin:3pt auto; background:white;}
+section#users button {
+   display:block; margin:3pt auto;}
+section#users button#addUser, section#users button#importUser {
+   background:none; font-weight:normal; color:#963;}
+section#users button#importUser {
+   display:inline;}
+section#users button#addUser:hover {
+   text-decoration:underline; color:#b0844d;}
+section#users div#findUser {
+   max-width:98%;}
+section#users div#findUser input,
+section#users div#findUser select,
+section#users div#findUser button {
+   display:inline-block;}
+section#users div#findUser input#usFindCateg {
+   width:6em;}
+section#users table, section#admins table {
+   margin:10px auto; background:white; border-collapse:collapse;
+   border:1px solid #963;}
+section#users th, section#users td, section#admins td {
+   border:1px solid #963; padding:2px 5px; text-align:left;}
+section#users th {
+   text-align:center; color:#963;}
+section#users td.un {
+   text-align:center;}
+section#users tr.blk td {
+   color:gray;}
+section#users  td[title="Редактировать"],
+section#users  td[title="Назначить администратором"],
+section#admins td[title="Удалить из администраторов"],
+section#users  td[title="Заблокировать"],
+section#users  tr.blk td[title="Разблокировать"] {
+   color:#963; cursor:pointer; text-align:center;}
+section#users  td[title="Является администратором"] {
+   color:red; font-weight:bold; text-align:center;}
+}
+   
+/* БЛОК РАБОТЫ СО СПИСКОМ КЛАССОВ
+   ----------------------------------------------------- */
+section#classes select {
+   margin:3pt; background:white;}
+section#classes div {
+   display:inline-block; max-width:98%; text-align:left;}
+section#classes span {
+   display:inline-block; margin:3px; padding:3px;
+   width:3.2em; background:#e6ded5;}
+section#classes span div {
+   display:inline; margin-right:3px;}
+section#classes span div:hover {
+   cursor:pointer;}
+
+/* БЛОК РАБОТЫ СО СПИСКОМ ПРЕДМЕТОВ
+   ----------------------------------------------------- */
+section#subjects div {
+   display:inline-block; max-width:98%; text-align:left;}
+section#subjects span, section#subjects input {
+   display:block; margin:3px auto; padding:3px;
+   width:25em; max-width:98%; background:#e6ded5;}
+section#subjects input {
+   background:#fff; max-width:95%;}
+section#subjects input:first-of-type {
+   margin-top:30px;}
+section#subjects input.sbEd {
+   width:90%; margin:auto;}
+section#subjects span div {
+   display:inline-block; width:1.5em; margin-right:3px; color:#963;}
+section#subjects span div:hover {
+   cursor:pointer;}
+section#subjects span div.noCur:hover {
+   cursor:default;}
+   
+/* БЛОК РАСПРЕДЕЛЕНИЯ ПЕДАГОГИЧЕСКОЙ НАГРУЗКИ
+   ----------------------------------------------------- */
+section#distrib table {
+   margin:auto;}
+section#distrib td:first-child {
+   font-weight:bold; padding-right:10px;}
+section#distrib select {
+   background:#f6f3f0; border:none; cursor:pointer;}
+section#distrib select#distSelTeach,
+section#distrib select#distSelSubj,
+section#distrib select#distSelClass,
+section#distrib select#distSelClassPredv {
+   background:#e6ded5; border:1px solid #963; margin:3px;}
+section#distrib table#teachLoad {
+   border-collapse:collapse; margin-top:10px;}
+section#distrib table#teachLoad td {
+   border:1px solid #963; padding:5px;}
+section#distrib table#teachLoad td:first-child {
+   font-weight:normal; text-align:left; padding-right:3px;}
+section#distrib table#teachLoad td:nth-child(3) {
+   cursor:pointer;}
+   
+/* МОБИЛЬНАЯ ВЕРСИЯ
+   ----------------------------------------------------- */
+@media (max-width: 960px) {
+   /* Хидер и меню ............................. */
+   header img {
+      display:block;}
+   span#progName {
+      display:none;}
+   nav {
+      display:none;}
+   nav ul {
+      position:fixed; left:0px; top:22pt; width:100%;}
+   nav li {
+      display:block; padding:3px; background:#b0844d;}
+   nav li.sel {
+      box-shadow:none; border:none; border-radius:0px;
+      background:#b0844d; color:#ff6;   }
+   section {
+      top:48pt;}
+}
