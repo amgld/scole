@@ -4,10 +4,10 @@
  */
 "use strict";
 
-// В запросе приходят класс, предмет, дата, тема, дз, вес, учитель
-// (последний параметр из фронтенда в массиве аргументов не передается,
+// В запросе приходят [класс, предмет, дата, тема, дз, вес, учитель]
+// (логин учителя из фронтенда в массиве аргументов не передается,
 // подписывается модулем API index.js)
-// Вес приходит как строка, но в базу пишется как число!
+// NB! Вес приходит как строка, но в базу пишется как число!
 // Дата приходит в формате "d607", где 6 - номер месяца
 // (сентябрь = 0, май = 8), 07 - число месяца
 // Пример: ["8Ж-дев", "s110", "d113", "Тема", "ДЗ", "4", "ivanov"]
@@ -31,6 +31,15 @@ module.exports = async argsObj => {
       if (!/^[1-8]{1}$/.test(wt))          return "none"; wt = Number(wt);
       if (!/^d[0-9][0-3][0-9]$/.test(dt))  return "none";
       if (Number(dt.substr(2, 2)) > 31)    return "none";
+      
+      // Проверяем полномочия учителя на запрашиваемые класс и предмет
+      let distrRes = await dbFind("distrib", {tLogin: lg});
+      if (!distrRes.length) return "none";
+      else {
+         let distr = distrRes[0].tLoad;
+         if (!distr[sb]) return "none";
+         else if (!distr[sb].includes(gr)) return "none";
+      }
       
       let objFind = {g: gr, s: sb, l: lg, d: dt},
           objNew  = {...objFind, t:tp, h:ht, w:wt};
