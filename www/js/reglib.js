@@ -138,7 +138,7 @@ const topicsGet = async (className, subjCode, teachLgn) => {
 // Показ тем уроков, дз и весов отметок на странице (из объекта topicsObj)
 const topicsShow = () => {
    let content = '';
-   if (!Object.keys(topicsObj).length) content = "<b>Уроков не найдено</b>";
+   if (!Object.keys(topicsObj).length) content = "<b>Тем уроков не найдено</b>";
    else {
       let dates = Object.keys(topicsObj).sort();
       for (let dt of dates) {
@@ -155,13 +155,23 @@ const topicsShow = () => {
 // **************************************************************************
 // Загрузка списка детей и отметок из базы
 const gradesGet = async (className, subjCode, teachLgn) => {
-   return {};
+   let apiResp = await apireq("gradesGet", [className, subjCode, teachLgn]);
+   if (apiResp != "none") return JSON.parse(apiResp);
+   else {info(1, "Ошибка на сервере."); return {}};
 }
-
 // **************************************************************************
 // Показ списка детей и отметок на странице (из объекта topicsObj)
 const gradesShow = () => {
-   dqs("#regGrades").innerHTML = "Здесь что-то будет";
+   if (!Object.keys(gradesObj).length) content = "<b>Ничего не найдено</b>";
+   else {
+      // Список детей
+      content = "<table id='regPupList'>";
+      for (let currPup of gradesObj.pnList)
+         content += `<tr><td>${currPup}</td></tr>`;
+      content += "</table>";
+   }
+   
+   dqs("#regGrades").innerHTML = content;;
 }
 
 // **************************************************************************
@@ -196,20 +206,22 @@ const loadGrades = async () => {
    let params = dqs("#regPageSel").value.trim();
    if (!params) {
       dqs("#regGrades").innerHTML =
-         "<h3>Для этого класса пока нет журнальных страничек</h3>";
-      dqs("#regTopics").innerHTML = '';
+         "<b>Для этого класса пока нет журнальных страничек</b>";
+      dqs("#regJustTopics").innerHTML = '';
       return;
    }
-   let paramsArr = params.split('^'),
-       className = paramsArr[0],
-       subjCode  = paramsArr[1],
-       teachLgn  = paramsArr[2];   
-   
-   // Загружаем темы уроков из базы и показываем на странице
-   topicsObj = await topicsGet(className, subjCode, teachLgn);
-   topicsShow();
-   
-   // Загружаем список детей и отметки из базы и показываем на странице
-   gradesObj = await gradesGet(className, subjCode, teachLgn);
-   gradesShow();   
+   else {
+      let paramsArr = params.split('^'),
+         className = paramsArr[0],
+         subjCode  = paramsArr[1],
+         teachLgn  = paramsArr[2];   
+      
+      // Загружаем темы уроков из базы и показываем на странице
+      topicsObj = await topicsGet(className, subjCode, teachLgn);
+      topicsShow();
+      
+      // Загружаем список детей и отметки из базы и показываем на странице
+      gradesObj = await gradesGet(className, subjCode, teachLgn);
+      gradesShow();
+   }
 }
