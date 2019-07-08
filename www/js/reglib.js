@@ -141,11 +141,15 @@ const topicsShow = () => {
    if (!Object.keys(topicsObj).length) content = "<b>Уроков не найдено</b>";
    else {
       let dates = Object.keys(topicsObj).sort();
-      for (let dt of dates)
+      for (let dt of dates) {
+         let dz = topicsObj[dt].h ? ` <span>[${topicsObj[dt].h}]</span>` : '';
          content += `<p><b onClick="dtFocus('${dt}')">${dateConv(dt)}</b> `
-                  + `${topicsObj[dt].t}</p>`;
+                  + `${topicsObj[dt].t}${dz}</p>`;
+      }
    }
    dqs("#regJustTopics").innerHTML = content;
+   dtFocus();
+   dqs("#regTopDt").value = regNow; // из замыкания
 }
 
 // **************************************************************************
@@ -164,8 +168,22 @@ const gradesShow = () => {
 // Перемещение выбранной даты (типа d729) в фокус (колонки отметок, темы)
 // и заполнение формы редактирования темы актуальными для этой даты данными
 // При вызове без аргумента - фокусировка на последней по дате теме
-const dtFocus = dt => {
-   alert("Выбрана дата " + dateConv(dt));
+const dtFocus = dt => {   
+   if(!dt) {
+      dqs("#regJustTopics").scrollTop = dqs("#regJustTopics").scrollHeight;      
+      dqs("#regNewTopic textarea").value = '';
+      dqs("#regTopHTask").value = '';
+      dqs("#regTopWeight").value = 2;
+      dqs("#regNewTopic button").innerHTML = "Добавить";
+   }
+   else {
+      // Заполняем поля формы ввода новой темы данными выбранной даты
+      dqs("#regTopDt").value = dateConv(dt, 1);
+      dqs("#regNewTopic textarea").value = topicsObj[dt].t;
+      dqs("#regTopHTask").value = topicsObj[dt].h;
+      dqs("#regTopWeight").value = topicsObj[dt].w;
+      dqs("#regNewTopic button").innerHTML = "Редактировать";
+   }
 }
 
 // **************************************************************************

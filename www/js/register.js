@@ -31,7 +31,7 @@ createSection("register", `
    <div id="regGrades"></div>
    <div id="regTopics">
       <div id="regNewTopic">
-         <input id="regTopDt" type="date"
+         <input id="regTopDt" type="date" onChange="dtFocus()"
                 min="${regYst}" max="${regYfin}" value="${regNow}">
          <textarea placeholder="${regTopPH}"></textarea>
          <input id="regTopHTask" type="text" placeholder="Домашнее задание">

@@ -46,6 +46,8 @@ div#regJustTopics p {
    font-size:11pt; text-align:left; margin:0px 0px 5px 3em;
    text-indent:-3em;
    -webkit-hyphens:auto; -moz-hyphens:auto; -ms-hyphens:auto; hiphens:auto;}
+div#regJustTopics p span {
+   color:gray;}
 div#regJustTopics p b {
    color:#963;}
 div#regJustTopics p b:hover {
