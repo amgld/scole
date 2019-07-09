@@ -7,9 +7,9 @@
 // В запросе приходят [класс, предмет, учитель]
 // Возвращается none либо объект (вес - не строка, а число!):
 // {
-//    puList: ['',       "ivanov", "petrov",...],
-//    pnList: ["&nbsp;", "Иванов", "Петров",...],
-//    d601:   [8,        "нн",     "5",     ...],
+//    puList: ["ivanov", "petrov",...],
+//    pnList: ["Иванов", "Петров",...],
+//    d601:   ["нн",     "5",     ...],
 //    ...
 // }
 module.exports = async argsObj => {   
@@ -45,8 +45,8 @@ module.exports = async argsObj => {
          puListBlock.sort();
          pnListMain .sort((a, b) => a.localeCompare(b, "ru"));
          pnListBlock.sort((a, b) => a.localeCompare(b, "ru"));
-         resp.puList = ['',       ...puListMain, ...puListBlock];
-         resp.pnList = ["&nbsp;", ...pnListMain, ...pnListBlock];
+         resp.puList = [...puListMain, ...puListBlock];
+         resp.pnList = [...pnListMain, ...pnListBlock];
       }
       else return "{}";
       

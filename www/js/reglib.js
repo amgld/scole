@@ -150,6 +150,7 @@ const topicsShow = () => {
    dqs("#regJustTopics").innerHTML = content;
    dtFocus();
    dqs("#regTopDt").value = regNow; // из замыкания
+   gradesShow();
 }
 
 // **************************************************************************
@@ -165,10 +166,25 @@ const gradesShow = () => {
    if (!Object.keys(gradesObj).length) content = "<b>Ничего не найдено</b>";
    else {
       // Список детей
-      content = "<table id='regPupList'>";
-      for (let currPup of gradesObj.pnList)
-         content += `<tr><td>${currPup}</td></tr>`;
+      content = "<table id='regPupList'>"
+              + "<tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr>";
+      for (let i=0; i<gradesObj.pnList.length; i++)
+         content += `<tr><td id="rp${i}">${gradesObj.pnList[i]}</td></tr>`;
       content += "</table>";
+      
+      // Отметки
+      content += "<div>";
+      for (let dt of Object.keys(topicsObj).sort()) {
+         content += `<table><tr><td>${dateConv(dt)}</td></tr>`
+                  + `<tr><td>${topicsObj[dt].w}</td></tr>`;
+         let existDateGrades = gradesObj[dt] ? true : false;
+         for (let i=0; i<gradesObj.pnList.length; i++) {
+            let grade = existDateGrades ? gradesObj[dt][i] : ' ';
+            content += `<tr><td id="${dt}p${i}">${grade}</td></tr>`;
+         }
+         content += "</table>";
+      }
+      content += "</div>";
    }
    
    dqs("#regGrades").innerHTML = content;;

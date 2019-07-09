@@ -15,7 +15,21 @@
 /* ОТМЕТКИ
    ----------------------------------------------------- */
 div#regGrades {
-   width:calc(100% - 430px); overflow-x:auto;}
+   width:calc(100% - 430px); text-align:left; position:relative;}
+div#regGrades div {
+   width:calc(100% - 10em - 10px); margin-top:0px; margin-left:calc(10em + 5px);
+   overflow-x:auto; text-align:left; white-space:nowrap}
+div#regGrades table {
+   display:inline-block; border-collapse:collapse;
+   border-top:2px solid #963; border-bottom:2px solid #963;}
+div#regGrades table td {
+   text-align:center; padding:2px; border:1px solid #963; border-left:none;}
+div#regGrades > table {
+   position:absolute; top:0px; left:0px;}
+div#regGrades > table td {
+   text-align:left; border-left:1px solid #963; width:10em; overflow:hidden;}
+div#regGrades table tr:nth-child(2) td {
+   font-weight:bold; color:#963; border-bottom-width:2px}
 
 /* ТЕМЫ УРОКОВ
    ----------------------------------------------------- */

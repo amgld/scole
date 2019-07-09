@@ -11,9 +11,9 @@
 // topicsObj = {d601: {t: "Африка", h: "Учить главу 4", w: 4},...}
 // gradesObj =
 //    {
-//       puList: ['',       "ivanov", "petrov",...],
-//       pnList: ["&nbsp;", "Иванов", "Петров",...],
-//       d601:   [8,        "нн",     "5",     ...],
+//       puList: ["ivanov", "petrov",...],
+//       pnList: ["Иванов", "Петров",...],
+//       d601:   ["нн",     "5",     ...],
 //       ...
 //    }
 let topicsObj = {}, gradesObj = {};
