@@ -22,16 +22,22 @@ div#regGrades div {
 div#regGrades table {
    display:inline-block; border-collapse:collapse;
    border-top:2px solid #963; border-bottom:2px solid #963;}
+div#regGrades table.grIt {
+   background:#e6ded5;}
 div#regGrades table td {
    text-align:center; padding:2px; white-space:nowrap;
    border:1px solid #963; border-left:none;}
+div#regGrades table tr:first-child td {
+   color:#963;}
+div#regGrades table tr:first-child td:hover {
+   cursor:pointer;}
 div#regGrades > table {
    position:absolute; top:0px; left:0px;}
 div#regGrades > table td {
    text-align:left; border-left:1px solid #963; width:10em; max-width:10em;
    white-space:nowrap; overflow: hidden; text-overflow:ellipsis;}
 div#regGrades table tr:nth-child(2) td {
-   font-weight:bold; color:#963; border-bottom-width:2px}
+   font-weight:bold; color:gray; border-bottom-width:2px}
 
 /* ТЕМЫ УРОКОВ
    ----------------------------------------------------- */

@@ -174,13 +174,29 @@ const gradesShow = () => {
       
       // Отметки
       content += "<div>";
-      for (let dt of Object.keys(topicsObj).sort()) {
-         content += `<table><tr><td>${dateConv(dt)}</td></tr>`
-                  + `<tr><td>${topicsObj[dt].w}</td></tr>`;
+      // Текущие и итоговые даты; DTSIT определен в ini.js
+      let dtArr = [...Object.keys(topicsObj), ...Object.keys(DTSIT)].sort();
+      for (let dt of dtArr) {
+         
+         // Две верхних заголовочных ячейки с датой и с весом
+         let dtN = '', dtW = ' ', bgcol = '';
+         if (dt.length == 5) { // итоговая дата вида d628c
+            dtN = `<b>${DTSIT[dt][0]}</b>`;
+            bgcol = " class='grIt'";
+         }
+         else { // обычная текущая дата вида d613
+            dtN = dateConv(dt);
+            dtW = topicsObj[dt].w;
+         }
+         content += `<table${bgcol}><tr>`
+                  + `<td onClick="dtFocus('${dt}')">${dtN}</td></tr>`
+                  + `<tr><td>${dtW}</td></tr>`;
+                  
+         // Собственно отметки, если они есть
          let existDateGrades = gradesObj[dt] ? true : false;
          for (let i=0; i<gradesObj.pnList.length; i++) {
             let grade = existDateGrades ? gradesObj[dt][i] : ' ';
-            content += `<tr><td id="${dt}p${i}">${grade}</td></tr>`;
+            content += `<tr><td id="${dt}-${i}">${grade}</td></tr>`;
          }
          content += "</table>";
       }
@@ -202,6 +218,7 @@ const dtFocus = dt => {
       dqs("#regTopWeight").value = 2;
       dqs("#regNewTopic button").innerHTML = "Добавить";
    }
+   else if (dt.length > 4) return;
    else {
       // Заполняем поля формы ввода новой темы данными выбранной даты
       dqs("#regTopDt").value = dateConv(dt, 1);
