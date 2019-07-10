@@ -15,7 +15,7 @@ const DOCROOT  = __dirname + "/www/",
       nedb     = require("nedb"),
       htmlpdf  = require("html-pdf"),
 
-      {PORT, SERVER, ERR404, MIME, PERIODS, PWD, SALT, ADMIN, KEYPATH, CERTPATH}
+      {PORT, SERVER, ERR404, MIME, PWD, SALT, ADMIN, KEYPATH, CERTPATH}
                = require("./config"),
       api      = require("./api"),
       putlog   = require("./api/putlog"),
@@ -27,7 +27,6 @@ const DOCROOT  = __dirname + "/www/",
       };
 
 global.salt    = SALT;
-global.periods = PERIODS;
 global.admPwd  = PWD;
 
 
