@@ -160,9 +160,11 @@ const gradesGet = async (className, subjCode, teachLgn) => {
    if (apiResp != "none") return JSON.parse(apiResp);
    else {info(1, "Ошибка на сервере."); return {}};
 }
+
 // **************************************************************************
 // Показ списка детей и отметок на странице (из объекта topicsObj)
 const gradesShow = () => {
+   let content = '';
    if (!Object.keys(gradesObj).length) content = "<b>Ничего не найдено</b>";
    else {
       // Список детей
@@ -203,7 +205,8 @@ const gradesShow = () => {
       content += "</div>";
    }
    
-   dqs("#regGrades").innerHTML = content;;
+   dqs("#regGrades").innerHTML = content;
+   dtFocus();
 }
 
 // **************************************************************************
@@ -217,6 +220,12 @@ const dtFocus = dt => {
       dqs("#regTopHTask").value = '';
       dqs("#regTopWeight").value = 2;
       dqs("#regNewTopic button").innerHTML = "Добавить";
+      
+      // Проматываем таблицу отметок к концу
+      if (dqs("#regGrades div")) {
+         let sdvig = dqs("#regGrades div").offsetWidth + 100;
+         dqs("#regGrades div").scrollBy(sdvig, 0);
+      }
    }
    else if (dt.length > 4) return;
    else {
@@ -226,6 +235,11 @@ const dtFocus = dt => {
       dqs("#regTopHTask").value = topicsObj[dt].h;
       dqs("#regTopWeight").value = topicsObj[dt].w;
       dqs("#regNewTopic button").innerHTML = "Редактировать";
+      
+      // Прокручиваем таблицу с отметками, чтобы дата была видима
+      let colonObj = dqs(`#${dt}-0`).parentNode.parentNode;
+      let realX = colonObj.getBoundingClientRect().left;
+      dqs("#regGrades div").scrollBy(~~realX - 178, 0);
    }
 }
 
