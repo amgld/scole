@@ -157,9 +157,9 @@ const topicsShow = () => {
 // Замена содержимого ячейки таблицы с отметками на input для ввода отметок
 const td2inp = (id, grOld) => {
    dqs(`#${id}`).onclick = null;
-   dqs(`#${id}`).innerHTML = `<input id="inp${id}" `
+   dqs(`#${id}`).innerHTML = `<input id="inp${id}" maxlength="5" `
       + `onBlur="sendGr('${id}', '${grOld}', this.value)" `
-      + `onKeyDown="if (event.keyCode == 13) `
+      + `onKeyDown="if (event.keyCode == 13 || event.keyCode == 40) `
       + `sendGr('${id}', '${grOld}', this.value)" `
       + `value="${grOld}">`;
    dqs(`#inp${id}`).focus();
