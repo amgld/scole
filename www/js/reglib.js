@@ -156,24 +156,68 @@ const topicsShow = () => {
 // **************************************************************************
 // Замена содержимого ячейки таблицы с отметками на input для ввода отметок
 const td2inp = (id, grOld) => {
+   if (!grOld) grOld = dqs(`#${id}`).innerHTML
+                     . replace("&nbsp;", '').replace(' ', '');
+   if (dqs("#selRole").value != "teacher") return;
    dqs(`#${id}`).onclick = null;
-   dqs(`#${id}`).innerHTML = `<input id="inp${id}" maxlength="5" `
-      + `onBlur="sendGr('${id}', '${grOld}', this.value)" `
-      + `onKeyDown="if (event.keyCode == 13 || event.keyCode == 40) `
-      + `sendGr('${id}', '${grOld}', this.value)" `
-      + `value="${grOld}">`;
+   dqs(`#${id}`).innerHTML = `
+      <input id="inp${id}" maxlength="5"
+         onBlur="sendGr('${id}', '${grOld}', this.value)"
+         onKeyDown="if (event.keyCode == 13 || event.keyCode == 40) `
+            + `sendGr('${id}', '${grOld}', this.value, 1);"
+         value="${grOld}">
+   `;
    dqs(`#inp${id}`).focus();
 }
 
 // **************************************************************************
 // Отправка введенной отметки для записи в базу с помощью API
-const sendGr = (id, gradeOld, gradeNew) => {
-   gradeNew = gradeNew.trim(); // ну и куча замен еще всяких неразрешенных
-   // gradeOld если отправка не удалась
-   // info(1, "Ошибка на сервере");
+const sendGr = async (id, gradeOld, gradeNew, toDown) => {  
+   
+   gradeNew = gradeNew.replace(/\s+/g, ' ').replace(/Н/g, 'н')
+      .replace(/[\-+=.,a-zA-Zа-мо-яёА-Я]/g, '').trim();
+   if (!/^[н0-9 ]{0,5}$/.test(gradeNew)) {
+      gradeNew = gradeOld;
+      info(1, "Допустимы не более 5 символов:<br>только цифры, пробел<br>"
+            + "и русская строчная буква «н»");
+   }
+   
+   let dt     = id.split('-')[0],
+       pupNum = Number(id.split('-')[1]),
+       pupId  = gradesObj.puList[pupNum];
+   
+   if (gradeOld != gradeNew) {
+      
+      dqs(`#inp${id}`).style.background = "#f99";
+      
+      // Отправляем отметку с помощью API
+      // Отметки хранятся с полями дата, класс, предм, учитель, ученик, отм
+      // rgClassName, rgSubjCode, rgTeachLgn были установлены в loadGrades()      
+      let apiResp = await apireq(
+         "gradeAdd",
+         [dt, rgClassName, rgSubjCode, rgTeachLgn, pupId, gradeNew]
+      );
+      let errMess = (apiResp == "pupBlock") ?
+         "Этот учащийся отчислен." : "Ошибка на сервере."; 
+      if (apiResp != "success") {
+         gradeNew = gradeOld;
+         info(1, errMess);
+      }      
+   }
+      
+   // Обновляем ячейку
+   dqs(`#inp${id}`).style.background = "none";
    let cnt = gradeNew ? gradeNew : ' ';
    dqs(`#${id}`).outerHTML =
       `<td id="${id}" onClick="td2inp('${id}', '${gradeNew}')">${cnt}</td>`;
+      
+   // Если пришел аргумент toDown, устанавливаем фокус (с полем input)
+   // на нижележащую ячейку, если она есть
+   if (toDown) {
+      pupNum++;
+      let idNew = `${dt}-${pupNum}`;
+      if (dqs(`#${idNew}`)) td2inp(idNew);
+   }
 }
 
 // **************************************************************************
@@ -281,17 +325,17 @@ const loadGrades = async () => {
       return;
    }
    else {
-      let paramsArr = params.split('^'),
-         className = paramsArr[0],
-         subjCode  = paramsArr[1],
-         teachLgn  = paramsArr[2];   
+      let paramsArr = params.split('^');
+      rgClassName = paramsArr[0]; // глобальные переменные!
+      rgSubjCode  = paramsArr[1];
+      rgTeachLgn  = paramsArr[2];   
       
       // Загружаем темы уроков из базы и показываем на странице
-      topicsObj = await topicsGet(className, subjCode, teachLgn);
+      topicsObj = await topicsGet(rgClassName, rgSubjCode, rgTeachLgn);
       topicsShow();
       
       // Загружаем список детей и отметки из базы и показываем на странице
-      gradesObj = await gradesGet(className, subjCode, teachLgn);
+      gradesObj = await gradesGet(rgClassName, rgSubjCode, rgTeachLgn);
       gradesShow();
    }
 }

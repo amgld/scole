@@ -4,7 +4,46 @@
  */
 "use strict";
 
-// Объект с учебными предметами по умолчанию из файла www/js/ini.js
-const ini = require("../www/js/ini.js");
-const subjDef = ini.subjDef;
-
+// Возвращает "success", либо "none", либо "pupBlock" (ребенок заблокирован)
+// Аргументы - [дата, класс, предмет, учитель, ученик, отметка]
+//   например, ["d729", "s110", "ivanov", "petrov", "нн5"]
+module.exports = async (argsObj) => {
+   try {      
+      // Проверяем, что пришло
+      const d = argsObj[0].substr(0,  5).trim(),
+            c = argsObj[1].substr(0, 20).trim(),
+            s = argsObj[2].substr(0, 20).trim(),
+            t = argsObj[3].substr(0, 20).trim(),
+            p = argsObj[4].substr(0, 20).trim(),
+            g = argsObj[5].substr(0,  5).trim() || '';
+            
+      if (!d || !c || !s || !t || !p) return "none";
+      if (
+         !/^d\d{3}[a-z]{0,1}$/.test(d) || !/^[н0-9 ]{0,5}$/.test(g)
+      ) return "none";
+      
+      // Проверяем полномочия учителя на запрашиваемые класс и предмет
+      let distrRes = await dbFind("distrib", {tLogin: t});
+      if (!distrRes.length) return "none";
+      else {
+         let distr = distrRes[0].tLoad;
+         if (!distr[s]) return "none";
+         else if (!distr[s].includes(c)) return "none";
+      } 
+      
+      // Проверяем, есть ли такой ученик и не заблокирован ли он
+      let res = await dbFind("pupils", {Ulogin: p});
+      if (!res.length)  return "none";
+      if (res[0].block) return "pupBlock";
+      
+      let success = 1;
+      db.grades.update(
+         {d: d, s: s, t: t, p: p},
+         {d: d, s: s, t: t, p: p, g: g},
+         {upsert: true},
+         function (e) {if(e) success = 0;}
+      );
+      if (success) return "success"; else return "none";
+   }
+   catch(e) {return "none";}
+};

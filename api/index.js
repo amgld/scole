@@ -16,7 +16,8 @@ const modReq = {
    "adminsList":  [1,0], "usBlock":     [1,1], "usChPwd":       [1,1],
    "teachList":   [1,0], "tutorSet":    [0,1], "tutorsList":    [1,0],
    "distrGet":    [1,0], "distrEdit":   [1,1], "classesGroups": [1,0],
-   "topicEdit":   [1,1], "topicsGet":   [1,1], "gradesGet":     [1,1]
+   "topicEdit":   [1,1], "topicsGet":   [1,1], "gradesGet":     [1,1],
+   "gradeAdd":    [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -33,7 +34,9 @@ const RIGHTS = {
       "classesList", "subjList", "teachList", "tutorSet", "tutorsList",
       "distrGet", "distrEdit", "classesGroups", "topicsGet", "gradesGet"
    ],
-   "teacher": ["usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet"],
+   "teacher": [
+      "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd"
+   ],
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",
       "gradesGet"
