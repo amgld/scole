@@ -66,6 +66,7 @@ module.exports = async (post, addr) => {
    // Подписываем логин юзера в объект аргументов, передающийся модулю API
    // (для некоторых функций API, требующих валидного логина юзера)
    if (postDt.f == "topicEdit" && postDt.z) postDt.z.push(postDt.l);
+   if (postDt.f == "gradeAdd"  && postDt.z) postDt.z.push(postDt.l);
       
    // Проверяем полномочия юзера на запрашиваемую функцию   
    let rolesArr = JSON.parse(authResult)["roles"];

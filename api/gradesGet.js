@@ -12,7 +12,7 @@
 //    d601:   ["нн",     "5",     ...],
 //    ...
 // }
-module.exports = async argsObj => {   
+module.exports = async (argsObj) => {   
    try {
       let gr = argsObj[0].substr(0, 20).trim(),
           sb = argsObj[1].substr(0,  4).trim(),
@@ -51,7 +51,16 @@ module.exports = async argsObj => {
       else return "{}";
       
       // Теперь формируем объекты (по датам) с отметками
-      resp["d709"] = [0, "н4"];
+      let grVal = resp.puList.length;
+      let grResp = await dbFind("grades", {c: gr, s: sb, t: lg});      
+      for (let currGr of grResp) {
+         if (resp.puList.includes(currGr.p)) {
+            let i = resp.puList.indexOf(currGr.p);
+            if (!resp[currGr.d])
+               resp[currGr.d] = (new Array(grVal)).map(x => ''); // массив из ''
+            resp[currGr.d][i] = currGr.g;
+         }
+      }
       
       return JSON.stringify(resp);
    }

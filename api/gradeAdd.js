@@ -1,23 +1,25 @@
 /**
- *   ДОБАВЛЕНИЕ ОТМЕТКИ В БАЗУ ДАННЫХ
+ *   ДОБАВЛЕНИЕ ОТМЕТКИ В БАЗУ ДАННЫХ ЛИБО УДАЛЕНИЕ КОЛОНКИ ОТМЕТОК
  *   Copyright © 2019, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 
 // Возвращает "success", либо "none", либо "pupBlock" (ребенок заблокирован)
-// Аргументы - [дата, класс, предмет, учитель, ученик, отметка]
+// Аргументы - [дата, класс, предмет, ученик, отметка, учитель]
 //   например, ["d729", "s110", "ivanov", "petrov", "нн5"]
+// Если аргумент "ученик" пустой, удаляется вся колонка отметок
 module.exports = async (argsObj) => {
    try {      
       // Проверяем, что пришло
-      const d = argsObj[0].substr(0,  5).trim(),
-            c = argsObj[1].substr(0, 20).trim(),
-            s = argsObj[2].substr(0, 20).trim(),
-            t = argsObj[3].substr(0, 20).trim(),
-            p = argsObj[4].substr(0, 20).trim(),
-            g = argsObj[5].substr(0,  5).trim() || '';
+      let d = argsObj[0].substr(0,  5).trim(),
+          c = argsObj[1].substr(0, 20).trim(),
+          s = argsObj[2].substr(0, 20).trim(),            
+          p = argsObj[3].substr(0, 20).trim(),
+          g = argsObj[4].substr(0,  5).trim(),
+          t = argsObj[5].substr(0, 20).trim();
+      if(!g) g = '';
             
-      if (!d || !c || !s || !t || !p) return "none";
+      if (!d || !c || !s || !t) return "none";
       if (
          !/^d\d{3}[a-z]{0,1}$/.test(d) || !/^[н0-9 ]{0,5}$/.test(g)
       ) return "none";
@@ -29,7 +31,13 @@ module.exports = async (argsObj) => {
          let distr = distrRes[0].tLoad;
          if (!distr[s]) return "none";
          else if (!distr[s].includes(c)) return "none";
-      } 
+      }
+      
+      // Если пришел пустой ученик, удаляем всю колонку отметок
+      if (!p) {
+         db.grades.remove({d: d, c: c, s: s, t: t}, {multi: true});
+         return "success";
+      }
       
       // Проверяем, есть ли такой ученик и не заблокирован ли он
       let res = await dbFind("pupils", {Ulogin: p});
@@ -38,8 +46,8 @@ module.exports = async (argsObj) => {
       
       let success = 1;
       db.grades.update(
-         {d: d, s: s, t: t, p: p},
-         {d: d, s: s, t: t, p: p, g: g},
+         {d: d, c: c, s: s, t: t, p: p},
+         {d: d, c: c, s: s, t: t, p: p, g: g},
          {upsert: true},
          function (e) {if(e) success = 0;}
       );

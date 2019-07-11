@@ -118,8 +118,16 @@ const topicEdit = async () => {
       else {
          // Добавляем или редактируем новую тему в объекте тем topicsObj
          // (либо удаляем) и обновляем показ тем на странице из этого объекта
-         if (topicsObj[dt] && !topic) delete topicsObj[dt];
-         else topicsObj[dt] = {t:topic, h:hometask, w:Number(weight)};
+         // Если тема пустая то, кроме того, удаляем соотв. колонку отметок
+         if (topicsObj[dt] && !topic) {
+            delete topicsObj[dt];
+            let apiResp =
+               await apireq("gradeAdd", [dt, className, subj, '', '']);
+            if (apiResp !== "success") info(1, "Ошибка на сервере.");
+            delete gradesObj[dt];
+         }            
+         else
+            if (topic) topicsObj[dt] = {t:topic, h:hometask, w:Number(weight)};
          topicsShow();
       }
    }
@@ -175,7 +183,7 @@ const td2inp = (id, grOld) => {
 const sendGr = async (id, gradeOld, gradeNew, toDown) => {  
    
    gradeNew = gradeNew.replace(/\s+/g, ' ').replace(/Н/g, 'н')
-      .replace(/[\-+=.,a-zA-Zа-мо-яёА-Я]/g, '').trim();
+      .replace(/б/g, 'н').replace(/[\-+=.,a-zA-Zа-мо-яёА-ЯЁ]/g, '').trim();
    if (!/^[н0-9 ]{0,5}$/.test(gradeNew)) {
       gradeNew = gradeOld;
       info(1, "Допустимы не более 5 символов:<br>только цифры, пробел<br>"
@@ -191,11 +199,12 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
       dqs(`#inp${id}`).style.background = "#f99";
       
       // Отправляем отметку с помощью API
-      // Отметки хранятся с полями дата, класс, предм, учитель, ученик, отм
-      // rgClassName, rgSubjCode, rgTeachLgn были установлены в loadGrades()      
+      // Отметки хранятся с полями [дата, класс, предм, учитель, ученик, отм]
+      // rgClassName, rgSubjCode были установлены в loadGrades()
+      // Логин учителя не передается, берется из данных авторизации
+      // модулем API index.js     
       let apiResp = await apireq(
-         "gradeAdd",
-         [dt, rgClassName, rgSubjCode, rgTeachLgn, pupId, gradeNew]
+         "gradeAdd", [dt, rgClassName, rgSubjCode, pupId, gradeNew]
       );
       let errMess = (apiResp == "pupBlock") ?
          "Этот учащийся отчислен." : "Ошибка на сервере."; 
@@ -265,6 +274,7 @@ const gradesShow = () => {
          for (let i=0; i<gradesObj.pnList.length; i++) {
             let gr = ' ';
             if (gradesObj[dt]) if (gradesObj[dt][i]) gr = gradesObj[dt][i];
+            if (!gr) gr = ' ';
             let grA = gr.replace("&nbsp;", '').replace(" ", '');
             content += `<tr><td id="${dt}-${i}" `
                + `onClick="td2inp('${dt}-${i}', '${grA}')">${gr}</td></tr>`;
