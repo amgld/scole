@@ -1,3 +1,4 @@
+// В СТРОКАХ 36 И 39 ИСПРАВИТЬ ВРЕМЕННЫЕ 1 ОБРАТНО НА 0 !!!!!!!!!!!!!!!!
 /**
  *   АУТЕНТИФИКАЦИЯ И АВТОРИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ
  *   Copyright © 2019, А.М.Гольдин. Modified BSD License
@@ -32,10 +33,10 @@ module.exports = async (tip, login, pwd, cptId, capt, addr) => {
          let cptIdIndex = captchaIdArr.indexOf(Number(cptId));
          if (cptIdIndex > -1) {
             captchaIdArr.splice(cptIdIndex, 1);
-            if (captNumGen(cptId) != capt) return 0;
+            if (captNumGen(cptId) != capt) return 1;
             else return 1;
          }
-         else return 0;
+         else return 1;
       }
       
       // Ответ, возвращаемый в случае успешной авторизации

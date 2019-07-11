@@ -44,7 +44,7 @@ createSection("register", `
          <input id="regTopHTask" type="text" placeholder="Домашнее задание">
          <span>Вес отметок (от 1 до 8)</span>
          <input id="regTopWeight" type="number" min=1 max=8 value=2>
-         <button onClick="topicEdit()">Добавить</button>
+         <button onClick="topicEdit()"> &gt;&gt; </button>
       </div>
       <div id="regJustTopics"></div>
    </div>

@@ -154,6 +154,29 @@ const topicsShow = () => {
 }
 
 // **************************************************************************
+// Замена содержимого ячейки таблицы с отметками на input для ввода отметок
+const td2inp = (id, grOld) => {
+   dqs(`#${id}`).onclick = null;
+   dqs(`#${id}`).innerHTML = `<input id="inp${id}" `
+      + `onBlur="sendGr('${id}', '${grOld}', this.value)" `
+      + `onKeyDown="if (event.keyCode == 13) `
+      + `sendGr('${id}', '${grOld}', this.value)" `
+      + `value="${grOld}">`;
+   dqs(`#inp${id}`).focus();
+}
+
+// **************************************************************************
+// Отправка введенной отметки для записи в базу с помощью API
+const sendGr = (id, gradeOld, gradeNew) => {
+   gradeNew = gradeNew.trim(); // ну и куча замен еще всяких неразрешенных
+   // gradeOld если отправка не удалась
+   // info(1, "Ошибка на сервере");
+   let cnt = gradeNew ? gradeNew : ' ';
+   dqs(`#${id}`).outerHTML =
+      `<td id="${id}" onClick="td2inp('${id}', '${gradeNew}')">${cnt}</td>`;
+}
+
+// **************************************************************************
 // Загрузка списка детей и отметок из базы
 const gradesGet = async (className, subjCode, teachLgn) => {
    let apiResp = await apireq("gradesGet", [className, subjCode, teachLgn]);
@@ -195,10 +218,12 @@ const gradesShow = () => {
                   + `<tr><td>${dtW}</td></tr>`;
                   
          // Собственно отметки, если они есть
-         let existDateGrades = gradesObj[dt] ? true : false;
          for (let i=0; i<gradesObj.pnList.length; i++) {
-            let grade = existDateGrades ? gradesObj[dt][i] : ' ';
-            content += `<tr><td id="${dt}-${i}">${grade}</td></tr>`;
+            let gr = ' ';
+            if (gradesObj[dt]) if (gradesObj[dt][i]) gr = gradesObj[dt][i];
+            let grA = gr.replace("&nbsp;", '').replace(" ", '');
+            content += `<tr><td id="${dt}-${i}" `
+               + `onClick="td2inp('${dt}-${i}', '${grA}')">${gr}</td></tr>`;
          }
          content += "</table>";
       }
@@ -219,7 +244,6 @@ const dtFocus = dt => {
       dqs("#regNewTopic textarea").value = '';
       dqs("#regTopHTask").value = '';
       dqs("#regTopWeight").value = 2;
-      dqs("#regNewTopic button").innerHTML = "Добавить";
       
       // Проматываем таблицу отметок к концу
       if (dqs("#regGrades div")) {
@@ -234,7 +258,6 @@ const dtFocus = dt => {
       dqs("#regNewTopic textarea").value = topicsObj[dt].t;
       dqs("#regTopHTask").value = topicsObj[dt].h;
       dqs("#regTopWeight").value = topicsObj[dt].w;
-      dqs("#regNewTopic button").innerHTML = "Редактировать";
       
       // Прокручиваем таблицу с отметками, чтобы дата была видима
       let colonObj = dqs(`#${dt}-0`).parentNode.parentNode;

@@ -51,7 +51,7 @@ module.exports = async argsObj => {
       else return "{}";
       
       // Теперь формируем объекты (по датам) с отметками
-      // ...
+      resp["d709"] = [0, "н4"];
       
       return JSON.stringify(resp);
    }
