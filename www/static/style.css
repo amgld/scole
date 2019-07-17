@@ -168,7 +168,7 @@ section#users  td[title="Является администратором"] {
    color:red; font-weight:bold; text-align:center;}
 }
    
-/* БЛОК РАБОТЫ СО СПИСКОМ КЛАССОВ
+/* БЛОКИ РАБОТЫ СО СПИСКОМ КЛАССОВ И СПИСКОМ ПОДГРУПП
    ----------------------------------------------------- */
 section#classes select {
    margin:3pt; background:white;}
@@ -177,9 +177,14 @@ section#classes div {
 section#classes span {
    display:inline-block; margin:3px; padding:3px;
    width:3.2em; background:#e6ded5;}
-section#classes span div {
+section#subgroup div#subGrList div {
+   padding:3px; width:8em; margin:3px auto;
+   background:#e6ded5; text-align:left;}
+section#classes span div,
+section#subgroup div#subGrList div div {
    display:inline; margin-right:3px;}
-section#classes span div:hover {
+section#classes span div:hover,
+section#subgroup div#subGrList div div:hover {
    cursor:pointer;}
 
 /* БЛОК РАБОТЫ СО СПИСКОМ ПРЕДМЕТОВ

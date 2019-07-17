@@ -25,7 +25,7 @@ const clListPubl = clArr => {
          cont += "<br>";
       }
       cont += `<span>
-         <div onclick=classNumDel("${currCl}")>&#10060;</div>${currCl}</span>`;
+         <div onclick="classNumDel('${currCl}')">&#10060;</div>${currCl}</span>`;
    }
    dqs("#clList").innerHTML = cont;  
 };

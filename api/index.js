@@ -17,7 +17,7 @@ const modReq = {
    "teachList":   [1,0], "tutorSet":    [0,1], "tutorsList":    [1,0],
    "distrGet":    [1,0], "distrEdit":   [1,1], "classesGroups": [1,0],
    "topicEdit":   [1,1], "topicsGet":   [1,1], "gradesGet":     [1,1],
-   "gradeAdd":    [1,1]
+   "gradeAdd":    [1,1], "subgrEdit":   [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -39,7 +39,7 @@ const RIGHTS = {
    ],
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",
-      "gradesGet"
+      "gradesGet", "subgrEdit"
    ],
    "pupil":   ["subjList", "distrGet", "teachList", "topicsGet"],
    "parent":  ["subjList", "distrGet", "teachList", "topicsGet"]
@@ -65,8 +65,8 @@ module.exports = async (post, addr) => {
    
    // Подписываем логин юзера в объект аргументов, передающийся модулю API
    // (для некоторых функций API, требующих валидного логина юзера)
-   if (postDt.f == "topicEdit" && postDt.z) postDt.z.push(postDt.l);
-   if (postDt.f == "gradeAdd"  && postDt.z) postDt.z.push(postDt.l);
+   let fNames = ["topicEdit", "gradeAdd", "subgrEdit"];
+   if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
       
    // Проверяем полномочия юзера на запрашиваемую функцию   
    let rolesArr = JSON.parse(authResult)["roles"];
