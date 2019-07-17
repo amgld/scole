@@ -46,10 +46,54 @@ const subGroupsLoad = async (className) => {
             cont += `<div><div onclick="subGrEdit('${sGroup}', 'del')">`
                   + `&#10060;</div>${sGroup}</div>`;
          dqs("#subGrList").innerHTML = cont;
+         
+         // Формируем селект выбора подгруппы для редактирования ее состава
+         let inner = '';
+         for (let gr of groupsList) inner += `<option>${gr}</option>`;
+         dqs("#sgrGroupSel").innerHTML = inner;
+         subGroupPups(groupsList[0]);
       }
       else dqs("#subGrList").innerHTML = "Подгрупп не найдено";
    }
-   else dqs("#subGrList").innerHTML = "Подгрупп не найдено";
+   else dqs("#subGrList").innerHTML = "Подгрупп не найдено";   
+}
+
+// Публикация формы редактирования списочного состава одной подгруппы
+// (имя подгруппы типа "мальч" без префикса класса!)
+const subGroupPups = async (sbGrName) => {
+   let className = dqs("#sgrClassSel").value,
+       fullName  = `${className}-${sbGrName}`,
+       cont      = '';
+       
+   let apiResp = await apireq("gradesGet", [className, '', "a"]);
+   if (apiResp != "none") {
+      let rObj = JSON.parse(apiResp);
+      
+      // Получаем логины членов подгруппы
+      let grResp = await apireq("gradesGet", [fullName, '', "a"]);
+      if (grResp == "none") {info(1, "Ошибка на сервере"); return;}
+      let grObj = JSON.parse(grResp);
+      let grArr = grObj.puList ? grObj.puList : [];
+      
+      cont += "<table>";
+      for (let i = 0; i < rObj.puList.length; i++) {
+         let checked = grArr.includes(rObj.puList[i]) ? " checked" : '';
+         cont += `<tr>
+            <td>${rObj.pnList[i]}</td>
+            <td><input type="checkbox"${checked}></td>
+         </tr>`;
+      }
+      cont += "</table>";
+      cont += `<button type="button" onClick="sgrPupsEd()"
+         >Сохранить изменения</button>`;
+   }
+   else cont = "Список учащихся не получен с сервера"
+   dqs("#subGrEdit").innerHTML = cont;
+}
+
+// Редактирование списочного состава одной подгруппы (запрос к API)
+const sgrPupsEd = async () => {
+   alert("Типа запрос к API отправлен!");
 }
 
 // Формируем контент странички
@@ -60,6 +104,9 @@ createSection("subgroup", `
    <input id="subGrNew" maxlength="10" placeholder="Новая подгруппа"
           onKeyDown="if (event.keyCode == 13) subGrEdit('', 'add')">
    <button type="button" onClick="subGrEdit('', 'add')">Добавить</button>
+   <h3>Редактирование состава подгруппы</h3>
+   <select id="sgrGroupSel" onChange="subGroupPups(this.value);"></select>
+   <div id="subGrEdit"></div>
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
@@ -70,7 +117,6 @@ getContent.subgroup = async () => {
    for (let cls of uTutorCls) sgrSelClInner += `<option>${cls}</option>`;
    dqs("#sgrClassSel").innerHTML = sgrSelClInner;
    
-   // Загружаем список подгрупп первого класса в списке классов
+   // Загружаем список подгрупп {первого класса в списке классов}
    subGroupsLoad(dqs("#sgrClassSel").value);
-
 }
