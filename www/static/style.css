@@ -186,6 +186,14 @@ section#subgroup div#subGrList div div {
 section#classes span div:hover,
 section#subgroup div#subGrList div div:hover {
    cursor:pointer;}
+section#subgroup table {
+   border-collapse:collapse; border:1px solid #963;
+   margin:auto; margin-top:10px;}
+section#subgroup table td {
+   border:1px solid #963; padding:3px; color:#963;
+   min-width: 2em; cursor:pointer;}
+section#subgroup table td:first-child {
+   text-align:left; cursor:default; color:black;}
 
 /* БЛОК РАБОТЫ СО СПИСКОМ ПРЕДМЕТОВ
    ----------------------------------------------------- */

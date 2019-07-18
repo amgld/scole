@@ -4,6 +4,11 @@
  */
 "use strict";
 
+// Переключение содержимого ячейки таблицы с галочки на пустую и обратно
+const turnMark = elem => {
+   elem.innerHTML = elem.innerHTML ? '' : '■';
+}
+
 // Добавление/удаление подгруппы из списка
 // (имя подгруппы типа "мальч" без префикса класса!)
 // f - это "add" или "del"
@@ -77,14 +82,14 @@ const subGroupPups = async (sbGrName) => {
       
       cont += "<table>";
       for (let i = 0; i < rObj.puList.length; i++) {
-         let checked = grArr.includes(rObj.puList[i]) ? " checked" : '';
-         cont += `<tr>
+         let checked = grArr.includes(rObj.puList[i]) ? '■' : '';
+         cont += `<tr data-uid="${rObj.puList[i]}">
             <td>${rObj.pnList[i]}</td>
-            <td><input type="checkbox"${checked}></td>
+            <td onClick="turnMark(this)">${checked}</td>
          </tr>`;
       }
       cont += "</table>";
-      cont += `<button type="button" onClick="sgrPupsEd()"
+      cont += `<button type="button" onClick="sgrPupsEd('${fullName}')"
          >Сохранить изменения</button>`;
    }
    else cont = "Список учащихся не получен с сервера"
@@ -92,8 +97,18 @@ const subGroupPups = async (sbGrName) => {
 }
 
 // Редактирование списочного состава одной подгруппы (запрос к API)
-const sgrPupsEd = async () => {
-   alert("Типа запрос к API отправлен!");
+const sgrPupsEd = async (subrgName) => {
+   // Формируем массив логинов отмеченных учащихся
+   // (самый первый элемент - название подгруппы!)
+   let grLoginsArr = [subrgName];
+   let trElems = document.querySelectorAll("#subgroup table tr");
+   for (let tr of trElems)
+      if (tr.innerHTML.includes('■')) grLoginsArr.push(tr.dataset.uid);
+      
+   // Отправляем запрос к API
+   let grResp = await apireq("subgrPups", grLoginsArr);
+   if (grResp == "none") {info(1, "Ошибка на сервере"); return;}
+   else info(0, "Состав подгруппы успешно обновлен");
 }
 
 // Формируем контент странички
