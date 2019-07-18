@@ -97,6 +97,8 @@ const chPwd = () => {
          <input type="password" id="newPwd1" placeholder="Повторите пароль"
                 onKeyDown="if (event.keyCode == 13) chPwdApi()">
          <button type="button" onClick="chPwdApi()">Сменить пароль</button>
+         <button id="clButt" type="button" onClick="elems.chPwdElem.remove()"
+            style="margin-top:-30px">Отмена</button>
          <div id="chPwdWarn"></div>
       `;
       elems.chPwdElem.id = "chPwdWin";
