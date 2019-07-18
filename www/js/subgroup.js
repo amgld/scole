@@ -106,9 +106,10 @@ const sgrPupsEd = async (subrgName) => {
       if (tr.innerHTML.includes('■')) grLoginsArr.push(tr.dataset.uid);
       
    // Отправляем запрос к API
+   info(0, "Ждите...<br><img src='/static/preloader.gif'>");
    let grResp = await apireq("subgrPups", grLoginsArr);
    if (grResp == "none") {info(1, "Ошибка на сервере"); return;}
-   else info(0, "Состав подгруппы успешно обновлен");
+   else info(0, "Состав подгруппы успешно обновлен.");
 }
 
 // Формируем контент странички

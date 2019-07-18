@@ -17,7 +17,7 @@ const modReq = {
    "teachList":   [1,0], "tutorSet":    [0,1], "tutorsList":    [1,0],
    "distrGet":    [1,0], "distrEdit":   [1,1], "classesGroups": [1,0],
    "topicEdit":   [1,1], "topicsGet":   [1,1], "gradesGet":     [1,1],
-   "gradeAdd":    [1,1], "subgrEdit":   [1,1]
+   "gradeAdd":    [1,1], "subgrEdit":   [1,1], "subgrPups":     [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -39,7 +39,7 @@ const RIGHTS = {
    ],
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",
-      "gradesGet", "subgrEdit"
+      "gradesGet", "subgrEdit", "subgrPups"
    ],
    "pupil":   ["subjList", "distrGet", "teachList", "topicsGet"],
    "parent":  ["subjList", "distrGet", "teachList", "topicsGet"]
@@ -63,9 +63,9 @@ module.exports = async (post, addr) => {
       postDt.t, postDt.l, postDt.p, postDt.ci, postDt.c, addr);
    if (!authResult) return "none";
    
-   // Подписываем логин юзера в объект аргументов, передающийся модулю API
+   // Подписываем логин юзера в массив аргументов, передающийся модулю API
    // (для некоторых функций API, требующих валидного логина юзера)
-   let fNames = ["topicEdit", "gradeAdd", "subgrEdit"];
+   let fNames = ["topicEdit", "gradeAdd", "subgrEdit", "subgrPups"];
    if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
       
    // Проверяем полномочия юзера на запрашиваемую функцию   
