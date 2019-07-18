@@ -168,8 +168,8 @@ section#users  td[title="Является администратором"] {
    color:red; font-weight:bold; text-align:center;}
 }
    
-/* БЛОКИ РАБОТЫ СО СПИСКОМ КЛАССОВ И СПИСКОМ ПОДГРУПП
-   ----------------------------------------------------- */
+/* БЛОКИ РАБОТЫ СО СПИСКОМ КЛАССОВ, СПИСКОМ ПОДГРУПП, КОДАМИ ДЛЯ РОДИТЕЛЕЙ
+   ----------------------------------------------------------------------- */
 section#classes select {
    margin:3pt; background:white;}
 section#classes div {
@@ -186,13 +186,17 @@ section#subgroup div#subGrList div div {
 section#classes span div:hover,
 section#subgroup div#subGrList div div:hover {
    cursor:pointer;}
-section#subgroup table {
+section#subgroup table, section#parcodes table {
    border-collapse:collapse; border:1px solid #963;
    margin:auto; margin-top:10px;}
+section#parcodes table {
+   margin-bottom:20px;}
 section#subgroup table td {
    border:1px solid #963; padding:3px; color:#963;
    min-width: 2em; cursor:pointer;}
-section#subgroup table td:first-child {
+section#parcodes table td, section#parcodes table th {
+   border:1px solid #963; padding:3px 10px;}
+section#subgroup table td:first-child, section#parcodes table td:first-child {
    text-align:left; cursor:default; color:black;}
 
 /* БЛОК РАБОТЫ СО СПИСКОМ ПРЕДМЕТОВ

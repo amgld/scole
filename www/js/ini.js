@@ -209,8 +209,3 @@ const subjSort = sbObj => {
 // Сортировка массива, состоящего из объектов-пользователей,
 // по ключу login в каждом объекте-пользователе
 const userSort = usArray => usArray.sort((u1, u2) => (u1.login > u2.login));
-
-// Экспорт функций и других объектов для среды nodejs
-if (typeof(module) !== "undefined") {
-   module.exports.subjDef = subjDef;   
-};
