@@ -61,5 +61,5 @@ module.exports = async (args) => {
       }
       return "success";
    }
-   catch(e) {console.info(e); return "none";}
+   catch(e) {return "none";}
 };

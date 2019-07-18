@@ -51,7 +51,15 @@ module.exports = async (args) => {
             );
             
             // Удаляем эту подгруппу у всех учеников, которые в нее входили
-            
+            // (идем циклом по всем ученикам данного класса)
+            let pupilsArr = await dbFind("pupils", {Uclass: clName});
+            if (!pupilsArr.length) return "success";
+            for (let pupil of pupilsArr) {
+               if (pupil.groups) if (pupil.groups.includes(grName)) {
+                  pupil.groups.splice(pupil.groups.indexOf(grName), 1);
+                  await db["pupils"].update({Ulogin: pupil.Ulogin}, pupil, {});
+               }
+            }
          }
       }
       
