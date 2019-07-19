@@ -26,20 +26,20 @@ module.exports = async (argArr) => {
       if (!res.length) return "none";
       let pup = res[0];
       let pupGroups = [pup.Uclass];
-      if (pup.groups) pupGroups = [pup.Uclass, ...pup.groups];
+      if (pup.groups) pupGroups = [pup.Uclass, ...pup.groups];      
       
       // Из коллекции topics получаем все темы, дз и веса
       // для этих классов и подгрупп и пишем это все в объект resp
       // (см. описание выше) пока без отметок
       for (let gr of pupGroups) {
          res = await dbFind("topics", {g: gr});
-         if (!res.length) return "none";
+         if (!res.length) continue;
          for (let t of res) {
             let k = `${gr}_${t.s}_${t.l}`;
             if (!resp[k]) resp[k] = {};
             resp[k][t.d] = [t.t, t.h, t.w];
          }
-      }      
+      }
       
       // Из коллекции grades получаем все отметки этого ребенка
       // и подписываем их в объект resp

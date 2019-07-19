@@ -19,8 +19,8 @@ let jrnArr = {};
 
 // Отображение контента по данному предмету-учителю на странице
 const jrnContLoad = async () => {
-   let subjTeach = dqs("#jrnSubj").value;
-   alert("Показываю " + subjTeach);
+   let grSbTh = dqs("#jrnSubj").value;
+   alert("Показываю " + grSbTh);
 }
 
 // Формирование контента страницы (селект для начала невидим в css)
@@ -50,14 +50,32 @@ getContent.journal = async () => {
    apiResp = await apireq("jrnGet", []);
    info(2);
    if (apiResp == "none") {
-      dqs("#jrnCont").innerHTML =
-         "<b>Дневник пока пуст.</b>";
+      dqs("#jrnCont").innerHTML = "<b>Дневник пока пуст.</b>";
       return;
    }   
-   let jrnArr = JSON.parse(apiResp); alert(JSON.stringify(jrnArr));
+   let jrnArr = JSON.parse(apiResp);
    
    // Формируем список предметов и учителей в селекте и делаем его видимым
-   // ...
+   let keysArr = Object.keys(jrnArr);
+   if (!keysArr.length) {
+      dqs("#jrnCont").innerHTML = "<b>Дневник пока пуст.</b>";
+      return;
+   }
+   keysArr.sort(
+      (a, b) => a.split('_')[1].substr(1, 3) > b.split('_')[1].substr(1, 3)
+   );
+   
+   let selInn = '';
+   for (let k of keysArr) {
+      let kArr = k.split('_'),
+          grName = kArr[0],
+          subj   = jrnSbList[kArr[1]],
+          teach  = jrnThList[kArr[2]];
+      teach = grName.includes('-') ?
+              `(${grName.split('-')[1]}; ${teach})` : `(${teach})`;
+      selInn += `<option value="${k}">${subj} ${teach}</option>`;
+   }
+   dqs("#jrnSubj").innerHTML = selInn;
    dqs("#jrnSubj").style.display = "block";
       
    // Формируем контент страницы по данному предмету и учителю
