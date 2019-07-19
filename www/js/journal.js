@@ -7,13 +7,15 @@
 // Объекты с предметами и учителями (подгружаются в конце страницы)
 let jrnSbList = {}, jrnThList = {};
 
-// Контент страницы - массив jrnArr из следующих объектов:
+// Контент страницы - объект jrnArr:
 // {
-//    p:    "s410-ivanov",
-//    d601: ["Африка", "Учить реки", 8, "нн5"],
+//    "s410-ivanov": {
+//       d601: ["Африка", "Учить реки", 8, "нн5"],
+//       ...
+//    }
 //    ...
 // }
-let jrnArr = [];
+let jrnArr = {};
 
 // Отображение контента по данному предмету-учителю на странице
 const jrnContLoad = async () => {
@@ -21,7 +23,7 @@ const jrnContLoad = async () => {
    alert("Показываю " + subjTeach);
 }
 
-// Формирование контента страницы (СЕЛЕКТ ДЛЯ НАЧАЛА СДЕЛАТЬ НЕВИДИМЫМ В CSS)
+// Формирование контента страницы (селект для начала невидим в css)
 createSection("journal", `
    <select id="jrnSubj" onChange="jrnContLoad();"></select>
    <div id="jrnCont"><img src='/static/preloader.gif'></div>
@@ -49,13 +51,14 @@ getContent.journal = async () => {
    info(2);
    if (apiResp == "none") {
       dqs("#jrnCont").innerHTML =
-         "<b>У вас пока нет отметок и данных о посещаемости.</b>";
+         "<b>Дневник пока пуст.</b>";
       return;
    }   
-   let jrnArr = JSON.parse(apiResp);
+   let jrnArr = JSON.parse(apiResp); alert(JSON.stringify(jrnArr));
    
    // Формируем список предметов и учителей в селекте и делаем его видимым
    // ...
+   dqs("#jrnSubj").style.display = "block";
       
    // Формируем контент страницы по данному предмету и учителю
    jrnContLoad();   

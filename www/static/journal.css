@@ -1,0 +1,23 @@
+/**  
+ *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: СТИЛИ СТРАНИЦ ИНТЕРФЕЙСА УЧАЩЕГОСЯ
+ *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ */
+
+#journal {
+   margin-top:-25px; padding-bottom:0px;}
+#journal div {
+   margin:5px 2px; display:inline-block;}
+#journal select {
+   display:none; margin:2px auto 10px;}
+#journal img {
+   margin-top:100px;}
+   
+/* ТЕМЫ, Д/З, ОТМЕТКИ, ВЕСА ОТМЕТОК
+   ----------------------------------------------------- */
+
+
+/* МОБИЛЬНАЯ ВЕРСИЯ
+   ----------------------------------------------------- */
+@media (max-width: 960px) {
+   
+}
