@@ -18,7 +18,7 @@ const modReq = {
    "distrGet":    [1,0], "distrEdit":   [1,1], "classesGroups": [1,0],
    "topicEdit":   [1,1], "topicsGet":   [1,1], "gradesGet":     [1,1],
    "gradeAdd":    [1,1], "subgrEdit":   [1,1], "subgrPups":     [1,1],
-   "parCodes":    [1,1], "jrnGet":      [1,1]
+   "parCodes":    [1,1], "jrnGet":      [1,1], "absentGet":     [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -33,17 +33,18 @@ const RIGHTS = {
    ],
    "admin":   [
       "classesList", "subjList", "teachList", "tutorSet", "tutorsList",
-      "distrGet", "distrEdit", "classesGroups", "topicsGet", "gradesGet"
+      "distrGet", "distrEdit", "classesGroups", "topicsGet", "gradesGet",
+      "absentGet"
    ],
    "teacher": [
       "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd"
    ],
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",
-      "gradesGet", "subgrEdit", "subgrPups", "parCodes"
+      "gradesGet", "subgrEdit", "subgrPups", "parCodes", "absentGet"
    ],
-   "pupil":   ["subjList", "teachList", "jrnGet"],
-   "parent":  ["subjList", "teachList", "jrnGet"]
+   "pupil":   ["subjList", "teachList", "jrnGet", "absentGet"],
+   "parent":  ["subjList", "teachList", "jrnGet", "absentGet"]
 };
 for (let item in RIGHTS) RIGHTS[item].push("login");
 
@@ -62,18 +63,24 @@ module.exports = async (post, addr) => {
    // Проверяем результаты аутентификации юзера
    let authResult = await mod.auth(
       postDt.t, postDt.l, postDt.p, postDt.ci, postDt.c, addr);
-   if (!authResult) return "none";
-   
-   // Подписываем логин юзера в массив аргументов, передающийся модулю API
-   // (для некоторых функций API, требующих валидного логина юзера)
-   let fNames = [
-      "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet"
-   ];
-   if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
+   if (!authResult) return "none";   
       
    // Проверяем полномочия юзера на запрашиваемую функцию   
    let rolesArr = JSON.parse(authResult)["roles"];
    if (!rolesArr.some(r => RIGHTS[r].includes(postDt.f))) return "none";
+   
+   // Подписываем логин юзера в массив аргументов, передающийся модулю API
+   // (для некоторых функций API, требующих валидного логина юзера)
+   let fNames = [
+      "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet",
+      "absentGet"
+   ];
+   if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);  
+   
+   // Для функции получения пропусков уроков если юзер администратор,
+   // подписываем еще один аргумент "admin" в массив аргументов
+   if (postDt.f == "absentGet" && rolesArr.includes("admin"))
+      postDt.z.push("admin");
       
    // Реализуем соответствующую функцию api в зависимости от переменной f
    // и необходимости использования await и передачи модулю аргументов
