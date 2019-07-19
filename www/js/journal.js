@@ -20,7 +20,26 @@ let jrnArr = {};
 // Отображение контента по данному предмету-учителю на странице
 const jrnContLoad = async () => {
    let grSbTh = dqs("#jrnSubj").value;
-   alert("Показываю " + grSbTh);
+   let grades = jrnArr[grSbTh] || {},
+       wArr   = ['', '0.5', '', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0'],
+       cont   = "<table><th>Дата</th><th>Вес</th><th>Тема урока</th>"
+              + "<th>Дом.&nbsp;задание</th><th>Отм.</th>";
+       
+   if (!Object.keys(grades).length) {
+      dqs("#jrnCont").innerHTML = "<b>Пока ничего нет.</b>";
+      return;
+   }
+   
+   for (let d of Object.keys(grades)) {
+      let dt  = dateConv(d), cls = '';
+      if (d.length > 4) {dt = DTSIT[d][0]; cls = " class='it'";}
+      let otm = grades[d][3] ? grades[d][3] : '';
+      cont += `<tr${cls}>`
+            + `<td>${dt}</td><td>${wArr[grades[d][2]]}</td>`
+            + `<td>${grades[d][0]}</td><td>${grades[d][1]}</td>`
+            + `<td>${otm}</td></tr>`;
+   }
+   dqs("#jrnCont").innerHTML = cont + "</table>";
 }
 
 // Формирование контента страницы (селект для начала невидим в css)
@@ -53,7 +72,7 @@ getContent.journal = async () => {
       dqs("#jrnCont").innerHTML = "<b>Дневник пока пуст.</b>";
       return;
    }   
-   let jrnArr = JSON.parse(apiResp);
+   jrnArr = JSON.parse(apiResp); alert(apiResp);
    
    // Формируем список предметов и учителей в селекте и делаем его видимым
    let keysArr = Object.keys(jrnArr);

@@ -41,12 +41,13 @@ module.exports = async (argArr) => {
          }
       }
       
-      // Из коллекции grades получаем все отметки этого ребенка
-      // и подписываем их в объект resp
+      // Из коллекции grades получаем все отметки этого ребенка (в том числе
+      // итоговые) и подписываем их в объект resp
       res = await dbFind("grades", {p: lg});
       for (let otm of res) {
          let k = `${otm.c}_${otm.s}_${otm.t}`;
          if (resp[k][otm.d]) resp[k][otm.d].push(otm.g);
+         else resp[k][otm.d] = ['', '', 0, otm.g];
       }
       
       return JSON.stringify(resp);
