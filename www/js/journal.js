@@ -30,7 +30,9 @@ const jrnContLoad = async () => {
       return;
    }
    
-   for (let d of Object.keys(grades)) {
+   let dates = Object.keys(grades).sort();
+   
+   for (let d of dates) {
       let dt  = dateConv(d), cls = '';
       if (d.length > 4) {dt = DTSIT[d][0]; cls = " class='it'";}
       let otm = grades[d][3] ? grades[d][3] : '';
@@ -72,7 +74,7 @@ getContent.journal = async () => {
       dqs("#jrnCont").innerHTML = "<b>Дневник пока пуст.</b>";
       return;
    }   
-   jrnArr = JSON.parse(apiResp); alert(apiResp);
+   jrnArr = JSON.parse(apiResp);
    
    // Формируем список предметов и учителей в селекте и делаем его видимым
    let keysArr = Object.keys(jrnArr);

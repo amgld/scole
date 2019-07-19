@@ -47,7 +47,7 @@ module.exports = async (argArr) => {
       for (let otm of res) {
          let k = `${otm.c}_${otm.s}_${otm.t}`;
          if (resp[k][otm.d]) resp[k][otm.d].push(otm.g);
-         else resp[k][otm.d] = ['', '', 0, otm.g];
+         else resp[k][otm.d] = ['', '', 0, otm.g]; // итоговые отметки
       }
       
       return JSON.stringify(resp);

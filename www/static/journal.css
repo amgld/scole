@@ -14,7 +14,15 @@
    
 /* ТЕМЫ, Д/З, ОТМЕТКИ, ВЕСА ОТМЕТОК
    ----------------------------------------------------- */
-
+#journal table {
+   width:100%; border-collapse:collapse; border:1px solid #963;
+   margin-bottom:100px;}
+#journal table th, #journal table td {
+   padding:2px 5px; border:1px solid #963;}
+#journal table td:nth-child(3), #journal table td:nth-child(4) {
+   text-align:left;}
+#journal table tr.it {
+   background:#e6ded5; font-weight:bold;}
 
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
