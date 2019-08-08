@@ -166,7 +166,6 @@ section#users  tr.blk td[title="Разблокировать"] {
    color:#963; cursor:pointer; text-align:center;}
 section#users  td[title="Является администратором"] {
    color:red; font-weight:bold; text-align:center;}
-}
    
 /* БЛОКИ РАБОТЫ СО СПИСКОМ КЛАССОВ, СПИСКОМ ПОДГРУПП, КОДАМИ ДЛЯ РОДИТЕЛЕЙ
    ----------------------------------------------------------------------- */
