@@ -13,7 +13,6 @@ const DOCROOT  = __dirname + "/www/",
       url      = require("url"),
       fs       = require("fs"),
       nedb     = require("nedb"),
-      htmlpdf  = require("html-pdf"),
 
       {PORT, SERVER, ERR404, MIME, PWD, SALT, ADMIN, KEYPATH, CERTPATH}
                = require("./config"),
