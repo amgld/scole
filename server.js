@@ -32,13 +32,13 @@ global.admPwd  = PWD;
 /* ИНИЦИАЛИЗАЦИЯ КОЛЛЕКЦИЙ БАЗЫ ДАННЫХ
  * ----------------------------------------------------------------------- */
 global.db  = {};
-db.staff    = new nedb({filename: "db/staff.db",    autoload: true});
-db.pupils  = new nedb({filename: "db/pupils.db",  autoload: true});
-db.curric  = new nedb({filename: "db/curric.db",  autoload: true});
-db.distrib = new nedb({filename: "db/distrib.db", autoload: true});
-db.grades  = new nedb({filename: "db/grades.db",  autoload: true});
-db.spravki = new nedb({filename: "db/spravki.db", autoload: true});
-db.topics  = new nedb({filename: "db/topics.db",  autoload: true});
+db.staff    = new nedb({filename: __dirname + "/db/staff.db",    autoload: true});
+db.pupils  = new nedb({filename: __dirname + "/db/pupils.db",  autoload: true});
+db.curric  = new nedb({filename: __dirname + "/db/curric.db",  autoload: true});
+db.distrib = new nedb({filename: __dirname + "/db/distrib.db", autoload: true});
+db.grades  = new nedb({filename: __dirname + "/db/grades.db",  autoload: true});
+db.spravki = new nedb({filename: __dirname + "/db/spravki.db", autoload: true});
+db.topics  = new nedb({filename: __dirname + "/db/topics.db",  autoload: true});
 
 
 /* ОПРЕДЕЛЕНИЯ ФУНКЦИЙ
