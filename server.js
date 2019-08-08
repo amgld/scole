@@ -165,5 +165,14 @@ https.createServer(httpsOpt, (zapros, otvet) => {
    
 }).listen(PORT);
 
+// Перенаправление с http на https
+const http = require("http");
+http.createServer((zapros, otvet) => {
+    otvet.writeHead(
+       301, {"Location": "https://" + zapros.headers["host"] + zapros.url}
+    );
+    otvet.end();
+}).listen(80);
+
 let now = (new Date()).toString().replace(/ \(.*\)/, '');
 console.info(`${now} ScoleServer стартовал на порту ${PORT}`);
