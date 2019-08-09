@@ -176,8 +176,9 @@ https.createServer(httpsOpt, (zapros, otvet) => {
          }
          else {
             sendOtvet(otvet, 200, mtip, cont);
-            // Успешные GET-запросы не логируются, чтобы не раздувать лог
-            // putlog(ADDR, "GET", pathname, 200, cont.length);
+            // Из успешных GET-запросов логируем только запрос главной
+            if (pathname == "/index.html")
+               putlog(ADDR, "GET", '/', 200, cont.length);
          }
       });
    
