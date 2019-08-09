@@ -178,16 +178,17 @@ https.createServer(httpsOpt, (zapros, otvet) => {
       zapros.on("end",  async () => {
          let cont = await api(postData, ADDR);
          sendOtvet(otvet, 200, "text/plain", cont);
-         // Определяем логин и запрашиваемую функцию API
-         let logCont;
+         // Определяем логин и запрашиваемую функцию API;
+         // логируем только запросы авторизации (функция login)
+         let logCont = '';
          try {
             let postDataObj = JSON.parse(postData);
             let logLogin    = postDataObj.l || "none";
             let logFunc     = postDataObj.f || "none";
-            logCont = `/ [${logLogin}, ${logFunc}]`;
+            if (logFunc == "login") logCont = `[${logLogin}]`;
          }
-         catch(e) {logCont = '/';}
-         putlog(ADDR, "POST", logCont, 200, cont.length);
+         catch(e) {;}
+         if (logCont) putlog(ADDR, "POST", logCont, 200, cont.length);
       });      
    }
    
