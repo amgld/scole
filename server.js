@@ -38,6 +38,7 @@ db.distrib = new nedb({filename: __dirname + "/db/distrib.db", autoload: true});
 db.grades  = new nedb({filename: __dirname + "/db/grades.db",  autoload: true});
 db.spravki = new nedb({filename: __dirname + "/db/spravki.db", autoload: true});
 db.topics  = new nedb({filename: __dirname + "/db/topics.db",  autoload: true});
+db.authlog = new nedb({filename: __dirname + "/db/authlog.db", autoload: true});
 
 
 /* ОПРЕДЕЛЕНИЯ ФУНКЦИЙ
@@ -56,11 +57,20 @@ const putlog = (ip, reqMeth, pathname, kodOtv, lengthOtv) => {
       dt  = `${y}-${m}-${d}`,
       tm  = `${h}:${i}:${s}`;
    
+   // Пишем данные в серверный лог
    fs.appendFile(
       __dirname + `/logs/${dt}.log`,
       `${ip} [${tm}] ${reqMeth} ${pathname} ${kodOtv} ${lengthOtv}\n`,
       e => {}
    )
+   
+   // Пишем успешный запрос авторизации в коллекцию authlog
+   if (pathname.includes(" login]") && lengthOtv > 5)
+      db.authlog.insert({
+         d:  `${dt} ${tm}`,
+         l:  pathname.replace(/[\[\], ]/g, '').replace("login", ''),
+         ip: ip
+      });
 };
 
 // Генерирование числового значения капчи по её Id
@@ -178,17 +188,26 @@ https.createServer(httpsOpt, (zapros, otvet) => {
       zapros.on("end",  async () => {
          let cont = await api(postData, ADDR);
          sendOtvet(otvet, 200, "text/plain", cont);
+
          // Определяем логин и запрашиваемую функцию API;
-         // логируем только запросы авторизации (функция login)
-         let logCont = '';
+         // пишем логин и запрашиваемую функцию в серверный лог
+         // (если функция содержится в списке логируемых функций),
+         // а успешный запрос авторизации - еще и в базу (authlog)
+         // с помощью функции putlog (определена выше)
+         let logCont  = '';
+         let logFuncs = ["login", "classAdd", "classDel", "subjAdd", "subjEdit",
+            "subjDel", "usAddEdit", "usImport", "usSetAdmin", "usBlock",
+            "usChPwd", "tutorSet", "distrEdit", "classesGroups", "topicEdit",
+            "gradeAdd", "subgrEdit", "subgrPups"];
          try {
             let postDataObj = JSON.parse(postData);
             let logLogin    = postDataObj.l || "none";
             let logFunc     = postDataObj.f || "none";
-            if (logFunc == "login") logCont = `[${logLogin}]`;
+            if (logFuncs.includes(logFunc))
+               logCont = `[${logLogin} ${logFunc}]`;
          }
          catch(e) {;}
-         if (logCont) putlog(ADDR, "POST", logCont, 200, cont.length);
+         if (logCont) putlog(ADDR, "POST", logCont, 200, cont.length);         
       });      
    }
    
