@@ -17,7 +17,6 @@ const DOCROOT  = __dirname + "/www/",
       {PORT, SERVER, ERR404, MIME, PWD, SALT, ADMIN, KEYPATH, CERTPATH}
                = require("./config"),
       api      = require("./api"),
-      putlog   = require("./api/putlog"),
       captGen  = require("./api/captchaGen"),
 
       httpsOpt = {
@@ -43,6 +42,26 @@ db.topics  = new nedb({filename: __dirname + "/db/topics.db",  autoload: true});
 
 /* ОПРЕДЕЛЕНИЯ ФУНКЦИЙ
  * ----------------------------------------------------------------------- */
+
+// Запись серверного лога
+const putlog = (ip, reqMeth, pathname, kodOtv, lengthOtv) => {
+   let
+      now = new Date(),
+      y   = now.getFullYear(),
+      m   = (now.getMonth() + 1).toString().padStart(2, '0'),
+      d   = now.getDate().toString().padStart(2, '0'),
+      h   = now.getHours().toString().padStart(2, '0'),
+      i   = now.getMinutes().toString().padStart(2, '0'),
+      s   = now. getSeconds().toString().padStart(2, '0'),
+      dt  = `${y}-${m}-${d}`,
+      tm  = `${h}:${i}:${s}`;
+   
+   fs.appendFile(
+      __dirname + `/logs/${dt}.log`,
+      `${ip} [${tm}] ${reqMeth} ${pathname} ${kodOtv} ${lengthOtv}\n`,
+      e => {}
+   )
+};
 
 // Генерирование числового значения капчи по её Id
 // (используется также для генерирования родительских паролей из детских)
@@ -119,7 +138,8 @@ https.createServer(httpsOpt, (zapros, otvet) => {
    if (!pathname.includes(".")) pathname += "/index.html";
    pathname = pathname.replace("//", '/').replace(/\.\./g, '');
    
-   let ADDR = zapros.connection.remoteAddress.replace("::1", "127.0.0.1");
+   let ADDR = zapros.connection.remoteAddress
+            . replace("::1", "127.0.0.1").replace(/\:.*\:/, '');
    
    // Если пришел запрос контактов администратора
    if (pathname == "/a.a") sendOtvet(otvet, 200, "text/plain", ADMIN);
@@ -146,7 +166,8 @@ https.createServer(httpsOpt, (zapros, otvet) => {
          }
          else {
             sendOtvet(otvet, 200, mtip, cont);
-            putlog(ADDR, "GET", pathname, 200, cont.length);
+            // Успешные GET-запросы не логируются, чтобы не раздувать лог
+            // putlog(ADDR, "GET", pathname, 200, cont.length);
          }
       });
    
@@ -157,9 +178,16 @@ https.createServer(httpsOpt, (zapros, otvet) => {
       zapros.on("end",  async () => {
          let cont = await api(postData, ADDR);
          sendOtvet(otvet, 200, "text/plain", cont);
-         // Здесь еще блок определения логина и запрашиваемой функции
-         // (вычленяем их из postData, если они там есть), пишем вместо '/'
-         putlog(ADDR, "POST", '/', 200, cont.length);
+         // Определяем логин и запрашиваемую функцию API
+         let logCont;
+         try {
+            let postDataObj = JSON.parse(postData);
+            let logLogin    = postDataObj.l || "none";
+            let logFunc     = postDataObj.f || "none";
+            logCont = `/ [${logLogin}, ${logFunc}]`;
+         }
+         catch(e) {logCont = '/';}
+         putlog(ADDR, "POST", logCont, 200, cont.length);
       });      
    }
    
