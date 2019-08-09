@@ -6,6 +6,7 @@
       "svg":   "image/svg+xml",
       "gif":   "image/gif",
       "css":   "text/css",
+      "txt":   "text/plain",
       "html":  "text/html",
       "js":    "text/javascript",
       "ico":   "image/x-icon",
