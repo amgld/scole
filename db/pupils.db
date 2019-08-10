@@ -3,11 +3,11 @@
 {"Ulogin":"kataev","Ufamil":"Катаев","Uname":"Владимир","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"41UrHJkfAjsbKPAc"}
 {"Ulogin":"ezhova","Ufamil":"Ежова","Uname":"Дарья","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"47t94Y5mzNugElUY"}
 {"Ulogin":"ezhov","Ufamil":"Ежов","Uname":"Александр","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"4Dp6tfBxjGx3pLUu"}
-{"Ulogin":"elkin","Ufamil":"Ёлкин","Uname":"Тимофей","Uclass":"11З","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"MqlYHh5SPkNE9hNGzvAFDzgY","_id":"4POBct9mvlLCXxW0"}
+{"Ulogin":"elkin","Ufamil":"Ёлкин","Uname":"Тимофей","Uclass":"11З","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"MqlYHh5SPkNE9hNGzvAFDzgY","_id":"4POBct9mvlLCXxW0","groups":["11З-инф1"]}
 {"Ulogin":"zavyalova","Ufamil":"Завьялова","Uname":"Юлия","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"BWuTjFqOh1FKq1AF"}
 {"Ulogin":"babarikina","Ufamil":"Бабарыкина","Uname":"Дарья","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"CwvP4GtDdur3gT53"}
 {"Ulogin":"orlov","Ufamil":"Орлов","Uname":"Василий","Uclass":"11З","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"MqlYHh5SPkNE9hNGzvAFDzgY","_id":"DOreE8dUwPzeBj9n","block":true}
-{"Ulogin":"davidov","Ufamil":"Давыдов","Uname":"Иван","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"GGARQ1dRYMMJ267a"}
+{"Ulogin":"davidov","Ufamil":"Давыдов","Uname":"Иван","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"GGARQ1dRYMMJ267a","groups":["11З-инф1"]}
 {"Ulogin":"vaulina","Ufamil":"Ваулина","Uname":"Екатерина","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"HalczdAgAOS7bjcH"}
 {"Ulogin":"kostenko","Ufamil":"Костенко","Uname":"Александра","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"JEvkd1YpyAHYsmad"}
 {"Ulogin":"prujinkina","Ufamil":"Пружинкина","Uname":"Дарья","Uclass":"10Ж","Upwd":"cqDLnaAA7qmVIwwGSxpGouEQ","UpwdPar":"3sT8yhWCpxrMMq5689yRiwQI","_id":"K5eTiAdRFpu8iNJW"}
@@ -17,7 +17,7 @@
 {"Ulogin":"grebenkin","Ufamil":"Гребёнкин","Uname":"Константин","Uclass":"8А","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"MqlYHh5SPkNE9hNGzvAFDzgY","_id":"PQ0AO8XAAjLuctVI","groups":["8А-инф1","8А-мальч"]}
 {"Ulogin":"nikitina","Ufamil":"Никитина","Uname":"Екатерина","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"TrUZbO0AIqn8FnQ7"}
 {"Ulogin":"tebenkov","Ufamil":"Тебеньков","Uname":"Дмитрий","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"YQ3ZgCcYjndcNhLQ"}
-{"Ulogin":"kazakova","Ufamil":"Казакова","Uname":"Дарья","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"ZTCCmUNTh19Mn6wy"}
+{"Ulogin":"kazakova","Ufamil":"Казакова","Uname":"Дарья","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"ZTCCmUNTh19Mn6wy","groups":["11З-инф1"]}
 {"Ulogin":"yanchina","Ufamil":"Янчина","Uname":"Анна","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"aiEH7IXn8xBoQrTp"}
 {"Ulogin":"sokolova","Ufamil":"Соколова","Uname":"Елена","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"IfgHQpiRXfLNw9SVvdVZ2v9T","Uclass":"11З","_id":"hSea7NXnSKV5psuZ"}
 {"Ulogin":"pridur","Ufamil":"Придурковатый","Uname":"Константин","Uclass":"8А","Upwd":"S9e2JymRKuW81pLIzpYIGk9B","UpwdPar":"MqlYHh5SPkNE9hNGzvAFDzgY","_id":"i6upSwDMemybKUyi","groups":["8А-инф1","8А-мальч"]}

@@ -26,7 +26,7 @@ module.exports = async (argArr) => {
       if (!res.length) return "none";
       let pup = res[0];
       let pupGroups = [pup.Uclass];
-      if (pup.groups) pupGroups = [pup.Uclass, ...pup.groups];      
+      if (pup.groups) pupGroups = [pup.Uclass, ...pup.groups];   
       
       // Из коллекции topics получаем все темы, дз и веса
       // для этих классов и подгрупп и пишем это все в объект resp
@@ -40,17 +40,18 @@ module.exports = async (argArr) => {
             resp[k][t.d] = [t.t, t.h, t.w];
          }
       }
-      
+            
       // Из коллекции grades получаем все отметки этого ребенка (в том числе
       // итоговые) и подписываем их в объект resp
       res = await dbFind("grades", {p: lg});
       for (let otm of res) {
          let k = `${otm.c}_${otm.s}_${otm.t}`;
+         if (!resp[k]) resp[k] = {};
          if (resp[k][otm.d]) resp[k][otm.d].push(otm.g);
          else resp[k][otm.d] = ['', '', 0, otm.g]; // итоговые отметки
       }
       
       return JSON.stringify(resp);
    }
-   catch(e) {return "none";}
+   catch(e) {return "none"; console.info(e)}
 };
