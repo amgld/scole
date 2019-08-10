@@ -198,17 +198,20 @@ https.createServer(httpsOpt, (zapros, otvet) => {
          let logCont  = '';
          let logFuncs = ["login", "classAdd", "classDel", "subjAdd", "subjEdit",
             "subjDel", "usAddEdit", "usImport", "usSetAdmin", "usBlock",
-            "usChPwd", "tutorSet", "distrEdit", "classesGroups", "topicEdit",
-            "gradeAdd", "subgrEdit", "subgrPups"];
+            "usChPwd", "tutorSet", "distrEdit", "topicEdit", "gradeAdd",
+            "subgrEdit", "subgrPups"];
          try {
             let postDataObj = JSON.parse(postData);
             let logLogin    = postDataObj.l || "none";
             let logFunc     = postDataObj.f || "none";
+            let logRole     = `_${postDataObj.t}` || "_none";
+            if (logLogin == "admin") logRole = '';
             if (logFuncs.includes(logFunc))
-               logCont = `[${logLogin} ${logFunc}]`;
+               logCont = `[${logLogin}${logRole} ${logFunc}]`;
          }
          catch(e) {;}
-         if (logCont) putlog(ADDR, "POST", logCont, 200, cont.length);         
+         let codeOtv = (cont == "none") ? 403 : 200;
+         if (logCont) putlog(ADDR, "POST", logCont, codeOtv, cont.length);         
       });      
    }
    
