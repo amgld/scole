@@ -14,6 +14,21 @@
 // }
 // Если предмет = '', то возвращаются только puList и pnList, причем
 // без заблокированных учащихся
+
+// Одновременная сортировка двух массивов: первый из логинов, второй из
+// фамилий (кириллицей). Сортируется второй массив по алфавиту, а первый
+// массив сортируется в соответствии с отсортированным вторым.
+// Возвращается массив, состоящий из двух этих отсортированных массивов 
+const sort2 = (arrLat, arrRus) => {
+   let arrRusNew = [...arrRus], arrLatNew = [];
+   arrRusNew.sort((a, b) => a.localeCompare(b, "ru"));
+   for (let i=0; i<arrRusNew.length; i++) {
+      let iNew = arrRus.indexOf(arrRusNew[i]);
+      arrLatNew[i] = arrLat[iNew];
+   }
+   return [arrLatNew, arrRusNew];
+}
+
 module.exports = async (argsObj) => {
    try {
       let gr = argsObj[0].substr(0, 20).trim(),
@@ -50,11 +65,13 @@ module.exports = async (argsObj) => {
          }
       }
       if (puListMain.length || puListBlock.length) {
-         puListMain.sort();         
-         pnListMain.sort((a, b) => a.localeCompare(b, "ru"));
+         let arr2main = sort2(puListMain, pnListMain);
+         puListMain = arr2main[0];
+         pnListMain = arr2main[1];         
          if (sb) {
-            puListBlock.sort();
-            pnListBlock.sort((a, b) => a.localeCompare(b, "ru"));
+            let arr2block = sort2(puListBlock, pnListBlock);
+            puListBlock = arr2block[0];
+            pnListBlock = arr2block[1];
             resp.puList = [...puListMain, ...puListBlock];
             resp.pnList = [...pnListMain, ...pnListBlock];
          }
