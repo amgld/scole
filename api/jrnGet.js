@@ -53,5 +53,5 @@ module.exports = async (argArr) => {
       
       return JSON.stringify(resp);
    }
-   catch(e) {return "none"; console.info(e)}
+   catch(e) {return "none";}
 };
