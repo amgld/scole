@@ -65,12 +65,13 @@ const putlog = (ip, reqMeth, pathname, kodOtv, lengthOtv) => {
    )
    
    // Пишем успешный запрос авторизации в коллекцию authlog
-   if (pathname.includes(" login]") && lengthOtv > 5)
-      db.authlog.insert({
-         d:  `${dt} ${tm}`,
-         l:  pathname.replace(/[\[\], ]/g, '').replace("login", ''),
-         ip: ip
-      });
+   if (pathname.includes(" login]") && lengthOtv > 5) {
+      let loginArr = pathname.replace(/[\[\], ]/g, '').replace("login", '')
+                   . split('_'),
+          login = loginArr[0],
+          categ = loginArr[1] || "root";
+      db.authlog.insert({d: `${dt} ${tm}`, l: login, c: categ, ip: ip});
+   }
 };
 
 // Генерирование числового значения капчи по её Id
