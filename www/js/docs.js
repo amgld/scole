@@ -5,8 +5,8 @@
 "use strict";
 
 // Формирование содержимого таблицы с документами одного учащегося
-const sprDocsShow = async () => {
-   
+const sprDocsShow = async (pupil) => {
+   alert(`Показ справок ${pupil}`);
 };
 
 // Формирование списка детей в селекте выбора учащегося
@@ -19,7 +19,7 @@ const sprPupListShow = async () => {
       for (let pup of pupilsList)
          selPupilInner += `<option value="${pup[1]}">${pup[0]}</option>`;
       dqs("#sprSelPupil").innerHTML = selPupilInner;
-      sprDocsShow(); // показываем справки первого учащегося
+      sprDocsShow(pupilsList[0][1]); // показываем справки первого учащегося
    }   
    else info(1, "Ошибка на сервере");
 }
@@ -27,7 +27,7 @@ const sprPupListShow = async () => {
 // Формирование контента страницы (regNow, regYst, regYfin определены в ini.js)
 createSection("docs", `
    <select id="sprSelClass" onChange="sprPupListShow()"></select>
-   <select id="sprSelPupil" onChange="sprDocsShow()></select>
+   <select id="sprSelPupil" onChange="sprDocsShow(this.value)"></select>
    <div id="sprAdd">
       <h3>Добавить новый документ</h3>
       <select id="sprVid"></select>
@@ -43,22 +43,23 @@ createSection("docs", `
    </tr></table>
 `);
 
+// Формируем селект выбора вида документа (sprVid определен в ini.js)
+let sprVidInner = '';
+for (let kod of Object.keys(sprVid))
+   sprVidInner += `<option value="${kod}">${sprVid[kod]}</option>`;
+dqs("#sprVid").innerHTML = sprVidInner; 
+
 // Динамически формируем содержимое страницы (имя метода = имени пункта меню!)
 getContent.docs = async () => {
    
-   let sprRole = dqs("#selRole").value;
-   
-   // Формируем селект выбора вида документа (sprVid определен в ini.js)
-   let sprVidInner = '';
-   for (let kod of Object.keys(sprVid))
-      sprVidInner += `<option value="${kod}">${sprVid[kod]}</option>`;
-   dqs("#sprVid").innerHTML = sprVidInner; 
+   let sprRole = dqs("#selRole").value;   
    
    // Если он учащийся или родитель, показываем ему только его справки
    if (sprRole == "pupil" || sprRole == "parent") {
       dqs("#sprSelClass").style.display = "none";
       dqs("#sprSelPupil").style.display = "none";
       dqs("#sprAdd")     .style.display = "none";
+      sprDocsShow(uLogin);
    }
    
    // Если он классный руководитель, показываем ему его классы
