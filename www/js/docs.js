@@ -4,6 +4,19 @@
  */
 "use strict";
 
+// Добавление нового документа (запрос к API)
+const sprAdd = async () => {
+   let vid   = dqs("#sprVid").value,
+       start = dqs("#sprStart").value,
+       fin    = dqs("#sprFin").value,
+       prim  = dqs("#sprPrim").value,
+       pupil = dqs("#sprSelPupil").value;
+
+   let apiResp = await apireq("sprAdd", [vid, start, fin, prim, pupil]);
+   if (apiResp != "none") sprDocsShow(pupil);
+   else info(1, "Ошибка на сервере,<br>документ не добавлен");
+}
+
 // Формирование содержимого таблицы с документами одного учащегося
 const sprDocsShow = async (pupil) => {
    alert(`Показ справок ${pupil}`);
@@ -36,10 +49,11 @@ createSection("docs", `
       <nobr>по <input id="sprFin" type="date"
          min="${regYst}" max="${regYfin}" value="${regNow}"></nobr>
       <input id="sprPrim" type="text" placeholder="Примечание">
+      <button id="sprSubm" type="button" onClick="sprAdd()"> >> </button>
       <h3>Зарегистрированные документы</h3>
    </div>
    <table id="sprShowDel"><tr>
-      <th> </th><th>Вид документа</th><th>с</th><th>по</th><th>Прим.</th>
+      <th> </th><th>Вид документа</th><th>Даты</th><th>Прим.</th>
    </tr></table>
 `);
 
@@ -59,7 +73,7 @@ getContent.docs = async () => {
       dqs("#sprSelClass").style.display = "none";
       dqs("#sprSelPupil").style.display = "none";
       dqs("#sprAdd")     .style.display = "none";
-      sprDocsShow(uLogin);
+      sprDocsShow("pupil"); // реальный логин подпишется на бэкенде 
    }
    
    // Если он классный руководитель, показываем ему его классы
