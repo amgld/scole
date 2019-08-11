@@ -15,7 +15,9 @@
 /* ОТМЕТКИ
    ----------------------------------------------------- */
 div#regGrades {
-   width:calc(100% - 430px); text-align:left; position:relative;}
+   width:calc(100% - 430px); text-align:left; position:relative;
+   margin-bottom:50px;
+}
 div#regGrades div {
    width:calc(100% - 10em - 10px); margin-top:0px; margin-left:calc(10em + 5px);
    overflow-x:auto; text-align:left; white-space:nowrap;}
