@@ -19,6 +19,14 @@ const sprAdd = async () => {
    else info(1, "Ошибка на сервере,<br>документ не добавлен");
 }
 
+// Удаление документа по его id
+const sprDel = async (id) => {
+   if (!confirm("Вы уверены?")) return;
+   let apiResp = await apireq("sprDel", [id]);
+   if (apiResp != "none") sprDocsShow(dqs("#sprSelPupil").value);
+   else info(1, "Ошибка на сервере,<br>документ не удален");
+}
+
 // Формирование содержимого таблицы с документами одного учащегося
 // (API возвращает массив объектов справок одного учащегося)
 const sprDocsShow = async (pupil) => {
@@ -35,19 +43,23 @@ const sprDocsShow = async (pupil) => {
       if (!sprList.length)
          innerTable += "<tr><td colspan=4>Документов не найдено</td></tr>";
       
-      else
+      else {
+         let i = 0;
          for (let spr of sprList) {
+            i++;
             let start = dConv(spr.start), fin = dConv(spr.fin);
             let dt = (start == fin) ? start : `${start} – ${fin}`;
+            let firstTD = (dqs("#selRole").value == "pupil") ? `<td>${i}</td>` :
+               `<td title="Удалить документ" `
+             + `onClick=sprDel("${spr._id}")>&#10060;</td>`;
             
-            innerTable += `<tr><td onClick=sprDel("${spr._id}")>&#10060;</td>`
-                        + `<td>${sprVid[spr.vid]}</td><td>${dt}</td>`
-                        + `<td>${spr.prim}</td></tr>`;
+            innerTable += `<tr>${firstTD}<td>${sprVid[spr.vid]}</td>`
+                        + `<td>${dt}</td><td>${spr.prim}</td></tr>`;
          }
-      
+      }
       dqs("#sprShowDel").innerHTML = innerTable;
    }
-   else info(1, "Ошибка на сервере");
+   else info(1, "Не могу загрузить<br>список документов");
 };
 
 // Формирование списка детей в селекте выбора учащегося

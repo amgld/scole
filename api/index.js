@@ -21,7 +21,8 @@ const modReq = {
    "topicEdit":   [1,1], "topicsGet":   [1,1], "gradesGet":     [1,1],
    "gradeAdd":    [1,1], "subgrEdit":   [1,1], "subgrPups":     [1,1],
    "parCodes":    [1,1], "jrnGet":      [1,1], "absentGet":     [1,1],
-   "pupilsList":  [1,1], "sprAdd":      [1,1], "sprGet":        [1,1]
+   "pupilsList":  [1,1], "sprAdd":      [1,1], "sprGet":        [1,1],
+   "sprDel":      [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -45,7 +46,7 @@ const RIGHTS = {
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",
       "gradesGet", "subgrEdit", "subgrPups", "parCodes", "absentGet",
-      "pupilsList", "sprAdd", "sprGet"
+      "pupilsList", "sprAdd", "sprGet", "sprDel"
    ],
    "pupil":   ["subjList", "teachList", "jrnGet", "absentGet", "sprGet"],
    "parent":  ["subjList", "teachList", "jrnGet", "absentGet", "sprGet"]
@@ -77,7 +78,7 @@ module.exports = async (post, addr) => {
    // (для некоторых функций API, требующих валидного логина юзера)
    let fNames = [
       "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet",
-      "absentGet", "pupilsList", "sprAdd", "sprGet"
+      "absentGet", "pupilsList", "sprAdd", "sprGet", "sprDel"
    ];
    if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);  
    

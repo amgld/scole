@@ -249,6 +249,8 @@ section#docs table th, section#docs table td {
    border:1px solid #963; padding:5px;}
 section#docs table td:nth-child(2), section#docs table td:nth-child(4) {
    text-align:left;}
+section#docs table td:first-child {
+   cursor:pointer;}
 section#docs h3 {
    margin:15px 0px 5px;}
    
