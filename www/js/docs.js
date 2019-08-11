@@ -11,6 +11,8 @@ const sprAdd = async () => {
        fin    = dqs("#sprFin").value,
        prim  = dqs("#sprPrim").value,
        pupil = dqs("#sprSelPupil").value;
+       
+   if (start > fin) {info(1, "Неверные даты!"); return;}
 
    let apiResp = await apireq("sprAdd", [vid, start, fin, prim, pupil]);
    if (apiResp != "none") sprDocsShow(pupil);
@@ -18,8 +20,34 @@ const sprAdd = async () => {
 }
 
 // Формирование содержимого таблицы с документами одного учащегося
+// (API возвращает массив объектов справок одного учащегося)
 const sprDocsShow = async (pupil) => {
-   alert(`Показ справок ${pupil}`);
+   // Преобразование даты вида 2019-09-13 к формату 13.09
+   const dConv = d => `${d.substr(8,2)}.${d.substr(5,2)}`;
+   
+   let innerTable = "<tr><th> </th><th>Вид документа</th>"
+                  + "<th>Даты</th><th>Прим.</th></tr>";
+   let apiResp = await apireq("sprGet", [pupil]);
+   if (apiResp != "none") {
+      let sprList = JSON.parse(apiResp);
+      sprList.sort((a, b) => a.fin > b.fin);
+      
+      if (!sprList.length)
+         innerTable += "<tr><td colspan=4>Документов не найдено</td></tr>";
+      
+      else
+         for (let spr of sprList) {
+            let start = dConv(spr.start), fin = dConv(spr.fin);
+            let dt = (start == fin) ? start : `${start} – ${fin}`;
+            
+            innerTable += `<tr><td onClick=sprDel("${spr._id}")>&#10060;</td>`
+                        + `<td>${sprVid[spr.vid]}</td><td>${dt}</td>`
+                        + `<td>${spr.prim}</td></tr>`;
+         }
+      
+      dqs("#sprShowDel").innerHTML = innerTable;
+   }
+   else info(1, "Ошибка на сервере");
 };
 
 // Формирование списка детей в селекте выбора учащегося
@@ -52,9 +80,7 @@ createSection("docs", `
       <button id="sprSubm" type="button" onClick="sprAdd()"> >> </button>
       <h3>Зарегистрированные документы</h3>
    </div>
-   <table id="sprShowDel"><tr>
-      <th> </th><th>Вид документа</th><th>Даты</th><th>Прим.</th>
-   </tr></table>
+   <table id="sprShowDel"></table>
 `);
 
 // Формируем селект выбора вида документа (sprVid определен в ini.js)

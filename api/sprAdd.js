@@ -21,14 +21,15 @@ module.exports = async (args) => {
       let vid   = args[0].substr(0,  50).trim(),
           start = args[1].substr(0,  10).trim(),
           fin    = args[2].substr(0,  10).trim(),
-          prim  = args[3].substr(0, 100).trim(),
+          prim  = args[3].substr(0, 100).trim() || '',
           pupil = args[4].substr(0,  20).trim(),
           clruk = args[5].substr(0,  20).trim();
 
-      if (!vid || !start || !fin || !prim || !pupil || !clruk) return "none";
+      if (!vid || !start || !fin || !pupil || !clruk) return "none";
       let dtPatt = /^\d{4}-\d{2}-\d{2}$/;
       if (!dtPatt.test(start) || !dtPatt.test(fin)) return "none";
-      prim = prim.replace(/[^а-яёА-ЯЁa-zA-Z0-9.,:\-!?№]/g, '');
+      if (start > fin) return "none";
+      prim = prim.replace(/[^а-яёА-ЯЁa-zA-Z0-9.,:\-!?№ ]/g, '');
       
       // Определяем класс ребенка
       let pupRes = await dbFind("pupils", {Ulogin: pupil});
@@ -41,7 +42,9 @@ module.exports = async (args) => {
       if (clRes[0].tutor != clruk) return "none";
       
       // Пишем новый документ в базу
-      db.spravki.insert({pupil:pupil, vid:vid, start:start, fin:fin, prim:prim});
+      await db.spravki.insert(
+         {pupil: pupil, vid: vid, start: start, fin: fin, prim: prim}
+      );
       
       return "success";
    }
