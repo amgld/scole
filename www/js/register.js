@@ -21,20 +21,10 @@ let rgClassName = '', rgSubjCode = '', rgTeachLgn = '';
 //    }
 let topicsObj = {}, gradesObj = {};
 
-let regDt = new Date(),
-    regY  = regDt.getFullYear(),
-    regM  = (regDt.getMonth() + 1).toString().padStart(2, '0'),
-    regD  = regDt.getDate().toString().padStart(2, '0'),
-    regNow = `${regY}-${regM}-${regD}`;
-
-// Начало и окончание учебного года
-let regYst  = regDt.getMonth() > 7 ? `${regY}-09-01` : `${regY - 1}-09-01`,
-    regYfin = regDt.getMonth() > 7 ? `${regY + 1}-06-30` : `${regY}-06-30`;
-    
 // Текст placeholder'а в поле редактирования темы урока
 let regTopPH = `Введите тему урока\n(если тема пуста, колонка будет удалена)`;
 
-// Формирование контента страницы
+// Формирование контента страницы (regNow, regYst, regYfin определены в ini.js)
 createSection("register", `
    <select id="regClassSel" onChange="regPagesSelLoad(this.value);"></select>
    <select id="regPageSel"  onChange="loadGrades()"></select><br>
