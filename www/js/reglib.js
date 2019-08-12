@@ -246,8 +246,10 @@ const gradesShow = () => {
       // Список детей
       content = "<table id='regPupList'>"
               + "<tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr>";
-      for (let i=0; i<gradesObj.pnList.length; i++)
-         content += `<tr><td id="rp${i}">${gradesObj.pnList[i]}</td></tr>`;
+      for (let i=0; i<gradesObj.pnList.length; i++) {
+         let n = (i > 8) ? i+1 : "  " + (i+1);
+         content += `<tr><td id="rp${i}">${n}. ${gradesObj.pnList[i]}</td></tr>`;
+      }
       content += "</table>";
       
       // Отметки
