@@ -44,7 +44,8 @@ module.exports = async (args) => {
       }     
       
       // Читаем документы из базы и отдаем
-      let resp = await dbFind("spravki", {pupil: pupil});      
+      let resp = await dbFind("spravki", {pupil: pupil});
+      resp.sort((a, b) => a.fin > b.fin);
       return JSON.stringify(resp);
    }
    catch(e) {return "none";}

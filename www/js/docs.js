@@ -37,12 +37,9 @@ const sprDocsShow = async (pupil) => {
                   + "<th>Даты</th><th>Прим.</th></tr>";
    let apiResp = await apireq("sprGet", [pupil]);
    if (apiResp != "none") {
-      let sprList = JSON.parse(apiResp);
-      sprList.sort((a, b) => a.fin > b.fin);
-      
+      let sprList = JSON.parse(apiResp);      
       if (!sprList.length)
-         innerTable += "<tr><td colspan=4>Документов не найдено</td></tr>";
-      
+         innerTable += "<tr><td colspan=4>Документов не найдено</td></tr>";      
       else {
          let i = 0;
          for (let spr of sprList) {
