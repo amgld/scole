@@ -46,7 +46,7 @@ module.exports = async impUsStr => {
             newUser.Upwd = hash(usPassw, salt); // хэш пароля
             if (collect == "pupils") {
                // Добавляем хэш родительского пароля и класс
-               newUser.UpwdPar = hash('p' + captNumGen(usPassw), salt);
+               newUser.UpwdPar = hash('p' + captNumGen(newUser.Upwd), salt);
                newUser.Uclass = usClass;
             }
             else newUser.Uotch = usOtch;
