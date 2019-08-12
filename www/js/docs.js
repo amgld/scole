@@ -46,9 +46,12 @@ const sprDocsShow = async (pupil) => {
             i++;
             let start = dConv(spr.start), fin = dConv(spr.fin);
             let dt = (start == fin) ? start : `${start} – ${fin}`;
-            let firstTD = (dqs("#selRole").value == "pupil") ? `<td>${i}</td>` :
-               `<td title="Удалить документ" `
-             + `onClick=sprDel("${spr._id}")>&#10060;</td>`;
+            let firstTD = `<td title="Удалить документ" `
+                       + `onClick=sprDel("${spr._id}")>&#10060;</td>`;
+            if (
+                  dqs("#selRole").value == "pupil" ||
+                  dqs("#selRole").value == "parent"
+               ) firstTD = `<td>${i}</td>`;
             
             innerTable += `<tr>${firstTD}<td>${sprVid[spr.vid]}</td>`
                         + `<td>${dt}</td><td>${spr.prim}</td></tr>`;
