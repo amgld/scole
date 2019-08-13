@@ -80,16 +80,7 @@ module.exports = async (post, addr) => {
       "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet",
       "absentGet", "pupilsList", "sprAdd", "sprGet", "sprDel"
    ];
-   if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);  
-   
-   // Для функции получения пропусков уроков если юзер администратор,
-   // подписываем еще один аргумент "admin" в массив аргументов
-   // То же самое - для функции получения списка детей по имени класса
-   if (
-         (postDt.f == "absentGet" || postDt.f == "pupilsList")
-         && rolesArr.includes("admin")
-      )
-      postDt.z.push("admin");
+   if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
       
    // Реализуем соответствующую функцию api в зависимости от переменной f
    // и необходимости использования await и передачи модулю аргументов

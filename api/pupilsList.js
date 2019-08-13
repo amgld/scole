@@ -4,9 +4,8 @@
  */
 "use strict";
 
-// Аргументы - ["10Б", "ivanov"] или ["10Б", "ivanov", "admin"] (если он админ)
-// Логин классного руководителя с фронтенда не передается,
-// подписывается скриптом index.js, то же самое и для третьего аргумента
+// Аргументы - ["10Б", "ivanov"] или ["10Б", "ivanov"]
+// Логин кл. рук. с фронтенда не передается, подписывается скриптом index.js
 // Возвращает [["Иванов Иван", "ivanov"], ...] или "none"
 // Заблокированные учащиеся класса тоже возвращаются в общем списке
 module.exports = async (args) => {
@@ -18,14 +17,6 @@ module.exports = async (args) => {
       if (!/^\d{1,2}[A-Я]{1}$/.test(clName)) return "none";
       
       let resp = [];
-            
-      // Проверяем полномочия юзера (администратора или классного руководителя)
-      // на запрашиваемый класс
-      if (args[2] != "admin") {
-         let clRes = await dbFind("curric", {type: "class", className: clName});
-         if (!clRes.length)        return "none";
-         if (clRes[0].tutor != lg) return "none";
-      }
       
       // Идем циклом по всем ученикам данного класса
       let pupilsArr = await dbFind("pupils", {Uclass: clName});
