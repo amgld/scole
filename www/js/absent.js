@@ -27,7 +27,7 @@ const absShow = async (clORpup) => {
    
    // Получаем объект respectObj с данными об уважительных причинах пропусков:
    // {
-   //    ivanov: [["2019-09-02", "2019-09-13"], ...],
+   //    ivanov: [["d002", "d013"], ...],
    //    petrov: ...
    // }
    apiResp = await apireq("sprResp", reqObj);
@@ -58,8 +58,15 @@ const absShow = async (clORpup) => {
    for (let propusk of absentArr) {
       if (!absVal[propusk.p]) absVal[propusk.p] = {...pattern};
       absVal[propusk.p][propusk.d][0] += propusk.abs; // все пропуски
-   }
-}
+      
+      // Теперь считаем уважительные
+      for (let paraDat of respectObj[propusk.p]) {
+         if (propusk.d >= paraDat[0] && propusk.d <= paraDat[1])
+            absVal[propusk.p][propusk.d][1] += propusk.abs;
+      }
+   } // конец подсчета общего числа пропусков всех учеников
+   alert(JSON.stringify(respectObj));
+} // конец функции подсчета и публикации данных о посещаемости
 
 // Формирование списка детей в селекте выбора учащегося
 const absPupListShow = async () => {
