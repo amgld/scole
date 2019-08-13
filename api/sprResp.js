@@ -1,22 +1,24 @@
 /**
- *   ПОЛУЧЕНИЕ ДАННЫХ О ПОСЕЩАЕМОСТИ
+ *   ПОЛУЧЕНИЕ ДАННЫХ ОБ УВАЖИТЕЛЬНЫХ ПРИЧИНАХ ПРОПУСКОВ УРОКОВ
  *   Copyright © 2019, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 
 // В запросе приходят ["8Б", "ivanov", "petrov"]
-//      8Б - это запрашиваемый класс (пустой, если нужен один ученик)
+//      8Б - это запрашиваемый класс или группа (пустой, если нужен один ученик)
 //  ivanov - это запрашиваемый ученик (пустой, если запрашивается класс)
 //  petrov - это логин автора запроса (подписывается скриптом index.js)
 // 
 // При вызове с фронтенда передается массив, состоящий только из двух
 // первых аргументов (один из них всегда пустой)
 // 
-// Возвращается массив, состоящий из объектов вида
-// {d: "d730", c: "11Б", s: s430, t: sidorov, p: ivanov, abs: 2}
-// Здесь sidorov - логин преподавателя, 2 - количество пропущенных уроков
+// Возвращается объект с датами начала и окончания действия каждой справки
+// {
+//    ivanov: [["d023", "d025"], ["d207", "d207"], ...],
+//    petrov: ...
+// }
 module.exports = async (args) => {
-   let resp = [], bdReq = {};
+   let resp = {}, bdReq = {};
    try {
       let clName = args[0].substr(0, 20).trim(),
           pupil  = args[1].substr(0, 20).trim(),
@@ -31,16 +33,9 @@ module.exports = async (args) => {
          if (!res.length) return "none";
       }      
       
-      if (pupil) bdReq = {p: pupil};   // если запрашивается один ученик      
-      else       bdReq = {c: clName};  // если запрашивается класс
-      
-      let grResp = await dbFind("grades", bdReq);
-      for (let gr of grResp) {
-         let grade = gr.g;
-         if (!grade.includes('н')) continue;
-         let absVal = grade.length - grade.replace(/н/g, '').length;
-         resp.push({d:gr.d, c:gr.c, s:gr.s, t:gr.t, p:gr.p, abs:absVal});
-      }
+      if (pupil) bdReq = {pupil: pupil};    // Если запрашивается один ученик      
+      else       bdReq = {Uclass: clName};  // Если запрашивается класс      
+      let sprResp = await dbFind("spravki", bdReq);
       
       return JSON.stringify(resp);
    }

@@ -43,7 +43,7 @@ module.exports = async (args) => {
       
       // Пишем новый документ в базу
       await db.spravki.insert(
-         {pupil: pupil, vid: vid, start: start, fin: fin, prim: prim}
+         {Uclass:pupClass, pupil:pupil, vid:vid, start:start, fin:fin, prim:prim}
       );
       
       return "success";
