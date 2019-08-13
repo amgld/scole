@@ -18,7 +18,7 @@ const absShow = async (clORpup) => {
    if (/[А-Я]/.test(clORpup)) reqObj = [clORpup, ''];   // запрошен весь класс
    else     {onePupil = true; reqObj = ['', clORpup];}  // запрошен один ученик
    
-   // Получаем исходный массив объектов с данными о посещаемости
+   // Получаем исходный массив absentArr объектов с данными о посещаемости
    // (учитель Сидоров, учащийся Иванов)
    // [{d: "d730", c: "11Б", s: s430, t: sidorov, p: ivanov, abs: 2}, ...]   
    let apiResp = await apireq("absentGet", reqObj);
@@ -45,27 +45,62 @@ const absShow = async (clORpup) => {
    }
    
    // Подсчет числа пропусков (общего и по уважительной) всех учеников
-   // по учебным периодам; результат в объекте absVal, отсортированном
-   // по логинам учащихся, а внутри каждого учащегося - по ключам
+   // по учебным периодам; результат в объекте absVal:
    // {
    //    ivanov: {d628a: [34, 28], ...},
    //    petrov: {d628a: [56, 13], ...},
    //    ...
    // }
    let absVal = {}, pattern = {}; // шаблон объекта одного ученика
-   for (let itName of Object.keys(DTSIT)) pattern[itName] = [0, 0];
+   for (let itName of Object.keys(DTSIT)) {
+      pattern[itName] = [0, 0];
+   }
       
    for (let propusk of absentArr) {
-      if (!absVal[propusk.p]) absVal[propusk.p] = {...pattern};
-      absVal[propusk.p][propusk.d][0] += propusk.abs; // все пропуски
       
-      // Теперь считаем уважительные
+      // Сначала считаем все пропуски
+      if (!absVal[propusk.p]) absVal[propusk.p] = {...pattern};
+      for (let itName of Object.keys(DTSIT)) {
+         if (propusk.d >= DTSIT[itName][2] && propusk.d <= DTSIT[itName][3])
+            absVal[propusk.p][itName][0] += propusk.abs; // все пропуски
+      }
+      
+      // Теперь считаем уважительные, цикл по объекту respectObj
+      if (!respectObj[propusk.p]) continue; // если у него нет справок вообще
       for (let paraDat of respectObj[propusk.p]) {
-         if (propusk.d >= paraDat[0] && propusk.d <= paraDat[1])
-            absVal[propusk.p][propusk.d][1] += propusk.abs;
+         if (propusk.d >= paraDat[0] && propusk.d <= paraDat[1]) // если он ув.
+            for (let itName of Object.keys(DTSIT)) {
+               if (propusk.d >= DTSIT[itName][2] && propusk.d <= DTSIT[itName][3])
+                  absVal[propusk.p][itName][1] += propusk.abs;
+            }
       }
    } // конец подсчета общего числа пропусков всех учеников
-   alert(JSON.stringify(respectObj));
+   
+   // Публикация данных о посещаемости
+   let dann = '';   
+   if (Object.keys(absVal).length) {
+      
+      // Сначала публикуем таблицу со сводными данными
+      dann = "<table border=1><tr><th rowspan=2> </th>";
+      let str1 = '', str2 = '';
+      for (let itName of Object.keys(DTSIT)) {
+         str1 += `<th colspan=2>${DTSIT[itName][0]}</th>`;
+         str2 += "<th>всего</th><th>по ув.</th>";
+      }
+      dann += `${str1}</tr><tr>${str2}</tr>`;
+      
+      for (let pupLogin of Object.keys(absVal)) {
+         dann += `<tr><td>${pupLogin}</td>`;
+         for (let itName of Object.keys(DTSIT))
+            dann += `<td>${absVal[pupLogin][itName][0]}</td>`
+                  + `<td>${absVal[pupLogin][itName][1]}</td>`;
+         dann += "</tr>";
+      }      
+      dann += "</table>"
+   }
+   else dann = "<h3>Пропусков уроков нет</h3>";
+   dqs("#absResult").innerHTML = dann;
+   
 } // конец функции подсчета и публикации данных о посещаемости
 
 // Формирование списка детей в селекте выбора учащегося
