@@ -16,7 +16,7 @@
 // состоящий из объектов вида
 // {d: "d730", c: "11Б", s: s430, t: sidorov, p: ivanov, abs: 2}
 // Здесь sidorov - логин преподавателя, 2 - количество пропущенных уроков
-module.exports = async (argsObj) => {
+module.exports = async (args) => {
    let resp = [], bdReq = {};
    try {
       let clName = args[0].substr(0, 20).trim(),

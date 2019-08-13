@@ -7,3 +7,10 @@
 createSection("absent", `
    Блок «Посещаемость»
 `);
+
+// Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
+getContent.absent = async () => {
+   let apiResp = await apireq("absentGet", ['', 'bikova']);
+   if (apiResp != "none") alert(apiResp);
+   else alert("Error!");
+};
