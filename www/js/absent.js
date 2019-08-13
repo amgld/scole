@@ -79,9 +79,10 @@ const absShow = async (clORpup) => {
    // Публикация данных о посещаемости
    let dann = '';   
    if (Object.keys(absVal).length) {
+      dann = "<h3>Сводные данные</h3>";
       
       // Сначала публикуем таблицу со сводными данными
-      dann = "<table border=1><tr><th rowspan=2> </th>";
+      dann += "<table border=1><tr><th rowspan=2> </th>";
       let str1 = '', str2 = '';
       for (let itName of Object.keys(DTSIT)) {
          str1 += `<th colspan=2>${DTSIT[itName][0]}</th>`;
@@ -97,6 +98,11 @@ const absShow = async (clORpup) => {
          dann += "</tr>";
       }      
       dann += "</table>"
+      
+      // Если запрашивался один ребенок, еще публикуем расшифровку его прогулов
+      if (onePupil) {
+         dann += "<h3>Пропуски уроков по неизвестной причине</h3>";
+      }
    }
    else dann = "<h3>Пропусков уроков нет</h3>";
    dqs("#absResult").innerHTML = dann;
@@ -114,8 +120,11 @@ const absPupListShow = async () => {
          selPupilInner += `<option value="${pup[1]}">${pup[0]}</option>`;
       dqs("#absSelPupil").innerHTML = selPupilInner;
       absShow(clName); // показываем пропуски всего класса
-   }   
-   else info(1, "Ошибка на сервере");
+   }
+   else {
+      dqs("#absSelPupil").innerHTML = '';
+      dqs("#absResult").innerHTML = "<h3>В этом классе нет учащихся</h3>";
+   }
 }
 
 // Формирование контента страницы
