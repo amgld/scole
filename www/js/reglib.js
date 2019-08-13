@@ -230,6 +230,18 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
 }
 
 // **************************************************************************
+// Показ средних баллов и сумм баллов по учащемуся с данным номером в списке
+// (номера начинаются с 0, естественно) путем обработки topicsObj и gradesObj
+const gradesStat = i => {
+   let mess = `${gradesObj.pnList[i]}\n*****\n`;
+   let sum  = 0, av = 0;
+   for (let itDate of Object.keys(DTSIT)) {
+      mess += `${DTSIT[itDate][1]}: Σ = ${sum}, m = ${av}\n`;
+   }
+   alert(mess);
+}
+
+// **************************************************************************
 // Загрузка списка детей и отметок из базы
 const gradesGet = async (className, subjCode, teachLgn) => {
    let apiResp = await apireq("gradesGet", [className, subjCode, teachLgn]);
@@ -248,7 +260,9 @@ const gradesShow = () => {
               + "<tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr>";
       for (let i=0; i<gradesObj.pnList.length; i++) {
          let n = (i > 8) ? i+1 : "  " + (i+1);
-         content += `<tr><td id="rp${i}">${n}. ${gradesObj.pnList[i]}</td></tr>`;
+         content += `<tr><td id="rp${i}" title="Кликните для показа статистики"`
+                  + ` onClick="gradesStat(${i})">`
+                  + `${n}. ${gradesObj.pnList[i]}</td></tr>`;
       }
       content += "</table>";
       
