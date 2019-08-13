@@ -46,7 +46,8 @@ const jrnContLoad = async () => {
    // Выводим статистику
    let stat = `<h3>Статистика</h3><table id="jrnStat"><tr><th> </th>`
             + `<th>Сумма баллов<br>(с учетом весов)</th>`
-            + `<th>Средний балл</th><th>Пропущено<br>уроков</th></tr>`;
+            + `<th>Средне&shy;взвешенный<br>балл</th>`
+            + `<th>Пропущено<br>уроков</th></tr>`;
 
    // Цикл по периодам учебного года
    for (let itDate of Object.keys(DTSIT)) {

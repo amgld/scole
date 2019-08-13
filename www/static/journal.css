@@ -15,8 +15,7 @@
 /* ТЕМЫ, Д/З, ОТМЕТКИ, ВЕСА ОТМЕТОК
    ----------------------------------------------------- */
 #journal table {
-   width:100%; border-collapse:collapse; border:1px solid #963;
-   margin-bottom:100px;}
+   width:100%; border-collapse:collapse;}
 #journal table th, #journal table td {
    padding:2px 5px; border:1px solid #963;}
 #journal table td:nth-child(3), #journal table td:nth-child(4) {
@@ -25,6 +24,13 @@
    background:#e6ded5; font-weight:bold;}
 #journal table tr.it td:nth-child(2) { /* вес итоговой отметки не показываем */
    color:#e6ded5;}
+
+table#jrnStat {
+   width:auto; margin:auto; border-collapse:collapse; margin-bottom:100px;}
+table#jrnStat th, table#jrnStat td, table#jrnStat td:nth-child(n) {
+   text-align:center; padding:5px 10px; border:1px solid #963;}
+table#jrnStat td:first-child {
+   text-align:left;}
 
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
