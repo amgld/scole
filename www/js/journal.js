@@ -42,6 +42,38 @@ const jrnContLoad = async () => {
             + `<td>${otm}</td></tr>`;
    }
    dqs("#jrnCont").innerHTML = cont + "</table>";
+   
+   // Выводим статистику
+   let stat = `<h3>Статистика</h3><table id="jrnStat"><tr><th> </th>`
+            + `<th>Сумма баллов<br>(с учетом весов)</th>`
+            + `<th>Средний балл</th><th>Пропущено<br>уроков</th></tr>`;
+
+   // Цикл по периодам учебного года
+   for (let itDate of Object.keys(DTSIT)) {
+       // Cумма весов, сумма отметок с весами, среднее, пропуски
+      let wSum = 0, sum  = 0, av = 0, abs = 0;
+      
+      // Цикл по всем темам d601: ["Африка", "Учить реки", 8, "нн5"]
+      for (let dt of Object.keys(grades)) { 
+         // Если дата хорошая и за эту дату есть отметки
+         if (dt >= DTSIT[itDate][2] && dt <= DTSIT[itDate][3])
+         if (grades[dt][3]) {
+            let w = grades[dt][2], gFull = grades[dt][3];
+            let gClear = gFull.replace(/н/g, ''); // без «н»
+            abs += gFull.length - gClear.length;  // к-во пропусков
+            gClear = gClear.replace(/\s{2,}/g, ' ').trim();
+            if (gClear) {
+               let gArr = gClear.split(' ');
+               for (let x of gArr) {sum += Number(x) * w; wSum += w;}
+            }
+         }
+      }
+      if (wSum) av = (sum / wSum).toFixed(2);
+      stat += `<tr><td>${DTSIT[itDate][1]}</td><td>${sum/2}</td>`
+            + `<td>${av}</td><td>${abs}</td></tr>`;
+   }
+
+   dqs("#jrnCont").innerHTML += stat;
 }
 
 // Формирование контента страницы (селект для начала невидим в css)
