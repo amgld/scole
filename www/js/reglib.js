@@ -233,10 +233,20 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
 // Показ средних баллов и сумм баллов по учащемуся с данным номером в списке
 // (номера начинаются с 0, естественно) путем обработки topicsObj и gradesObj
 const gradesStat = i => {
-   let mess = `${gradesObj.pnList[i]}\n*****\n`;
-   let sum  = 0, av = 0;
+   let mess = `${gradesObj.pnList[i]}\n\n`;   
    for (let itDate of Object.keys(DTSIT)) {
-      mess += `${DTSIT[itDate][1]}: Σ = ${sum}, m = ${av}\n`;
+      let sum  = 0, av = 0, n = 0, abs = 0; // сумма, среднее, к-во, пропуски
+      for (let dt of Object.keys(topicsObj)) { // цикл по всем темам
+         // Если дата хорошая и у данного ребенка за эту дату есть отметки
+         if (dt >= DTSIT[itDate][2] && dt <= DTSIT[itDate][3])           
+         if (gradesObj[dt])
+         if (gradesObj[dt][i]) {
+            let w = topicsObj[dt].w, gFull = gradesObj[dt][i];
+            let gClear = gFull.replace(/н/g, ''); // без «н»
+            abs += gFull.length - gClear.length;  // к-во пропусков
+         }
+      }
+      mess += `${DTSIT[itDate][0]}: Σ = ${sum}, m = ${av}, н = ${abs}\n`;
    }
    alert(mess);
 }
