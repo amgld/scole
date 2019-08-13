@@ -14,6 +14,8 @@ let absClList = [];
 // либо наименование класса типа 11Б
 const absShow = async (clORpup) => {
    
+   dqs("#absResult").innerHTML = "<img src='/static/preloader.gif'>";
+   
    // Получаем исходный массив с данными о посещаемости
    let reqObj = [];
    if (/[А-Я]/.test(clORpup)) reqObj = [clORpup, '']; // запрошен весь класс
@@ -21,6 +23,8 @@ const absShow = async (clORpup) => {
    let apiResp = await apireq("absentGet", reqObj);
    if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
    let absentArr = JSON.parse(apiResp);
+   
+   // Получаем массив со справками либо одного ученика, либо класса
    
    alert(JSON.stringify(absentArr));
 }
@@ -44,7 +48,7 @@ const absPupListShow = async () => {
 createSection("absent", `
    <select id="absSelClass" onChange="absPupListShow()"></select>
    <select id="absSelPupil" onChange="absShow(this.value)"></select>
-   <div id="absResult"></div>
+   <div id="absResult"><img src='/static/preloader.gif'></div>
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
@@ -53,7 +57,7 @@ getContent.absent = async () => {
    let absRole = dqs("#selRole").value;   
    
    // Если он учащийся или родитель, показываем ему только его пропуски
-   if (absRole == "pupil" || sprRole == "parent") {
+   if (absRole == "pupil" || absRole == "parent") {
       dqs("#absSelClass").style.display = "none";
       dqs("#absSelPupil").style.display = "none";
       absShow(uLogin);
@@ -67,9 +71,9 @@ getContent.absent = async () => {
       
       // Если он администратор, показываем ему все классы
       else if (absRole == "admin") {
-         let apiResp = await apireq("pupilsList", [clName]);
+         let apiResp = await apireq("classesList");
          if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
-         let absAllClasses = JSON.parse(apiResp);
+         let absAllClasses = classSort(JSON.parse(apiResp));
          for (let cl of absAllClasses)
             selClassInner += `<option>${cl}</option>`;
       }
