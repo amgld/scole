@@ -14,26 +14,51 @@ const absShow = async (clORpup) => {
    
    dqs("#absResult").innerHTML = "<img src='/static/preloader.gif'>";
    
-   let reqObj = [];
-   if (/[А-Я]/.test(clORpup)) reqObj = [clORpup, '']; // запрошен весь класс
-   else                       reqObj = ['', clORpup]; // запрошен один ученик
+   let reqObj = [], onePupil = false;
+   if (/[А-Я]/.test(clORpup)) reqObj = [clORpup, ''];   // запрошен весь класс
+   else     {onePupil = true; reqObj = ['', clORpup];}  // запрошен один ученик
    
    // Получаем исходный массив объектов с данными о посещаемости
+   // (учитель Сидоров, учащийся Иванов)
    // [{d: "d730", c: "11Б", s: s430, t: sidorov, p: ivanov, abs: 2}, ...]   
    let apiResp = await apireq("absentGet", reqObj);
    if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
    let absentArr = JSON.parse(apiResp);
    
-   // Получаем объект с данными об уважительных причинах пропусков уроков:
+   // Получаем объект respectObj с данными об уважительных причинах пропусков:
    // {
    //    ivanov: [["2019-09-02", "2019-09-13"], ...],
    //    petrov: ...
    // }
-   let apiResp = await apireq("sprResp", reqObj);
+   apiResp = await apireq("sprResp", reqObj);
    if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
-   let respectObj = JSON.parse(apiResp);
+   let respectObjApi = JSON.parse(apiResp);
+   // Переформатируем из формата 2019-09-02, полученного от API, в формат d002
+   let respectObj = {};
+   for (let pup of Object.keys(respectObjApi)) {
+      respectObj[pup] = [];
+      for (let para of respectObjApi[pup]) {
+         para[0] = dateConv(para[0]);
+         para[1] = dateConv(para[1]);
+         respectObj[pup].push([para[0], para[1]]);
+      }
+   }
    
-   alert(JSON.stringify(respectObj));
+   // Подсчет числа пропусков (общего и по уважительной) всех учеников
+   // по учебным периодам; результат в объекте absVal, отсортированном
+   // по логинам учащихся, а внутри каждого учащегося - по ключам
+   // {
+   //    ivanov: {d628a: [34, 28], ...},
+   //    petrov: {d628a: [56, 13], ...},
+   //    ...
+   // }
+   let absVal = {}, pattern = {}; // шаблон объекта одного ученика
+   for (let itName of Object.keys(DTSIT)) pattern[itName] = [0, 0];
+      
+   for (let propusk of absentArr) {
+      if (!absVal[propusk.p]) absVal[propusk.p] = {...pattern};
+      absVal[propusk.p][propusk.d][0] += propusk.abs; // все пропуски
+   }
 }
 
 // Формирование списка детей в селекте выбора учащегося
