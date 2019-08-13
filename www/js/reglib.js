@@ -220,6 +220,11 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
    dqs(`#${id}`).outerHTML =
       `<td id="${id}" onClick="td2inp('${id}', '${gradeNew}')">${cnt}</td>`;
       
+   // Обновляем объект gradesObj 
+   if (!gradesObj[dt])
+      gradesObj[dt] = (new Array(gradesObj.puList.length)).map(x => '');
+   gradesObj[dt][pupNum] = gradeNew.toString();
+      
    // Если пришел аргумент toDown, устанавливаем фокус (с полем input)
    // на нижележащую ячейку, если она есть
    if (toDown) {
@@ -235,8 +240,11 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
 const gradesStat = i => {
    let mess = `${gradesObj.pnList[i]}\n\n`;   
    for (let itDate of Object.keys(DTSIT)) {
-      let sum  = 0, av = 0, n = 0, abs = 0; // сумма, среднее, к-во, пропуски
-      for (let dt of Object.keys(topicsObj)) { // цикл по всем темам
+       // Cумма весов, сумма отметок с весами, среднее, пропуски
+      let wSum = 0, sum  = 0, av = 0, abs = 0;
+      
+      // Цикл по всем темам
+      for (let dt of Object.keys(topicsObj)) { 
          // Если дата хорошая и у данного ребенка за эту дату есть отметки
          if (dt >= DTSIT[itDate][2] && dt <= DTSIT[itDate][3])           
          if (gradesObj[dt])
@@ -244,9 +252,15 @@ const gradesStat = i => {
             let w = topicsObj[dt].w, gFull = gradesObj[dt][i];
             let gClear = gFull.replace(/н/g, ''); // без «н»
             abs += gFull.length - gClear.length;  // к-во пропусков
+            gClear = gClear.replace(/\s{2,}/g, ' ').trim();
+            if (gClear) {
+               let gArr = gClear.split(' ');
+               for (let x of gArr) {sum += Number(x) * w; wSum += w;}
+            }
          }
       }
-      mess += `${DTSIT[itDate][0]}: Σ = ${sum}, m = ${av}, н = ${abs}\n`;
+      if (wSum) av = sum / wSum;
+      mess += `${DTSIT[itDate][0]}: Σ = ${sum/2}, m = ${av}, н = ${abs}\n`;
    }
    alert(mess);
 }
