@@ -238,7 +238,8 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
 // Показ средних баллов и сумм баллов по учащемуся с данным номером в списке
 // (номера начинаются с 0, естественно) путем обработки topicsObj и gradesObj
 const gradesStat = i => {
-   let mess = `${gradesObj.pnList[i]}\n\n`;   
+   let mess = `<h3>${gradesObj.pnList[i]}</h3>`
+            + `<table><tr><th> </th><th>Σ</th><th>m</th><th>Н</th></tr>`;   
    for (let itDate of Object.keys(DTSIT)) {
        // Cумма весов, сумма отметок с весами, среднее, пропуски
       let wSum = 0, sum  = 0, av = 0, abs = 0;
@@ -259,10 +260,11 @@ const gradesStat = i => {
             }
          }
       }
-      if (wSum) av = sum / wSum;
-      mess += `${DTSIT[itDate][0]}: Σ = ${sum/2}, m = ${av}, н = ${abs}\n`;
+      if (wSum) av = (sum / wSum).toFixed(2);
+      mess += `<tr><td>${DTSIT[itDate][0]}</td><td>${sum/2}</td>`
+            + `<td>${av}</td><td>${abs}</td></tr>`;
    }
-   alert(mess);
+   info(0, mess + "</table>");
 }
 
 // **************************************************************************
