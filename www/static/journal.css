@@ -23,6 +23,8 @@
    text-align:left;}
 #journal table tr.it {
    background:#e6ded5; font-weight:bold;}
+#journal table tr.it td:nth-child(2) { /* вес итоговой отметки не показываем */
+   color:#e6ded5;}
 
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */

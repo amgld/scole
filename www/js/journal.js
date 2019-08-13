@@ -21,7 +21,7 @@ let jrnArr = {};
 const jrnContLoad = async () => {
    let grSbTh = dqs("#jrnSubj").value;
    let grades = jrnArr[grSbTh] || {},
-       wArr   = ['', '0.5', '', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0'],
+       wArr   = ['0', '0.5', '', '1.5', '2.0', '2.5', '3.0', '3.5', '4.0'],
        cont   = "<table><th>Дата</th><th>Вес</th><th>Тема урока</th>"
               + "<th>Дом.&nbsp;задание</th><th>Отм.</th>";
        
