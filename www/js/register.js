@@ -35,8 +35,8 @@ createSection("register", `
                 min="${regYst}" max="${regYfin}" value="${regNow}">
          <textarea placeholder="${regTopPH}"></textarea>
          <input id="regTopHTask" type="text" placeholder="Домашнее задание">
-         <span>Вес отметок (от 1 до 8)</span>
-         <input id="regTopWeight" type="number" min=1 max=8 value=2>
+         <span>Вес отметок (от 0 до 8)</span>
+         <input id="regTopWeight" type="number" min=0 max=8 value=2>
          <button onClick="topicEdit()"> &gt;&gt; </button>
       </div>
       <div id="regJustTopics"></div>

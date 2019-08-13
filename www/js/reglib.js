@@ -101,8 +101,8 @@ const topicEdit = async () => {
           hometask = dqs("#regTopHTask").value.replace(/\s+/g, ' ').trim(),
           weight = dqs("#regTopWeight").value.toString().trim();
       if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}
-      if (!/^[1-8]{1}$/.test(weight)) {
-         info(1, "Вес может быть целым<br>числом от 1 до 8.");
+      if (!/^[0-8]{1}$/.test(weight)) {
+         info(1, "Вес может быть целым<br>числом от 0 до 8.");
          return;         
       }
       if (!topic) if (!confirm(regWarn)) return;

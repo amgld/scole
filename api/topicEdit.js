@@ -28,7 +28,7 @@ module.exports = async argsObj => {
           lg = argsObj[6].substr(0,  20).trim();
 
       if (!gr || !sb || !lg || !dt || !wt) return "none";
-      if (!/^[1-8]{1}$/.test(wt))          return "none"; wt = Number(wt);
+      if (!/^[0-8]{1}$/.test(wt))          return "none"; wt = Number(wt);
       if (!/^d[0-9][0-3][0-9]$/.test(dt))  return "none";
       if (Number(dt.substr(2, 2)) > 31)    return "none";
       
