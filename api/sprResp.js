@@ -5,7 +5,7 @@
 "use strict";
 
 // В запросе приходят ["8Б", "ivanov", "petrov"]
-//      8Б - это запрашиваемый класс или группа (пустой, если нужен один ученик)
+//      8Б - это запрашиваемый класс (пустой, если нужен один ученик)
 //  ivanov - это запрашиваемый ученик (пустой, если запрашивается класс)
 //  petrov - это логин автора запроса (подписывается скриптом index.js)
 // 
@@ -14,7 +14,7 @@
 // 
 // Возвращается объект с датами начала и окончания действия каждой справки
 // {
-//    ivanov: [["d023", "d025"], ["d207", "d207"], ...],
+//    ivanov: [["2019-09-02", "2019-09-13"], ...],
 //    petrov: ...
 // }
 module.exports = async (args) => {
@@ -36,6 +36,11 @@ module.exports = async (args) => {
       if (pupil) bdReq = {pupil: pupil};    // Если запрашивается один ученик      
       else       bdReq = {Uclass: clName};  // Если запрашивается класс      
       let sprResp = await dbFind("spravki", bdReq);
+      for (let spravka of sprResp) {
+         let start = spravka.start, fin = spravka.fin, pupil = spravka.pupil;
+         if (!resp[pupil]) resp[pupil] = [];
+         resp[pupil].push([start, fin]);
+      }
       
       return JSON.stringify(resp);
    }

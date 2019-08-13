@@ -14,18 +14,19 @@ const absShow = async (clORpup) => {
    
    dqs("#absResult").innerHTML = "<img src='/static/preloader.gif'>";
    
-   // Получаем исходный массив объектов с данными о посещаемости
-   // [{d: "d730", c: "11Б", s: s430, t: sidorov, p: ivanov, abs: 2}, ...]
    let reqObj = [];
    if (/[А-Я]/.test(clORpup)) reqObj = [clORpup, '']; // запрошен весь класс
    else                       reqObj = ['', clORpup]; // запрошен один ученик
+   
+   // Получаем исходный массив объектов с данными о посещаемости
+   // [{d: "d730", c: "11Б", s: s430, t: sidorov, p: ivanov, abs: 2}, ...]   
    let apiResp = await apireq("absentGet", reqObj);
    if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
    let absentArr = JSON.parse(apiResp);
    
    // Получаем объект с данными об уважительных причинах пропусков уроков:
    // {
-   //    ivanov: [["d023", "d025"], ["d207", "d207"], ...],
+   //    ivanov: [["2019-09-02", "2019-09-13"], ...],
    //    petrov: ...
    // }
    let apiResp = await apireq("sprResp", reqObj);
