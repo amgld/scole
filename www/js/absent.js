@@ -67,13 +67,15 @@ const absShow = async (clORpup) => {
       }
       
       // Теперь считаем уважительные, цикл по объекту respectObj
+      // чтобы понять, уважительный наш текущий пропуск или нет
+      let absIsResp = false;
       if (!respectObj[propusk.p]) continue; // если у него нет справок вообще
-      for (let paraDat of respectObj[propusk.p]) {
-         if (propusk.d >= paraDat[0] && propusk.d <= paraDat[1]) // если он ув.
-            for (let itName of Object.keys(DTSIT)) {
-               if (propusk.d >= DTSIT[itName][2] && propusk.d <= DTSIT[itName][3])
-                  absVal[propusk.p][itName][1] += propusk.abs;
-            }
+      for (let dats of respectObj[propusk.p])
+         if (propusk.d >= dats[0] && propusk.d <= dats[1]) absIsResp = true;
+      // Если пропуск был уважительный, пишем его в нужные периоды уч. года
+      if (absIsResp) for (let itName of Object.keys(DTSIT)) {
+         if (propusk.d >= DTSIT[itName][2] && propusk.d <= DTSIT[itName][3])
+            absVal[propusk.p][itName][1] += propusk.abs;
       }
    } // конец подсчета общего числа пропусков всех учеников
 
