@@ -285,6 +285,10 @@ section#absent table tr:first-child th:first-child {
 section#absent h3 {
    margin:15px 0px 5px;}
    
+section#absent table#noRespect,
+section#absent table#noRespect td:nth-child(n) {
+   border-width:1px;}
+   
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
 @media (max-width: 960px) {

@@ -161,7 +161,7 @@ const absShow = async (clORpup) => {
          if (!Object.keys(absNoResp).length)
             dann += "<p>Пропусков уроков без уважительной причины нет</p>";
          else {
-            dann += "<table>";
+            dann += "<table id='noRespect'>";
             for (let subjCode of Object.keys(absNoResp)
                  .sort((a,b) => a.substr(1,3) > b.substr(1,3))) {
                dann += `<tr><td>${absSbList[subjCode]}</td><td>`;
