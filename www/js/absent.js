@@ -7,6 +7,9 @@
 // Текущий список класса
 let absClList = [];
 
+// Справочник предметов
+let absSbList = {};
+
 // Функция получает данные о посещаемости и об уважительных причинах пропусков
 // уроков, все это обсчитывает и публикует на странице. Аргумент - либо логин
 // ученика, либо наименование класса типа 11Б
@@ -130,8 +133,47 @@ const absShow = async (clORpup) => {
       
       // Если запрашивался один ребенок, еще публикуем расшифровку его прогулов
       if (onePupil) {
-         dann += "<h3>Пропуски уроков по неизвестной причине</h3>";
-      }
+         dann += "<h3>Пропуски уроков без уважительной причины</h3>";
+         
+         // Загружаем справочник предметов, если он не загружен ранее
+         if (!Object.keys(absSbList).length) {
+            let apiResp     = await apireq("subjList");
+            let subjListDop = JSON.parse(apiResp);
+            absSbList   = {...subjDef, ...subjListDop};
+         }
+         
+         // Результат - в объекте absNoResp с ключами - кодами предметов
+         // {s110: ["d730(1)", "d023(2)"], ...}
+         // Идем циклом по всем пропускам
+         let absNoResp = {};
+         for (let propusk of absentArr) {
+            // Цикл по объекту respectObj (уважительный ли текущий пропуск)
+            let noResp = true;
+            if (respectObj[clORpup]) for (let dats of respectObj[clORpup])
+               if (propusk.d >= dats[0] && propusk.d <= dats[1]) noResp = false;
+            // Неуважительный пропуск пишем в объект absNoResp
+            if (noResp) {
+               if (!absNoResp[propusk.s]) absNoResp[propusk.s] = [];
+               absNoResp[propusk.s].push(`${propusk.d}(${propusk.abs})`);
+            }
+         }
+         // Публикуем расшифровку прогулов на страничке
+         if (!Object.keys(absNoResp).length)
+            dann += "<p>Пропусков уроков без уважительной причины нет</p>";
+         else {
+            dann += "<table>";
+            for (let subjCode of Object.keys(absNoResp)
+                 .sort((a,b) => a.substr(1,3) > b.substr(1,3))) {
+               dann += `<tr><td>${absSbList[subjCode]}</td><td>`;
+               let tdInn = '';
+               for (let dt of absNoResp[subjCode].sort())
+                  tdInn += `${dateConv(dt.substr(0,4))}${dt.substr(4)}, `;
+               tdInn = tdInn.trim().replace(/,$/, '');
+               dann += tdInn + "</td></tr>";
+            }
+            dann += "</table>";
+         }
+      } // конец расшифровки прогулов одного ребенка
    }
    else dann = "<h3>Пропусков уроков нет</h3>";
    dqs("#absResult").innerHTML =
