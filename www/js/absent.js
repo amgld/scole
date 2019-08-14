@@ -16,7 +16,7 @@ const absShow = async (clORpup) => {
    
    let reqObj = [], onePupil = false;
    if (/[А-Я]/.test(clORpup)) reqObj = [clORpup, ''];   // запрошен весь класс
-   else     {onePupil = true; reqObj = ['', clORpup];}  // запрошен один ученик
+   else     {onePupil = true; reqObj = ['', clORpup];}  // запрошен один ученик   
    
    // Получаем исходный массив absentArr объектов с данными о посещаемости
    // (учитель Сидоров, учащийся Иванов)
@@ -78,23 +78,26 @@ const absShow = async (clORpup) => {
    
    // Публикация данных о посещаемости
    let dann = '';   
-   if (Object.keys(absVal).length) {
-      dann = "<h3>Сводные данные</h3>";
+   if (Object.keys(absVal).length) {      
       
       // Сначала публикуем таблицу со сводными данными
-      dann += "<table border=1><tr><th rowspan=2> </th>";
+      dann = "<h3>Сводные данные посещаемости</h3>";
+      dann += "<table><tr><th rowspan=2> </th>";
       let str1 = '', str2 = '';
       for (let itName of Object.keys(DTSIT)) {
          str1 += `<th colspan=2>${DTSIT[itName][0]}</th>`;
          str2 += "<th>всего</th><th>по ув.</th>";
       }
-      dann += `${str1}</tr><tr>${str2}</tr>`;
+      dann  += `${str1}</tr><tr>${str2}</tr>`;
       
-      for (let pupLogin of Object.keys(absVal)) {
-         dann += `<tr><td>${pupLogin}</td>`;
-         for (let itName of Object.keys(DTSIT))
-            dann += `<td>${absVal[pupLogin][itName][0]}</td>`
-                  + `<td>${absVal[pupLogin][itName][1]}</td>`;
+      for (let pupil of absClList) {
+         dann += `<tr><td>${pupil[0]}</td>`;
+         for (let itName of Object.keys(DTSIT)) {
+            if (absVal[pupil[1]])
+               dann += `<td>${absVal[pupil[1]][itName][0]}</td>`
+                    + `<td>${absVal[pupil[1]][itName][1]}</td>`;
+            else dann += "<td>0</td><td>0</td>";
+         }
          dann += "</tr>";
       }      
       dann += "</table>"
@@ -114,7 +117,7 @@ const absPupListShow = async () => {
    let clName = dqs("#absSelClass").value;
    let apiResp = await apireq("pupilsList", [clName]);
    if (apiResp != "none") {
-      let absClList = JSON.parse(apiResp);
+      absClList = JSON.parse(apiResp);
       let selPupilInner = `<option value="${clName}">ВЕСЬ КЛАСС</option>`;
       for (let pup of absClList)
          selPupilInner += `<option value="${pup[1]}">${pup[0]}</option>`;

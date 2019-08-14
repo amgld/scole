@@ -260,6 +260,19 @@ section#docs table td:first-child {
 section#docs h3 {
    margin:15px 0px 5px;}
    
+/* БЛОК ОТОБРАЖЕНИЯ ПОСЕЩАЕМОСТИ
+   ---------------------------------------------------- */
+section#absent table {
+   border-collapse:collapse; margin:10px auto;}
+section#absent table th, section#absent table td {
+   border:1px solid #963; padding:5px; text-align:center;}
+section#absent table tr:nth-child(even) {
+   background:#edeae7;}
+section#absent table td:first-child {
+   text-align:left;}
+section#absent h3 {
+   margin:15px 0px 5px;}
+   
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
 @media (max-width: 960px) {

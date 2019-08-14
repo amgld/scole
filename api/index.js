@@ -82,7 +82,7 @@ module.exports = async (post, addr) => {
    // (для некоторых функций API, требующих валидного логина юзера)
    let fNames = [
       "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet",
-      "absentGet", "pupilsList", "sprAdd", "sprGet", "sprDel", "sprResp"
+      "absentGet", "sprAdd", "sprGet", "sprDel", "sprResp"
    ];
    if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
       

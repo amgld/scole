@@ -4,16 +4,14 @@
  */
 "use strict";
 
-// Аргументы - ["10Б", "ivanov"] или ["10Б", "ivanov"]
-// Логин кл. рук. с фронтенда не передается, подписывается скриптом index.js
+// Аргумент - ["10Б"]
 // Возвращает [["Иванов Иван", "ivanov"], ...] или "none"
 // Заблокированные учащиеся класса тоже возвращаются в общем списке
 module.exports = async (args) => {
    try {
-      let clName = args[0].substr(0,  3).trim(),
-          lg     = args[1].substr(0, 20).trim();          
+      let clName = args[0].substr(0,  3).trim();          
 
-      if (!clName || !lg) return "none";
+      if (!clName) return "none";
       if (!/^\d{1,2}[A-Я]{1}$/.test(clName)) return "none";
       
       let resp = [];
