@@ -237,11 +237,10 @@ const userSort = usArray => usArray.sort((u1, u2) => (u1.login > u2.login));
 /* ШАБЛОН HTML-ДОКУМЕНТОВ, ОТДАВАЕМЫХ ПОЛЬЗОВАТЕЛЮ ДЛЯ ПЕЧАТИ
 --------------------------------------------------------------------- */
 const HTML = `<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
-<style>@page {size: A4; margin: 1.5cm 1.5cm 1.5cm 2.5cm}
-body {font: 8pt Arial, sans-serif}
+<style>@page {size: A4; margin: 1.5cm} body {font: 8pt Arial, sans-serif}
 h3 {text-align:center; font-size: 10pt; text-transform: uppercase}
 table {border-collapse: collapse; margin: 6pt auto 48pt}
 table th, table td {
-   padding: 1pt 3pt; border: 0.25pt solid black; text-align: center}
+   padding: 3pt; border: 0.25pt solid black; text-align: center}
 table td:first-child {text-align: left}
 </style></head><body>{{body}}</body></html>`;

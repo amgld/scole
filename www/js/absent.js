@@ -16,7 +16,7 @@ const absShow = async (clORpup) => {
    
    let reqObj = [], onePupil = false;
    if (/[А-Я]/.test(clORpup)) reqObj = [clORpup, ''];   // запрошен весь класс
-   else     {onePupil = true; reqObj = ['', clORpup];}  // запрошен один ученик   
+   else     {onePupil = true; reqObj = ['', clORpup];}  // запрошен один ученик
    
    // Получаем исходный массив absentArr объектов с данными о посещаемости
    // (учитель Сидоров, учащийся Иванов)
@@ -55,11 +55,12 @@ const absShow = async (clORpup) => {
    for (let itName of Object.keys(DTSIT)) {
       pattern[itName] = [0, 0];
    }
+   let pattStr = JSON.stringify(pattern);
       
    for (let propusk of absentArr) {
       
       // Сначала считаем все пропуски
-      if (!absVal[propusk.p]) absVal[propusk.p] = {...pattern};
+      if (!absVal[propusk.p]) absVal[propusk.p] = JSON.parse(pattStr);
       for (let itName of Object.keys(DTSIT)) {
          if (propusk.d >= DTSIT[itName][2] && propusk.d <= DTSIT[itName][3])
             absVal[propusk.p][itName][0] += propusk.abs; // все пропуски
@@ -75,7 +76,7 @@ const absShow = async (clORpup) => {
             }
       }
    } // конец подсчета общего числа пропусков всех учеников
-   
+
    // Публикация данных о посещаемости
    let dann = '';   
    if (Object.keys(absVal).length) {      
@@ -90,7 +91,14 @@ const absShow = async (clORpup) => {
       }
       dann  += `${str1}</tr><tr>${str2}</tr>`;
       
-      for (let pupil of absClList) {
+      let list4table = [...absClList];
+      if (onePupil) {
+         let famil = "Пропущено уроков";
+         for (let pupil of absClList) // ищем фамилию, если получен absClList
+            if (pupil[1] == clORpup) {famil = pupil[0]; break;}
+         list4table = [[famil, clORpup]];
+      }
+      for (let pupil of list4table) {
          dann += `<tr><td>${pupil[0]}</td>`;
          for (let itName of Object.keys(DTSIT)) {
             if (absVal[pupil[1]])
@@ -112,8 +120,7 @@ const absShow = async (clORpup) => {
       dann + "<p><a id='absPrint'>Версия для печати</a></p>";
    
    // Подготавливаем версию для печати
-   let printCont =
-      HTML.replace("{{body}}", dann + "<p>Классный руководитель</p>");
+   let printCont = HTML.replace("{{body}}", dann);
    let dataLink = new Blob([printCont], {type: "text/html"});
    dqs("#absPrint").href = window.URL.createObjectURL(dataLink);
    dqs("#absPrint").download = "absent.html";
@@ -127,8 +134,11 @@ const absPupListShow = async () => {
    if (apiResp != "none") {
       absClList = JSON.parse(apiResp);
       let selPupilInner = `<option value="${clName}">ВЕСЬ КЛАСС</option>`;
-      for (let pup of absClList)
+      for (let pup of absClList) {
+         let imya = pup[0].split(' ')[1] || 'N';
+         pup[0] = pup[0].split(' ')[0] + ` ${imya[0]}.`;
          selPupilInner += `<option value="${pup[1]}">${pup[0]}</option>`;
+      }
       dqs("#absSelPupil").innerHTML = selPupilInner;
       absShow(clName); // показываем пропуски всего класса
    }
