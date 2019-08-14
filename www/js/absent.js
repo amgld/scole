@@ -100,7 +100,7 @@ const absShow = async (clORpup) => {
          }
          dann += "</tr>";
       }      
-      dann += "</table>"
+      dann += "</table>";      
       
       // Если запрашивался один ребенок, еще публикуем расшифровку его прогулов
       if (onePupil) {
@@ -108,7 +108,15 @@ const absShow = async (clORpup) => {
       }
    }
    else dann = "<h3>Пропусков уроков нет</h3>";
-   dqs("#absResult").innerHTML = dann;
+   dqs("#absResult").innerHTML =
+      dann + "<p><a id='absPrint'>Версия для печати</a></p>";
+   
+   // Подготавливаем версию для печати
+   let printCont =
+      HTML.replace("{{body}}", dann + "<p>Классный руководитель</p>");
+   let dataLink = new Blob([printCont], {type: "text/html"});
+   dqs("#absPrint").href = window.URL.createObjectURL(dataLink);
+   dqs("#absPrint").download = "absent.html";
    
 } // конец функции подсчета и публикации данных о посещаемости
 
