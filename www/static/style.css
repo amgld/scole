@@ -263,13 +263,25 @@ section#docs h3 {
 /* БЛОК ОТОБРАЖЕНИЯ ПОСЕЩАЕМОСТИ
    ---------------------------------------------------- */
 section#absent table {
-   border-collapse:collapse; margin:10px auto;}
+   border-collapse:collapse; margin:10px auto; border:2px solid #963;}
 section#absent table th, section#absent table td {
    border:1px solid #963; padding:5px; text-align:center;}
 section#absent table tr:nth-child(even) {
    background:#edeae7;}
+section#absent table td:nth-child(odd) {
+   color:#090;}
 section#absent table td:first-child {
-   text-align:left;}
+   text-align:left; color:black;}
+section#absent table td:first-child,
+section#absent table tr:first-child th,
+section#absent table tr:nth-child(2) th:nth-child(even),
+section#absent table td:nth-child(odd) {
+   border-right-width: 2px;}
+section#absent table tr.bold td {
+   border-top-width: 2px; font-weight:bold;}
+section#absent table tr:nth-child(2) th,
+section#absent table tr:first-child th:first-child {
+   border-bottom-width: 2px;}
 section#absent h3 {
    margin:15px 0px 5px;}
    

@@ -51,19 +51,24 @@ const absShow = async (clORpup) => {
    //    petrov: {d628a: [56, 13], ...},
    //    ...
    // }
+   // Итоговый результат по всему классу - в объекте absItog:
+   // {d628a: [156, 122], ...}
    let absVal = {}, pattern = {}; // шаблон объекта одного ученика
    for (let itName of Object.keys(DTSIT)) {
       pattern[itName] = [0, 0];
    }
    let pattStr = JSON.stringify(pattern);
+   let absItog = JSON.parse(pattStr);
       
    for (let propusk of absentArr) {
       
       // Сначала считаем все пропуски
       if (!absVal[propusk.p]) absVal[propusk.p] = JSON.parse(pattStr);
       for (let itName of Object.keys(DTSIT)) {
-         if (propusk.d >= DTSIT[itName][2] && propusk.d <= DTSIT[itName][3])
+         if (propusk.d >= DTSIT[itName][2] && propusk.d <= DTSIT[itName][3]) {
             absVal[propusk.p][itName][0] += propusk.abs; // все пропуски
+            absItog[itName][0] += propusk.abs;
+         }
       }
       
       // Теперь считаем уважительные, цикл по объекту respectObj
@@ -74,8 +79,10 @@ const absShow = async (clORpup) => {
          if (propusk.d >= dats[0] && propusk.d <= dats[1]) absIsResp = true;
       // Если пропуск был уважительный, пишем его в нужные периоды уч. года
       if (absIsResp) for (let itName of Object.keys(DTSIT)) {
-         if (propusk.d >= DTSIT[itName][2] && propusk.d <= DTSIT[itName][3])
+         if (propusk.d >= DTSIT[itName][2] && propusk.d <= DTSIT[itName][3]) {
             absVal[propusk.p][itName][1] += propusk.abs;
+            absItog[itName][1] += propusk.abs;
+         }
       }
    } // конец подсчета общего числа пропусков всех учеников
 
@@ -109,7 +116,16 @@ const absShow = async (clORpup) => {
             else dann += "<td>0</td><td>0</td>";
          }
          dann += "</tr>";
-      }      
+      }
+      // Если запрошен весь класс, подписываем еще итоговую строку
+      if (!onePupil) {
+         dann += `<tr class="bold"><td>Итого</td>`;
+         for (let itName of Object.keys(DTSIT)) {
+            dann += `<td>${absItog[itName][0]}</td>`
+                  + `<td>${absItog[itName][1]}</td>`;
+         }
+         dann += "</tr>";
+      }
       dann += "</table>";      
       
       // Если запрашивался один ребенок, еще публикуем расшифровку его прогулов
