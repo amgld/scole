@@ -286,8 +286,10 @@ section#absent h3 {
    margin:15px 0px 5px;}
    
 section#absent table#noRespect,
-section#absent table#noRespect td:nth-child(n) {
-   border-width:1px;}
+section#absent table#noRespect td:nth-child(n),
+section#absent table#noRespect tr:nth-child(n) {
+   text-align:left; background:none; vertical-align:top;
+   border-width:1px; border-left:none; border-right:none;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
