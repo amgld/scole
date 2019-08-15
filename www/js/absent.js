@@ -23,7 +23,7 @@ const absShow = async (clORpup) => {
    
    // Получаем исходный массив absentArr объектов с данными о посещаемости
    // (учитель Сидоров, учащийся Иванов)
-   // [{d: "d730", c: "11Б", s: s430, t: sidorov, p: ivanov, abs: 2}, ...]   
+   // [{d: "d730", s: s430, p: ivanov, abs: 2}, ...]   
    let apiResp = await apireq("absentGet", reqObj);
    if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
    let absentArr = JSON.parse(apiResp);

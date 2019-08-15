@@ -13,8 +13,7 @@
 // первых аргументов (один из них всегда пустой)
 // 
 // Возвращается массив, состоящий из объектов вида
-// {d: "d730", c: "11Б", s: s430, t: sidorov, p: ivanov, abs: 2}
-// Здесь sidorov - логин преподавателя, 2 - количество пропущенных уроков
+// {d: "d730", s: s430, p: ivanov, abs: 2} (2 - количество пропущенных уроков)
 module.exports = async (args) => {
    let resp = [], bdReq = {};
    try {
@@ -31,15 +30,15 @@ module.exports = async (args) => {
          if (!res.length) return "none";
       }      
       
-      if (pupil) bdReq = {p: pupil};   // если запрашивается один ученик      
-      else       bdReq = {c: clName};  // если запрашивается класс
+      if (pupil) bdReq = {p: pupil};              // если в запросе один ученик      
+      else       bdReq = {c: RegExp('^'+clName)}; // если весь класс
       
       let grResp = await dbFind("grades", bdReq);
       for (let gr of grResp) {
          let grade = gr.g;
          if (!grade.includes('н')) continue;
          let absVal = grade.length - grade.replace(/н/g, '').length;
-         resp.push({d:gr.d, c:gr.c, s:gr.s, t:gr.t, p:gr.p, abs:absVal});
+         resp.push({d:gr.d, s:gr.s, p:gr.p, abs:absVal});
       }
       
       return JSON.stringify(resp);
