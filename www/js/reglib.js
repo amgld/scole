@@ -180,7 +180,11 @@ const td2inp = (id, grOld) => {
 
 // **************************************************************************
 // Отправка введенной отметки для записи в базу с помощью API
-const sendGr = async (id, gradeOld, gradeNew, toDown) => {  
+const sendGr = async (id, gradeOld, gradeNew, toDown) => { 
+   
+   let dt     = id.split('-')[0],
+       pupNum = Number(id.split('-')[1]),
+       pupId  = gradesObj.puList[pupNum];
    
    gradeNew = gradeNew.replace(/\s+/g, ' ').replace(/Н/g, 'н')
       .replace(/б/g, 'н').replace(/[\-+=.,a-zA-Zа-мо-яёА-ЯЁ]/g, '').trim();
@@ -188,11 +192,11 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
       gradeNew = gradeOld;
       info(1, "Допустимы не более 5 символов:<br>только цифры, пробел<br>"
             + "и русская строчная буква «н»");
+   }       
+   if (dt.length > 4 && !/^[0-9]{0,3}$/.test(gradeNew)) {
+      gradeNew = gradeOld;
+      info(1, "В итоговых отметках допустимы<br>только цифры (не более трёх)");
    }
-   
-   let dt     = id.split('-')[0],
-       pupNum = Number(id.split('-')[1]),
-       pupId  = gradesObj.puList[pupNum];
    
    if (gradeOld != gradeNew) {
       
