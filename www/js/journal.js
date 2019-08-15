@@ -34,8 +34,12 @@ const jrnContLoad = async () => {
    
    for (let d of dates) {
       let dt  = dateConv(d), cls = '';
-      if (d.length > 4) {dt = DTSIT[d][0]; cls = " class='it'";}
-      let otm = grades[d][3] ? grades[d][3] : '';
+      let otm = (typeof grades[d][3] != "undefined") ? grades[d][3] : '';
+      if (d.length > 4) {
+         dt = DTSIT[d][0];
+         cls = " class='it'";
+         otm = otm.toString().replace(/^0$/, "н/а")
+      }      
       cont += `<tr${cls}>`
             + `<td>${dt}</td><td>${wArr[grades[d][2]]}</td>`
             + `<td>${grades[d][0]}</td><td>${grades[d][1]}</td>`
