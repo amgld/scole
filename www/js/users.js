@@ -53,7 +53,9 @@ const userFind = async () => {
          <table><tr><th>Логин</th><th>Фамилия</th><th>Имя</th>
          ${name2th}${unitTh}<th>&nbsp;</th>${setAdmTh}<th>&nbsp;</th>`;
             
-      let apiFindResult = userSort(JSON.parse(apiResp));
+      let apiFindResult = JSON.parse(apiResp).sort(
+         (u1, u2) => (u1.famil).localeCompare(u2.famil, "ru")
+      );
 
       for (let currUser of apiFindResult) {
          let unitInner  = isPup ? `<td class="un">${currUser.unit}</td>` : '',
