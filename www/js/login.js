@@ -1,5 +1,5 @@
 /**
- *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: ФОРМА АВТОРИЗАЦИИ ПОЛЬЗОВАТЕЛЯ
+ *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: АВТОРИЗАЦИЯ ПОЛЬЗОВАТЕЛЯ И ЗАГРУЗКА СКРИПТОВ
  *   Copyright © 2019, А.М.Гольдин. Modified BSD License
  */
 "use strict";
@@ -83,10 +83,30 @@ const submLogin = async () => {
          uToken         = apiRespObj.token;
          uTutorCls      = apiRespObj.tutClss   || [];
          uTeachLoad     = apiRespObj.teachLoad || {};
-            
-         // Публикуем контент страницы
+         
          dqs("article").style.display = "none";
-         headerGen();
+         
+         // Загружаем необходимые скрипты и публикуем контент страницы
+         // (menuItems определен в ini.js)
+         let requires = ["info"];
+         let rlsArr = ["pupil"];
+         if (uLogin == "admin") rlsArr = ["root"];
+         else if (uCateg == "staff") {
+            rlsArr = ["admin", "teacher", "tutor"];
+            requires.push("reglib");
+         }
+         for (let currRole of rlsArr)
+            for (let rlItem of menuItems[currRole]) requires.push(rlItem[0]);
+         requires.push("header");
+         
+         let scriptElem;
+         for (let scrName of new Set(requires)) {
+            scriptElem = document.createElement("script");
+            scriptElem.src = `js/${scrName}.js`;
+            scriptElem.async = false;
+            document.body.appendChild(scriptElem);
+         }         
+         scriptElem.onload = () => headerGen();
       }
    }
 }

@@ -21,23 +21,7 @@
 <footer>
 <a href="https://scole.ru/manual/" target="_blank">Помощь</a> &bull;
 </footer>
-
-<script>
-   if (!String.prototype.padStart) location.assign("/browsers.html");
-</script>
-<script>"use strict";
-const requires = [
-   "ini", "info", "classes", "subjects", "users", "admins", "reglib",
-   "register", "absent", "distrib", "groups", "export", "stat", "userlog",
-   "notes", "docs", "subgroup", "achsheet", "journal", "parcodes",
-   "header", "login"
-];
-for (let scrName of requires) {
-   let script = document.createElement("script");
-   script.src = `js/${scrName}.js`;
-   script.async = false;
-   document.body.appendChild(script);
-}
-</script>
+<script>if (!String.prototype.padStart) location.assign("/browsers.html");</script>
+<script src="/js/ini.js"></script><script src="/js/login.js"></script>
 </body>
 </html>
