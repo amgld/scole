@@ -159,7 +159,10 @@ getContent.distrib = async () => {
    
    // Объект со списком всех учителей
    apiResp = await apireq("teachList");
-   if (apiResp != "none") distrThList = userSort(JSON.parse(apiResp));
+   if (apiResp != "none")
+      distrThList = JSON.parse(apiResp).sort(
+         (u1, u2) => (u1.fio).localeCompare(u2.fio, "ru")
+      );
    
    // Объект с педагогической нагрузкой всех учителей
    // {"pupkin": {"s110": ["8Б", "10Ж"], "d830": ["8Б"]}, "ivanov": ...}
