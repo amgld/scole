@@ -74,7 +74,7 @@ const sprPupListShow = async () => {
       dqs("#sprSelPupil").innerHTML = selPupilInner;
       sprDocsShow(pupilsList[0][1]); // показываем справки первого учащегося
    }   
-   else info(1, "Ошибка на сервере");
+   else info(1, "Не могу загрузить список учащихся");
 }
 
 // Формирование контента страницы (regNow, regYst, regYfin определены в ini.js)
