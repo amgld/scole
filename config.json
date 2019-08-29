@@ -16,5 +16,6 @@
    "SALT":     "abcde",
    "ADMIN":    "vk.com/vasya-pupkin",
    "KEYPATH":  "key.pem",
-   "CERTPATH": "cert.pem"
+   "CERTPATH": "cert.pem",
+   "CAPATH":   ""
 }

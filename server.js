@@ -14,7 +14,7 @@ const DOCROOT  = __dirname + "/www/",
       fs       = require("fs"),
       nedb     = require("nedb"),
 
-      {PORT, SERVER, ERR404, MIME, PWD, SALT, ADMIN, KEYPATH, CERTPATH}
+      {PORT, SERVER, ERR404, MIME, PWD, SALT, ADMIN, KEYPATH, CERTPATH, CAPATH}
                = require("./config"),
       api      = require("./api"),
       captGen  = require("./api/captchaGen"),
@@ -23,6 +23,7 @@ const DOCROOT  = __dirname + "/www/",
          key:  fs.readFileSync(__dirname + "/ssl/" + KEYPATH),
          cert: fs.readFileSync(__dirname + "/ssl/" + CERTPATH)      
       };
+      if (CAPATH) httpsOpt.ca = CAPATH;
 
 global.salt    = SALT;
 global.admPwd  = PWD;
