@@ -56,7 +56,14 @@ const regPagesSelLoad = async (className) => {
       // (как странички самого класса, так и странички его подгрупп)
       for (let currClass of groups) {
          if (!regDistr[currClass]) continue;
+         
+         // Сортируем regDistr[currClass] по ключам предметов
+         regDistr[currClass].sort(
+            (a, b) => a[0].substr(1,3) > b[0].substr(1,3)
+         );
+         
          for (let sbPairs of regDistr[currClass]) {
+            
             
             // Если это не целый класс, а подгруппа, добавляем ее название
             let grName =
