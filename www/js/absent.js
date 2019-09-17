@@ -179,7 +179,7 @@ const absShow = async (clORpup) => {
    dqs("#absResult").innerHTML =
       dann + "<p><a id='absPrint'>Версия для печати</a></p>";
    
-   // Подготавливаем версию для печати
+   // Подготавливаем версию для печати (HTML определен в ini.js)
    let printCont = HTML.replace("{{body}}", dann);
    let dataLink = new Blob([printCont], {type: "text/html"});
    dqs("#absPrint").href = window.URL.createObjectURL(dataLink);
