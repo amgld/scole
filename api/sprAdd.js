@@ -18,6 +18,7 @@
 // Возвращает "success" или "none"
 module.exports = async (args) => {
    try {
+      if (args.length != 6) return "none";
       let vid   = args[0].substr(0,  50).trim(),
           start = args[1].substr(0,  10).trim(),
           fin    = args[2].substr(0,  10).trim(),

@@ -19,6 +19,7 @@
 // }
 module.exports = async argsObj => {   
    try {
+      if (argsObj.length != 7) return "none";
       let gr = argsObj[0].substr(0,  20).trim(),
           sb = argsObj[1].substr(0,   4).trim(),          
           dt = argsObj[2].substr(0,   4).trim(),

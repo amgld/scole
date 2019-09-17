@@ -10,6 +10,7 @@
 // Возвращает [["Иванов Иван", "ivanov", "123456"], ...] или "none"
 module.exports = async (args) => {
    try {
+      if (args.length != 2) return "none";
       let clName = args[0].substr(0,  3).trim(),
           lg     = args[1].substr(0, 20).trim();          
 

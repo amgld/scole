@@ -9,6 +9,7 @@
 // Возвращает "success" или "none"
 module.exports = async (args) => {
    try {
+      if (args.length != 2) return "none";
       let id    = args[0].substr(0, 50).trim(),
           clruk = args[1].substr(0, 20).trim();
 

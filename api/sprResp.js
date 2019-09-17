@@ -20,6 +20,7 @@
 module.exports = async (args) => {
    let resp = {}, bdReq = {};
    try {
+      if (args.length != 3) return "none";
       let clName = args[0].substr(0, 20).trim(),
           pupil  = args[1].substr(0, 20).trim(),
           lg     = args[2].substr(0, 20).trim();

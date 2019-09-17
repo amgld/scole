@@ -21,6 +21,7 @@
 // }
 module.exports = async (args) => {
    try {
+      if (args.length != 2) return "none";
       let pupil = '';
       
       if (args[0] == "pupil") { // документы запрашиваются самим учеником

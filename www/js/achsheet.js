@@ -4,12 +4,19 @@
  */
 "use strict";
 
+// Объект с предметами (подгружается в конце страницы)
+let achSbList = {};
+
 // Собственно генерирование табеля одного ученика
+// В аргументе приходит что-то вроде "pupkin^Пупкин Василий, 8Б класс"
 const achShow = async (pupil) => {
    dqs("#tabel").innerHTML = "<img src='/static/preloader.gif'>";   
-   let tabel = "<h3>ТАБЕЛЬ ОТМЕТОК ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ</h3>";
    
-   // Получаем фамилию, имя и класс ученика
+   // Получаем фамилию, имя и класс ученика для подзаголовка
+   let famImCl = pupil.split('^')[1];
+   let podzag  = famImCl ? `<p><b>${famImCl}</b></p>` : '';
+   
+   let tabel = "<h3>ТАБЕЛЬ ОТМЕТОК ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ</h3>" + podzag;
    
    
    dqs("#tabel").innerHTML =
@@ -32,8 +39,9 @@ const achPupListShow = async () => {
       let selPupilInner = `<option value=''>== Выберите учащегося ==</option>`;
       for (let pup of achClList) {
          let imya = pup[0].split(' ')[1] || 'N';
-         pup[0] = pup[0].split(' ')[0] + ` ${imya[0]}.`;
-         selPupilInner += `<option value="${pup[1]}">${pup[0]}</option>`;
+         let famI = pup[0].split(' ')[0] + ` ${imya[0]}.`;
+         selPupilInner += `<option value="${pup[1]}^${pup[0]}, `
+                        + `${clName} класс">${famI}</option>`;
       }
       dqs("#achSelPupil").innerHTML = selPupilInner;
    }
@@ -47,11 +55,17 @@ const achPupListShow = async () => {
 createSection("achsheet", `
    <select id="achSelClass" onChange="achPupListShow()"></select>
    <select id="achSelPupil" onChange="achShow(this.value)"></select>
-   <div id="tabel"></div>
+   <div id="tabel" style="margin-top:20px"></div>
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
 getContent.achsheet = async () => {
+   
+   // Получаем глобальный объект со списком всех предметов
+   // achSbList = {"s110": "Русский язык", ...}
+   let apiResp     = await apireq("subjList");
+   let achListDop = JSON.parse(apiResp);
+   achSbList  = {...subjDef, ...achListDop};
    
    let achRole = dqs("#selRole").value;
    let selClassInner = '';
@@ -60,7 +74,7 @@ getContent.achsheet = async () => {
    if (achRole == "pupil" || achRole == "parent") {
       dqs("#achSelClass").style.display = "none";
       dqs("#achSelPupil").style.display = "none";
-      achShow(uLogin);
+      achShow(`${uLogin}^`);
    }
    // Если он классный руководитель, показываем ему его классы
    else if (achRole == "tutor") {

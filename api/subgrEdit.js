@@ -10,6 +10,7 @@
 // Возвращает "success" или "none"
 module.exports = async (args) => {
    try {
+      if (args.length != 4) return "none";
       if (args[2] != "add" && args[2] != "del") return "none";
       let clName = args[0].substr(0,  3).trim(),
           grName = args[1].substr(0, 20).trim(),

@@ -18,6 +18,7 @@ module.exports = async (argArr) => {
    let resp = {};
    try {
       // Логин учащегося
+      if (argArr.length != 1) return "none";
       let lg = argArr[0].substr(0, 20).trim();
       if (!/^[a-z0-9]+$/.test(lg)) return "none";
       

@@ -11,6 +11,7 @@
 module.exports = async (argsObj) => {
    try {      
       // Проверяем, что пришло
+      if (argsObj.length != 6) return "none";
       let d = argsObj[0].substr(0,  5).trim(),
           c = argsObj[1].substr(0, 20).trim(),
           s = argsObj[2].substr(0, 20).trim(),            
