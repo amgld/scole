@@ -265,7 +265,7 @@ const gradesStat = i => {
             let gClear = gFull.replace(/н/g, ''); // без «н»
             abs += gFull.length - gClear.length;  // к-во пропусков
             gClear = gClear.replace(/\s{2,}/g, ' ').trim();
-            if (gClear) {
+            if (gClear) if (gClear != "999") {
                let gArr = gClear.split(' ');
                for (let x of gArr) {sum += Number(x) * w; wSum += w;}
             }
