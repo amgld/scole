@@ -69,14 +69,14 @@ const menuItems = {
    ],
    "pupil": [
       ["journal", "Дневник"],
-      ["achsheet", "Табели"],
+      ["achsheet", "Табель"],
       ["absent",   "Посещаемость"],
       ["docs",     "Справки"],
       ["notes",    "Заметки"]
    ],
    "parent": [
       ["journal", "Дневник"],
-      ["achsheet", "Табели"],
+      ["achsheet", "Табель"],
       ["absent",   "Посещаемость"],
       ["docs",     "Справки"],
       ["notes",    "Заметки"]

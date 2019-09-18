@@ -291,6 +291,15 @@ section#absent table#noRespect tr:nth-child(n) {
    text-align:left; background:none; vertical-align:top;
    border-width:1px; border-left:none; border-right:none;}
    
+/* БЛОК ОТОБРАЖЕНИЯ ТАБЕЛЯ
+   ---------------------------------------------------- */
+section#achsheet table {
+   border-collapse:collapse; margin:10px auto; border:1px solid #963;}
+section#achsheet table th, section#achsheet table td {
+   border:1px solid #963; padding:5px; text-align:center;}
+section#achsheet table td:first-child {
+   text-align:left;}
+   
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
 @media (max-width: 960px) {
