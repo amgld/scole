@@ -16,6 +16,16 @@ const achShow = async (pupil) => {
    let famImCl = pupil.split('^')[1];
    let podzag  = famImCl ? `<p><b>${famImCl}</b></p>` : '';
    
+   // Получаем итоговые отметки с помощью API
+   info(0, "Пожалуйста, дождитесь<br>загрузки данных.");
+   let apiResp = await apireq("tabelGet", [pupil.split('^')[0]]);
+   info(2);
+   if (apiResp == "none") {
+      dqs("#tabel").innerHTML = "<p>Не удалось получить данные</p>";
+      return;
+   }   
+   let gradesArr = JSON.parse(apiResp); alert(apiResp);
+   
    let tabel = "<h3>ТАБЕЛЬ ОТМЕТОК ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ</h3>" + podzag;
    
    

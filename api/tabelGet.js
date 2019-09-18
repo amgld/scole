@@ -38,11 +38,12 @@ module.exports = async (argArr) => {
       }
       
       // Получаем итоговые отметки и подписываем их в объект resp
-      let res = await dbFind("grades", {p: pupil}); // в запросе еще регВыр по дате!
-      for (let otm of res) {
-         if (!resp[otm.s]) resp[otm.s] = {};
-         resp[otm.s][otm.d] = otm.g;
-      }
+      let res = await dbFind("grades", {p: pupil, d: RegExp("\\w{5}")});
+      for (let otm of res) 
+         if (otm.g) {
+            if (!resp[otm.s]) resp[otm.s] = {};
+            resp[otm.s][otm.d] = otm.g;
+         }
       
       return JSON.stringify(resp);
    }

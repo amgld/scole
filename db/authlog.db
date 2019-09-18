@@ -15,6 +15,7 @@
 {"d":"2019-08-14 15:22:19","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"3C3f6tYXXm10H8pt"}
 {"d":"2019-08-16 20:50:33","l":"admin","c":"root","ip":"127.0.0.1","_id":"3GNAIFlgFNi0HD1t"}
 {"d":"2019-08-13 16:17:41","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"3HQ9fzCbWdo2rHeM"}
+{"d":"2019-09-17 19:13:48","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"3U4FVX94hwrCIEGc"}
 {"d":"2019-08-12 14:41:40","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"3WB2GCj552GvJgTS"}
 {"d":"2019-08-18 11:33:58","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"3fPsKWgJVkWeU6O1"}
 {"d":"2019-09-17 13:37:39","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"3iYmC2EvBfIKLTVW"}
@@ -50,7 +51,9 @@
 {"d":"2019-08-15 15:54:12","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"908q3Bgg1jFWahcK"}
 {"d":"2019-08-12 14:51:42","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"90nHi87e3FxhwUvA"}
 {"d":"2019-08-13 11:18:40","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"9RdgtZODBuc7pG0f"}
+{"d":"2019-09-18 11:48:56","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"9StVLuZ43Y8KLXrg"}
 {"d":"2019-08-19 20:40:01","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"9glhieZqmPbNU08U"}
+{"d":"2019-09-17 19:18:22","l":"davidov","c":"pupil","ip":"127.0.0.1","_id":"9tU7aZCcKQtjUnKU"}
 {"d":"2019-08-14 13:44:53","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"9x0eQZLl6FH1jyLO"}
 {"d":"2019-08-13 19:45:06","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"9ycOp1k3pVO2BXF9"}
 {"d":"2019-08-13 15:28:15","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"A5tGUnRnqHzSR7Zi"}
@@ -364,5 +367,3 @@
 {"d":"2019-08-13 11:17:10","l":"kazakova","c":"pupil","ip":"127.0.0.1","_id":"zIuSTvcg2lhRZcG6"}
 {"d":"2019-08-12 14:46:39","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"zeFOFM6xCaaytquq"}
 {"d":"2019-08-15 17:13:11","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"ziUia6MtPA1448vx"}
-{"d":"2019-09-17 19:13:48","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"3U4FVX94hwrCIEGc"}
-{"d":"2019-09-17 19:18:22","l":"davidov","c":"pupil","ip":"127.0.0.1","_id":"9tU7aZCcKQtjUnKU"}
