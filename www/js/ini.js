@@ -241,6 +241,7 @@ const HTML = `<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
    body {font: 8pt Arial, sans-serif}
    h3 {text-align:center; font-size: 10pt; text-transform: uppercase}
    p {text-align:center;}
+   p.sgn {text-align:left; margin:30pt 0px 0px 3cm; line-height:3;}
    table {border-collapse: collapse; margin: 6pt auto 18pt}
    table th, table td {
       padding: 3pt; border: 0.25pt solid black; text-align: center}

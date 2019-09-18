@@ -7,6 +7,11 @@
 // Объект с предметами (подгружается в конце страницы)
 let achSbList = {};
 
+// Замена отметок на расшифровку
+const grFull = {
+   "0":"н/а", "2":"2 (неуд.)", "3":"3 (удовл.)", "4":"4 (хор.)", "5":"5 (отл.)"
+};
+
 // Собственно генерирование табеля одного ученика
 // В аргументе приходит что-то вроде "pupkin^Пупкин Василий, 8Б класс"
 const achShow = async (pupil) => {
@@ -16,7 +21,8 @@ const achShow = async (pupil) => {
    let famImCl = pupil.split('^')[1];
    let podzag  = famImCl ? `<p><b>${famImCl}</b></p>` : '';
    
-   // Получаем итоговые отметки с помощью API
+   // Получаем итоговые отметки с помощью API в объект
+   // gradesObj = {"s410": {d628a: "5", d831b: "0", ...} ...}
    info(0, "Пожалуйста, дождитесь<br>загрузки данных.");
    let apiResp = await apireq("tabelGet", [pupil.split('^')[0]]);
    info(2);
@@ -24,16 +30,45 @@ const achShow = async (pupil) => {
       dqs("#tabel").innerHTML = "<p>Не удалось получить данные</p>";
       return;
    }   
-   let gradesArr = JSON.parse(apiResp); alert(apiResp);
+   let gradesObj = JSON.parse(apiResp);
    
+   // Упорядоченный список кодов предметов (ключи объекта gradesObj)
+   let subjs = Object.keys(gradesObj)
+             . sort((a,b) => a.substr(1,3) > b.substr(1,3));
+   
+   // Публикуем
+   if (!subjs.length) {
+      dqs("#tabel").innerHTML =
+         "<p>Табель не сгенерирован:<br>не выставлено ни одной " +
+         "отметки промежуточной аттестации</p>";
+      return;
+   }
    let tabel = "<h3>ТАБЕЛЬ ОТМЕТОК ПРОМЕЖУТОЧНОЙ АТТЕСТАЦИИ</h3>" + podzag;
    
+   tabel += "<table><tr><th>Предмет</th>";
+   for (let period of Object.keys(DTSIT))
+      tabel += `<th>${DTSIT[period][0]}</th>`;
+   tabel += "</tr>";
+   
+   for (let sbCode of subjs) {
+      tabel += `<tr><td>${achSbList[sbCode]}</td>`;
+      for (let period of Object.keys(DTSIT)) {
+         let grade = gradesObj[sbCode][period] ?
+                     gradesObj[sbCode][period] : "–";
+         grade = grFull[grade] ? grFull[grade] : grade;
+         tabel += `<td>${grade}</td>`;
+      }
+      tabel += "</tr>";
+   }
+   
+   tabel += "</table>";   
    
    dqs("#tabel").innerHTML =
       tabel + "<p><a id='achPrint'>Версия для печати</a></p>";
    
    // Подготавливаем версию для печати (HTML определен в ini.js)
-   let printCont = HTML.replace("{{body}}", tabel).replace("8pt", "9pt")
+   let tabelPrn = tabel + "<p class='sgn'>Директор<br>Классный руководитель</p>";
+   let printCont = HTML.replace("{{body}}", tabelPrn).replace("8pt", "9pt")
                  . replace("<h3>", "<h3 style='margin-top:5cm'>");
    let dataLink = new Blob([printCont], {type: "text/html"});
    dqs("#achPrint").href = window.URL.createObjectURL(dataLink);
