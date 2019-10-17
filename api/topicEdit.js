@@ -23,8 +23,8 @@ module.exports = async argsObj => {
       let gr = argsObj[0].substr(0,  20).trim(),
           sb = argsObj[1].substr(0,   4).trim(),          
           dt = argsObj[2].substr(0,   4).trim(),
-          tp = argsObj[3].substr(0, 200).trim(),
-          ht = argsObj[4].substr(0, 200).trim(),
+          tp = argsObj[3].substr(0, 300).trim(),
+          ht = argsObj[4].substr(0, 300).trim(),
           wt = argsObj[5].substr(0,   1).trim(),
           lg = argsObj[6].substr(0,  20).trim();
 
