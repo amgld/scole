@@ -24,6 +24,10 @@ let topicsObj = {}, gradesObj = {};
 // Текст placeholder'а в поле редактирования темы урока
 let regTopPH = `Введите тему урока\n(если тема пуста, колонка будет удалена)`;
 
+// Содержимое select выбора веса отметки
+let selWeightInner = '';
+for (let i=0; i<9; i++) selWeightInner += `<option value=${i}>${i/2}</option>`;
+
 // Формирование контента страницы (regNow, regYst, regYfin определены в ini.js)
 createSection("register", `
    <select id="regClassSel" onChange="regPagesSelLoad(this.value);"></select>
@@ -35,8 +39,8 @@ createSection("register", `
                 min="${regYst}" max="${regYfin}" value="${regNow}">
          <textarea placeholder="${regTopPH}"></textarea>
          <input id="regTopHTask" type="text" placeholder="Домашнее задание">
-         <span>Вес отметок (от 0 до 8)</span>
-         <input id="regTopWeight" type="number" min=0 max=8 value=2>
+         <span>Вес отметок (от 0 до 4)</span>
+         <select id="regTopWeight">${selWeightInner}</select>
          <button onClick="topicEdit()"> &gt;&gt; </button>
       </div>
       <div id="regJustTopics"></div>

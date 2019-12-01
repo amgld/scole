@@ -109,7 +109,7 @@ const topicEdit = async () => {
           weight = dqs("#regTopWeight").value.toString().trim();
       if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}
       if (!/^[0-8]{1}$/.test(weight)) {
-         info(1, "Вес может быть целым<br>числом от 0 до 8.");
+         info(1, "Вес должен быть числом<br>от 0 до 4 с шагом 0.5");
          return;         
       }
       if (!topic) if (!confirm(regWarn)) return;
@@ -317,7 +317,7 @@ const gradesShow = () => {
          }
          else { // обычная текущая дата вида d613
             dtN = dateConv(dt);
-            dtW = topicsObj[dt].w;
+            dtW = (Number(topicsObj[dt].w)/2).toString();
          }
          content += `<table${bgcol}><tr>`
                   + `<td onClick="dtFocus('${dt}')">${dtN}</td></tr>`
