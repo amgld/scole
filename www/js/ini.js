@@ -1,6 +1,6 @@
 /**
  *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: ИНИЦИАЛИЗАЦИЯ КОНСТАНТ И ФУНКЦИЙ
- *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ *   Copyright © 2020, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 

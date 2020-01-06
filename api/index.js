@@ -1,6 +1,6 @@
 /**
  *   API ЭЛЕКТРОННОГО ЖУРНАЛА «ШКАЛА»
- *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ *   Copyright © 2020, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 
@@ -22,7 +22,8 @@ const modReq = {
    "gradeAdd":    [1,1], "subgrEdit":   [1,1], "subgrPups":     [1,1],
    "parCodes":    [1,1], "jrnGet":      [1,1], "absentGet":     [1,1],
    "pupilsList":  [1,1], "sprAdd":      [1,1], "sprGet":        [1,1],
-   "sprDel":      [1,1], "sprResp":     [1,1], "tabelGet":      [1,1]
+   "sprDel":      [1,1], "sprResp":     [1,1], "tabelGet":      [1,1],
+   "export":      [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -38,7 +39,7 @@ const RIGHTS = {
    "admin":   [
       "classesList", "subjList", "teachList", "tutorSet", "tutorsList",
       "distrGet", "distrEdit", "classesGroups", "topicsGet", "gradesGet",
-      "absentGet", "pupilsList", "sprResp"
+      "absentGet", "pupilsList", "sprResp", "export"
    ],
    "teacher": [
       "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd"
@@ -46,7 +47,8 @@ const RIGHTS = {
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",
       "gradesGet", "subgrEdit", "subgrPups", "parCodes", "absentGet",
-      "pupilsList", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet"
+      "pupilsList", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
+      "export"
    ],
    "pupil":   [
       "subjList", "teachList", "jrnGet", "absentGet", "sprGet", "sprResp",
@@ -84,7 +86,8 @@ module.exports = async (post, addr) => {
    // (для некоторых функций API, требующих валидного логина юзера)
    let fNames = [
       "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet",
-      "absentGet", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet"
+      "absentGet", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
+      "export"
    ];
    if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
       
