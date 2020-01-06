@@ -300,6 +300,18 @@ section#achsheet table th, section#achsheet table td {
 section#achsheet table td:first-child {
    text-align:left;}
    
+/* БЛОК ЭКСПОРТА ЖУРНАЛА В ФАЙЛ
+   ---------------------------------------------------- */
+section#export #expGet {
+   display:none;}
+section#export ol {
+   width:500px; max-width:98%; margin:auto;}
+section#export li {
+   margin:3pt 0pt; text-align:justify;
+   -webkit-hyphens:auto; -moz-hyphens:auto; -ms-hyphens:auto; hiphens:auto;}
+section#export h3#expMan {
+   margin-top:24pt;}
+   
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
 @media (max-width: 960px) {
