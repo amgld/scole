@@ -18,8 +18,7 @@ const getExpFile = async () => {
    
    // Получаем собственно файл с данными журнала
    dqs("#expGet").innerHTML = "<img src='/static/preloader.gif'>";
-   let className = dqs("#expSelClass");
-   className = "10З";
+   let className = dqs("#expSelClass").value;
    let fileContent = await apireq("export", [className]);
    if (fileContent == "none") {info(1, "Не могу получить данные"); return;}
    
@@ -27,6 +26,7 @@ const getExpFile = async () => {
       + `<meta charset='utf-8'></head><body><article>${fileContent}`
       + `</article><script>${scrContent}</script></body></html>`;
 
+   // Отдаем юзеру
    let dataLink = new Blob([fileContent], {type: "text/html"});
    dqs("#expGet").href = window.URL.createObjectURL(dataLink);
    dqs("#expGet").download = `${className}.html`;
@@ -59,3 +59,24 @@ createSection("export", `
    появившемся окне выбора принтера). В случае печати на бумаге печатать
    необходимо <b>на двух сторонах листа</b>.</li></ol>
 `);
+
+// Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
+getContent.export = async () => {
+   
+   let expRole = dqs("#selRole").value;   
+   let selClassInner = '';
+   dqs("#expGet").style.display = "none";
+   
+   // Если он классный руководитель, показываем ему его классы
+   if (expRole == "tutor")
+      for (let cl of uTutorCls) selClassInner += `<option>${cl}</option>`;
+   
+   // Если он администратор, показываем ему все классы
+   else if (expRole == "admin") {
+      let apiResp = await apireq("classesList");
+      if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
+      let absAllClasses = classSort(JSON.parse(apiResp));
+      for (let cl of absAllClasses) selClassInner += `<option>${cl}</option>`;
+   }
+   dqs("#expSelClass").innerHTML = selClassInner;
+};

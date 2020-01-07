@@ -69,7 +69,6 @@ stl.textContent = `
 `;
 document.head.prepend(stl);
 
-// Формируем содержимое страницы и показываем его
 let doc = `
    <button type="button" onClick="window.print()" title="Печать"
       >&#128424;</button>
@@ -96,40 +95,40 @@ for (let subjObj of scole.content) {
        teach = `${teachArr[0]} ${teachArr[1][0]}. ${teachArr[2][0]}.`;
    toc += `<p><b>${pageNum}</b>&emsp;${subjObj.s} (${teach})</p>`;
    
-   // Текущая печатаемая страница (верх и низ)
-   let currPageTop = '', currPageBott = '';
+   // Текущая печатаемая страница (левая/четная и правая/нечетная)
+   let currPageLeft = '', currPageRight = '';
    
    // Цикл по всем датам (урокам) в данном предмете
    // (11 - количество записанных уроков на одной странице)
    let lessNum = 0;
    for (let lessObj of subjObj.l) {
       if (!(lessNum % 11)) {
-         doc += currPageTop + currPageBott;
-         currPageTop  = `<nav>${pageNum}</nav>`; pageNum++;
-         currPageTop += `<h3>${subjObj.s}</h3>`;
-         currPageTop += pupCol; // список учащихся
+         doc += currPageLeft + currPageRight;
+         currPageLeft  = `<nav>${pageNum}</nav>`; pageNum++;
+         currPageLeft += `<h3>${subjObj.s}</h3>`;
+         currPageLeft += pupCol; // список учащихся
          
-         currPageBott  = `<nav>${pageNum}</nav>`; pageNum++;
-         currPageBott += `<h3>${subjObj.p}</h3>`;
-         currPageBott += "<div class='topicsStr'>"
+         currPageRight  = `<nav>${pageNum}</nav>`; pageNum++;
+         currPageRight += `<h3>${subjObj.p}</h3>`;
+         currPageRight += "<div class='topicsStr'>"
             + "<div>Дата</div><div>Вес</div>"
             + "<div>Содержание урока</div><div>Задание на дом</div>"
             + "</div>";
       }
       // Подписываем текущий столбик урока в таблицу с отметками
-      currPageTop += `<div class='gradeCol'><div>${lessObj.d}</div>`;
+      currPageLeft += `<div class='gradeCol'><div>${lessObj.d}</div>`;
       for (let gr of lessObj.g)
-         currPageTop += `<div>${gr ? gr : ' '}</div>`;
-      currPageTop += "</div>";
+         currPageLeft += `<div>${gr ? gr : ' '}</div>`;
+      currPageLeft += "</div>";
       
       // Подписываем текущую тему в таблицу с темами
-      currPageBott += `<div class='topicsStr'><div>${lessObj.d}</div>`
+      currPageRight += `<div class='topicsStr'><div>${lessObj.d}</div>`
          + `<div>${lessObj.w}</div><div>${lessObj.t.substr(0,120)}</div>`
          + `<div>${lessObj.h.substr(0,120)}</div></div>`;
       
       lessNum++;
    }   
-   doc += currPageTop + currPageBott;
+   doc += currPageLeft + currPageRight;
 }
 
 doc += "<aside><p>В настоящем журнале пронумеровано,<br>" +
