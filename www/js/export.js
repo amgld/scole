@@ -28,10 +28,11 @@ const getExpFile = async () => {
 
    // Отдаем юзеру
    let dataLink = new Blob([fileContent], {type: "text/html"});
-   dqs("#expGet").href = window.URL.createObjectURL(dataLink);
-   dqs("#expGet").download = `${className}.html`;
-   dqs("#expGet").innerHTML = `Скачать файл ${className}.html`;
-   dqs("#expGet").style.display = "block";
+   let linkElem = dqs("#expGet");
+   linkElem.href = window.URL.createObjectURL(dataLink);
+   linkElem.download = `${className}.html`;
+   linkElem.innerHTML = `Скачать файл ${className}.html`;
+   linkElem.style.display = "inline";
 }
 
 // Формирование контента страницы
@@ -39,7 +40,7 @@ createSection("export", `
    <h3>Экспорт журнала одного класса в файл</h3>
    <select id="expSelClass"></select>
    <button type="button" onClick="getExpFile()">Экспортировать</button>
-   <p><a id="expGet">Скачать файл</a></p>
+   <p>&nbsp;<a id="expGet">Скачать файл</a></p>
    
    <h3 id="expMan">Инструкция</h3><ol>
    <li>Выберите класс из выпадающего списка и нажмите кнопку «Экс&shy;пор&shy;ти&shy;ро&shy;вать».</li>
