@@ -80,15 +80,15 @@ let doc = `
 doc += `<section>{{toc}}</section>`;
 let toc = '';
 
-// Формируем колонку с фамилиями учащихся
-let pupCol = "<div class='pupCol'><div>&nbsp;</div>";
-for (let pupil of scole.list) pupCol += `<div>${pupil}</div>`;
-pupCol += "</div>";
-
 let pageNum = 2;
 
 // Цикл по предметам в данном классе
 for (let subjObj of scole.content) {
+   
+   // Формируем колонку с фамилиями учащихся
+   let pupCol = "<div class='pupCol'><div>&nbsp;</div>";
+   for (let pupil of subjObj.list) pupCol += `<div>${pupil}</div>`;
+   pupCol += "</div>";
    
    // Формируем элемент оглавления
    let teachArr = subjObj.p.split(' '),
@@ -105,7 +105,7 @@ for (let subjObj of scole.content) {
       if (!(lessNum % 11)) {
          doc += currPageLeft + currPageRight;
          currPageLeft  = `<nav>${pageNum}</nav>`; pageNum++;
-         currPageLeft += `<h3>${subjObj.s}</h3>`;
+         currPageLeft += `<h3>${subjObj.s}</h3>`;         
          currPageLeft += pupCol; // список учащихся
          
          currPageRight  = `<nav>${pageNum}</nav>`; pageNum++;
