@@ -7,7 +7,7 @@
 // Функция получает файл журнала с бэкенда и отдает его юзеру
 const getExpFile = async () => {
    // Получаем файл со скриптом показа журнала   
-   let scrContent = await (await fetch("/static/viewExport.js")).text();
+   let scrContent = await (await fetch("/js/viewExport.js")).text();
    if (!scrContent.includes("use strict")) {
       info(1, "Не могу получить данные");
       return;
