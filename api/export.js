@@ -14,10 +14,10 @@
 //   "content": [
 //      {
 //         "list": ["Иванов В.", "Петров П.", ...],
-//         "s":    "Русский язык",
+//         "s":    "s110",
 //         "p":    "Кулебякин Иван Петрович",
 //         "l": [
-//            {"d":"03.09","w":2,"t":"Африка","h":"№ 234", "g":["3 4н", ...]},
+//            {"d":"d403","w":2,"t":"Африка","h":"№ 234", "g":["3 4н", ...]},
 //            ...
 //          ]
 //      },
@@ -46,11 +46,27 @@ module.exports = async (args) => {
       
       resp.className = clName;
       
-      // Список предметов, подгрупп и фамилий учителей данного класса типа
-      // curric = [["Физика", "10Б-инф1", "Козлов Иван Петрович"], ...]
+      // Забираем из таблицы topics все записи данного класса и его подгрупп
+      // и сортируем массив полученных объектов по коду предмета
+      let pattern   = new RegExp(`^${clName}`);
+      let resTopics = await dbFind("topics", {g: pattern});
+      resTopics = resTopics.sort((x, y) => x.s.substr(1,3) > y.s.substr(1,3));      
       
-      // Цикл по списку предметов
+      // Разбираем полученный массив в объект objTopics с ключами вида
+      // "Группа^кодПредм^Учитель" и значениями - массивами объектов из
+      // остальных полей, например:
+      // objTopics["10Б-мальч^s110^pupkin"] =
+      //    [{d: "d004", t: "Африка", h: "Учить термины", w: 2}, ...]
+      let objTopics = {};
+      for (let currT of resTopics) {
+         if (!objTopics[`${currT.g}^${currT.s}^${currT.l}`])
+            objTopics[`${currT.g}^${currT.s}^${currT.l}`] = [];
+            
+         objTopics[`${currT.g}^${currT.s}^${currT.l}`]
+            .push({d: currT.d, t: currT.t, h: currT.h, w: currT.w});
+      }
       
+      console.info(objTopics);
       
       return JSON.stringify(resp);
    }
