@@ -66,7 +66,28 @@ module.exports = async (args) => {
             .push({d: currT.d, t: currT.t, h: currT.h, w: currT.w});
       }
       
-      console.info(objTopics);
+      // Идем по этому объекту и формируем resp.content
+      for (let currGST of Object.keys(objTopics)) {
+         let keyArr = currGST.split('^');
+         let grGetData = await grGet([keyArr[0], keyArr[1], keyArr[2]]);
+         let grData = JSON.parse(grGetData);
+         
+         // Список учащихся и название предмета
+         let contElem = {list: [], s: '', p: '', l: []};
+         if (grData.pnList) contElem.list = grData.pnList;
+         contElem.s    = keyArr[1];
+         
+         // Фамилия, имя, отчество педагога
+         let tRes = await dbFind("staff", {Ulogin: keyArr[2]});
+         contElem.p = "Неизвестный None None";
+         if (res.length) contElem.p =
+            `${tRes[0].Ufamil} ${tRes[0].Uname} ${tRes[0].Uotch}`;
+            
+         // Массив с датами, весами, темами, дз и отметками
+         // contElem.l = ;
+         
+         resp.content.push(contElem);
+      }
       
       return JSON.stringify(resp);
    }
