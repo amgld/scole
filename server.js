@@ -32,7 +32,7 @@ global.admPwd  = PWD;
 /* ИНИЦИАЛИЗАЦИЯ КОЛЛЕКЦИЙ БАЗЫ ДАННЫХ
  * ----------------------------------------------------------------------- */
 global.db  = {};
-db.staff    = new nedb({filename: __dirname + "/db/staff.db",    autoload: true});
+db.staff   = new nedb({filename: __dirname + "/db/staff.db",   autoload: true});
 db.pupils  = new nedb({filename: __dirname + "/db/pupils.db",  autoload: true});
 db.curric  = new nedb({filename: __dirname + "/db/curric.db",  autoload: true});
 db.distrib = new nedb({filename: __dirname + "/db/distrib.db", autoload: true});
