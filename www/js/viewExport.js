@@ -122,9 +122,10 @@ for (let subjObj of scole.content) {
       currPageLeft += "</div>";
       
       // Подписываем текущую тему в таблицу с темами
-      currPageRight += `<div class='topicsStr'><div>${lessObj.d}</div>`
-         + `<div>${lessObj.w}</div><div>${lessObj.t.substr(0,120)}</div>`
-         + `<div>${lessObj.h.substr(0,120)}</div></div>`;
+      if (lessObj.t)
+         currPageRight += `<div class='topicsStr'><div>${lessObj.d}</div>`
+            + `<div>${lessObj.w}</div><div>${lessObj.t.substr(0,120)}</div>`
+            + `<div>${lessObj.h.substr(0,120)}</div></div>`;
       
       lessNum++;
    }   

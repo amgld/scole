@@ -89,8 +89,10 @@ module.exports = async (argsObj) => {
          for (let currGr of grResp) {
             if (resp.puList.includes(currGr.p)) {
                let i = resp.puList.indexOf(currGr.p);
-               if (!resp[currGr.d])
-                  resp[currGr.d] = (new Array(grVal)).map(x => ''); // массив ''
+               if (!resp[currGr.d]) { // тогда просто массив ''
+                  resp[currGr.d] = [];
+                  for (let i=0; i<grVal; i++) resp[currGr.d][i] = '';
+               }
                resp[currGr.d][i] = currGr.g;
             }
          }

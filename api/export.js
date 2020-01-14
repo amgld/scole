@@ -63,7 +63,7 @@ module.exports = async (args) => {
             objTopics[`${currT.g}^${currT.s}^${currT.l}`] = [];
             
          objTopics[`${currT.g}^${currT.s}^${currT.l}`]
-            .push({d: currT.d, t: currT.t, h: currT.h, w: currT.w});
+            .push({d: currT.d, t: currT.t, h: currT.h, w: currT.w});         
       }
       
       // Идем по этому объекту и формируем resp.content
@@ -73,23 +73,43 @@ module.exports = async (args) => {
          let grData = JSON.parse(grGetData);
          
          // Список учащихся и название предмета
-         let contElem = {list: [], s: '', p: '', l: []};
+         let contElem = {list: [], s: '', p: "Неизвестный N N", l: []};
          if (grData.pnList) contElem.list = grData.pnList;
          contElem.s    = keyArr[1];
          
          // Фамилия, имя, отчество педагога
          let tRes = await dbFind("staff", {Ulogin: keyArr[2]});
-         contElem.p = "Неизвестный None None";
          if (res.length) contElem.p =
             `${tRes[0].Ufamil} ${tRes[0].Uname} ${tRes[0].Uotch}`;
             
          // Массив с датами, весами, темами, дз и отметками
-         // contElem.l = ;
+         let topicsArr = objTopics[currGST];
+         for (let currT of topicsArr) {
+            let marks = grData[currT.d];
+            if (!marks) {
+               marks = [];
+               for (let i=0; i<contElem.list.length; i++) marks[i] = '';
+            }
+            marks = marks.map(x => x.replace(/999/g, "зач"));
+            contElem.l.push(
+               {d:currT.d, w:currT.w, t:currT.t, h:currT.h, g:marks}
+            );
+         }
+         // Добавляем еще в contElem.l все итоговые отметки
+         for (let k of Object.keys(grData)) if (k.length == 5) {
+            let marks = grData[k].map(
+               x => x.replace(/^0$/g, "н/а").replace(/999/g, "зач")
+            );
+            contElem.l.push({d:k, w:0, t:'', h:'', g:marks})
+         }
+         
+         // Сортируем по возрастанию дат
+         contElem.l = contElem.l.sort((a,b) => (a.d > b.d) ? 1 : -1);
          
          resp.content.push(contElem);
       }
       
       return JSON.stringify(resp);
    }
-   catch(e) {console.info(e); return "none";} // !!!!!!!!!!! не забыть удалить!
+   catch(e) {console.info(e); return "none";}
 };
