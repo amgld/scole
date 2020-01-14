@@ -8,7 +8,7 @@
 let expSbListFull = {};
 
 // Функция получает файл журнала с бэкенда и отдает его юзеру
-const getExpFile = async () => {
+const getExpFile = async () => {   
    // Получаем файл со скриптом показа журнала   
    let scrContent = await (await fetch("/js/viewExport.js")).text();
    if (!scrContent.includes("use strict")) {
@@ -21,6 +21,7 @@ const getExpFile = async () => {
    
    // Получаем собственно файл с данными журнала
    dqs("#expGet").innerHTML = "<img src='/static/preloader.gif'>";
+   dqs("#expGet").style.display = "inline";
    let className = dqs("#expSelClass").value;
    let fileContent = await apireq("export", [className]);
    if (fileContent == "none") {info(1, "Не могу получить данные"); return;}
@@ -50,7 +51,6 @@ const getExpFile = async () => {
    linkElem.href = window.URL.createObjectURL(dataLink);
    linkElem.download = `${className}.html`;
    linkElem.innerHTML = `Скачать файл ${className}.html`;
-   linkElem.style.display = "inline";
 }
 
 // Формирование контента страницы

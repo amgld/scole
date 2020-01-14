@@ -47,10 +47,12 @@ module.exports = async (args) => {
       resp.className = clName;
       
       // Забираем из таблицы topics все записи данного класса и его подгрупп
-      // и сортируем массив полученных объектов по коду предмета
+      // и сортируем полученный массив по кодам предметов
       let pattern   = new RegExp(`^${clName}`);
       let resTopics = await dbFind("topics", {g: pattern});
-      resTopics = resTopics.sort((x, y) => x.s.substr(1,3) > y.s.substr(1,3));      
+      resTopics = resTopics.sort(
+         (a,b) => (a.s.substr(1,3) > b.s.substr(1,3)) ? 1 : -1
+      );
       
       // Разбираем полученный массив в объект objTopics с ключами вида
       // "Группа^кодПредм^Учитель" и значениями - массивами объектов из
