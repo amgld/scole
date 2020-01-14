@@ -22,8 +22,22 @@ const getExpFile = async () => {
    let fileContent = await apireq("export", [className]);
    if (fileContent == "none") {info(1, "Не могу получить данные"); return;}
    
+   // Заменяем коды предметов и дат на названия и собственно даты
+   let expObj = JSON.parse(fileContent);
+   for (let i=0; i<expObj.content.length; i++) {
+      // expObj.content[i].s - код предмета, заменяем на название
+      
+      // Заменяем код даты на собственно дату
+      for (let j=0; j<expObj.content[i].l.length; j++) {
+         let dtCode = (expObj.content[i].l)[j].d;
+         let dt = (dtCode.length == 4) ?
+            dateConv(dtCode) : `<b>${DTSIT[dtCode][0]}</b>`;
+         (expObj.content[i].l)[j].d = dt;
+      }
+   }
+   
    fileContent = "<!DOCTYPE html><html lang='ru'><head>"
-      + `<meta charset='utf-8'></head><body><article>${fileContent}`
+      + `<meta charset='utf-8'></head><body><article>${JSON.stringify(expObj)}`
       + `</article><script>${scrContent}</script></body></html>`;
 
    // Отдаем юзеру
