@@ -18,10 +18,8 @@ const regPagesSelLoad = async (className) => {
    dqs("#regPageSel").innerHTML = '';   
    let regRole = dqs("#selRole").value, regSelPgInner = '';   
    
-   // Получение объекта со списком всех предметов
-   let apiResp     = await apireq("subjList");
-   let subjListDop = JSON.parse(apiResp);
-   let sbListFull  = {...subjDef, ...subjListDop};   
+   // Получаем объект со списком всех предметов
+   let sbListFull = await sbListFullGet();   
 
    if (regRole == "admin" || regRole == "tutor") {
       

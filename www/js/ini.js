@@ -114,6 +114,13 @@ const subjDef = {
    "s820": "ОБЖ"
 };
 
+// Получение объекта со списком всех предметов {"s403":"Физика", ...}
+const sbListFullGet = async () => {
+   let apiResp   = await apireq("subjList");
+   let sbListDop = JSON.parse(apiResp);
+   return {...subjDef, ...sbListDop};
+}
+
 // Виды документов о пропусках уроков
 const sprVid = {
    "med": "Справка медицинской организации",

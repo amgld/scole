@@ -4,6 +4,9 @@
  */
 "use strict";
 
+// Объект со списком всех предметов
+let expSbListFull = {};
+
 // Функция получает файл журнала с бэкенда и отдает его юзеру
 const getExpFile = async () => {
    // Получаем файл со скриптом показа журнала   
@@ -25,7 +28,8 @@ const getExpFile = async () => {
    // Заменяем коды предметов и дат на названия и собственно даты
    let expObj = JSON.parse(fileContent);
    for (let i=0; i<expObj.content.length; i++) {
-      // expObj.content[i].s - код предмета, заменяем на название
+      // Код предмета заменяем на название      
+      expObj.content[i].s = expSbListFull[expObj.content[i].s];
       
       // Заменяем код даты на собственно дату
       for (let j=0; j<expObj.content[i].l.length; j++) {
@@ -94,4 +98,7 @@ getContent.export = async () => {
       for (let cl of absAllClasses) selClassInner += `<option>${cl}</option>`;
    }
    dqs("#expSelClass").innerHTML = selClassInner;
+   
+   // Заполняем объект со списком всех предметов
+   expSbListFull = await sbListFullGet();
 };
