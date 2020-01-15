@@ -87,6 +87,7 @@ doc += `<section>{{toc}}</section>`;
 let toc = '';
 
 let listFull = new Set(); // полный список класса
+let vedom = [];           // массив со сводной ведомостью
 let pageNum = 2;
 
 // Цикл по предметам в данном классе
@@ -103,8 +104,30 @@ for (let subjObj of scole.content) {
    
    // Формируем элемент оглавления
    let teachArr = subjObj.p.split(' '),
-       teach = `${teachArr[0]} ${teachArr[1][0]}. ${teachArr[2][0]}.`;
+       teach = `${teachArr[0]}&nbsp;${teachArr[1][0]}.&nbsp;${teachArr[2][0]}.`;
    toc += `<p><b>${pageNum}</b>&emsp;${subjObj.s} (${teach})</p>`;
+   
+   // Пополняем массив со сводной ведомостью vedom =
+   // [
+   //    [
+   //       "Русский язык (Петров К. С.)",
+   //       {"Иванов В.": {"1ч.": 5, ...}, "Петров П.": {"1ч.": 3, ...}, ...}
+   //    ],
+   //    ...
+   // ]
+   // (массив учебных периодов PERDS подписан спереди скриптом export.js)
+   let vedomAdd = {};
+   for (let dt of subjObj.l) {
+      let dateBrief = dt.d.replace(/<.{0,1}b>/g, ''); // убираем <b></b>
+      if (PERDS.includes(dateBrief)) {         
+         for (let i=0; i<subjObj.list.length; i++) {
+            let fio = subjObj.list[i];
+            if (!vedomAdd[fio]) vedomAdd[fio] = {};
+            vedomAdd[fio][dateBrief] = (dt.g)[i];
+         }
+      }
+   }   
+   vedom.push([`${subjObj.s} (${teach})`, vedomAdd]);
    
    // Текущая печатаемая страница (левая/четная и правая/нечетная)
    let currPageLeft = '', currPageRight = '';
@@ -170,12 +193,24 @@ for (let vNum=0; vNum<pup2.length; vNum++) {
    for (let pup of pup2[vNum]) {doc += `<th colspan='${itVal}'>${pup}</th>`;}
    doc += "</tr><tr>";
    for (let pup of pup2[vNum]) {
-      for (let i=0; i<itVal; i++) doc += `<th>${PERDS[i]}</th>`;
+      for (let period of PERDS) doc += `<th>${period}</th>`;
    }
    doc += "</tr>";
    
-   // Цикл по предметам в данном классе, формируем строки таблицы
-   
+   // Цикл по ранее сформированному массиву vedom, формируем строки таблицы
+   for (let subjEl of vedom) {
+      doc += "<tr>";
+      doc += `<td>${subjEl[0]}</td>`;
+      for (let pup of pup2[vNum]) {
+         for (let per of PERDS) {
+            let tdCont = '';
+            if (subjEl[1][pup]) if (subjEl[1][pup][per])
+               tdCont = subjEl[1][pup][per];
+            doc += `<td>${tdCont}</td>`;
+         }
+      }
+      doc += "</tr>";
+   }   
    
    doc += "</table>";
 }

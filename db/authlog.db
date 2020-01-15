@@ -53,6 +53,7 @@
 {"d":"2020-01-06 20:02:47","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"6CxVce8EHcPVhaV1"}
 {"d":"2019-08-11 16:22:50","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"6FN1ZNv4z3DPy3Ij"}
 {"d":"2019-12-01 16:25:06","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"6H5TokXbWTI1Hw7w"}
+{"d":"2020-01-15 13:31:45","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"6HSOkRUnX95OXJvi"}
 {"d":"2019-08-10 13:33:08","l":"goldin_staff","ip":"127.0.0.1","_id":"6MyS48ShrfLIoiMJ"}
 {"d":"2019-08-11 15:10:06","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"6UVVxn6xXmpjDxSS"}
 {"d":"2019-08-12 14:53:03","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"6aK4TQ77S1ArWbdu"}
@@ -68,6 +69,7 @@
 {"d":"2019-08-11 17:59:29","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"7gSF1fvlKn93iv2E"}
 {"d":"2019-08-10 21:19:27","l":"kazakova","c":"pupil","ip":"127.0.0.1","_id":"85G1E58f5VvnSqkL"}
 {"d":"2019-08-18 13:21:38","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"8CmkPt8IfIBMs0zF"}
+{"d":"2020-01-15 13:36:48","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"8IZpO5D7saOIy1Q3"}
 {"d":"2019-08-13 15:31:45","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"8MnEmS00QKuZf1mA"}
 {"d":"2020-01-06 19:41:19","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"8ONChunkxkQmEQZt"}
 {"d":"2019-12-01 16:32:15","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"8SCoYiFl3mzkaRtt"}
@@ -121,7 +123,9 @@
 {"d":"2019-09-17 14:14:41","l":"kuku","c":"pupil","ip":"127.0.0.1","_id":"EF2fOgP6qMjZPhr8"}
 {"d":"2019-08-14 15:38:59","l":"bikova","c":"pupil","ip":"127.0.0.1","_id":"EHUGpTgQpbR3Gch2"}
 {"d":"2019-08-10 21:25:12","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"Ed2vpkNWNaxTNsaf"}
+{"d":"2020-01-15 13:51:39","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"ElKBBnJ6F4ZrbQAr"}
 {"d":"2019-08-10 21:16:47","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"EmlibdMYZzIPBDNk"}
+{"d":"2020-01-15 12:48:01","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"EozfOJ6doZmoSi59"}
 {"d":"2019-08-19 20:31:54","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"Ep9SwBhTaDqjgAl8"}
 {"d":"2019-08-13 10:21:52","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"Ewu2BxcVTjOggLkn"}
 {"d":"2020-01-06 21:46:56","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"Ez3vUr4ciD63k3bF"}
@@ -135,6 +139,7 @@
 {"d":"2019-08-14 15:08:24","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"GxFrfqUids3BHJRq"}
 {"d":"2019-08-10 21:12:37","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"GybpZJsLFcsreL7N"}
 {"d":"2019-08-13 09:57:48","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"Gze42ijgFCHYes75"}
+{"d":"2020-01-15 12:58:08","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"H22YRqJGqlXYE0WH"}
 {"d":"2019-08-14 15:11:44","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"H3A9qR7pSNmF28GC"}
 {"d":"2019-08-18 14:34:15","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"H54fxBBHytqniNfJ"}
 {"d":"2019-08-12 14:51:11","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"H5ywUTeLUggpC89d"}
@@ -144,8 +149,10 @@
 {"d":"2019-09-17 17:38:14","l":"kuku","c":"pupil","ip":"127.0.0.1","_id":"HWAHYgiKReOHU3Jh"}
 {"d":"2019-08-15 12:34:39","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"HYeWVSaNfBFVcos5"}
 {"d":"2019-08-13 15:32:24","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"HckgAxv84JCxlKeZ"}
+{"d":"2020-01-15 14:07:07","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"HjIHB5W2EwBT1sDa"}
 {"d":"2020-01-14 18:35:06","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"HnMksw9SEFPEUxuP"}
 {"d":"2019-08-11 15:01:50","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"Hq2DRFA65VsZ8JNA"}
+{"d":"2020-01-15 13:56:02","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"HrSBYE8cxhb6L4hH"}
 {"d":"2019-08-14 13:47:20","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"HsX3vFKgnCni7PKv"}
 {"d":"2019-08-18 11:50:39","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"Huv0AOrmBYu8wyZY"}
 {"d":"2019-08-09 17:05:18","l":"elkin","ip":"127.0.0.1","_id":"Hx66HKrrho5i1b08"}
@@ -231,6 +238,7 @@
 {"d":"2019-08-13 18:49:17","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"SXXrscKB6HnpfGWS"}
 {"d":"2019-08-11 15:24:15","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"SqjGoEC7W7kaxx1C"}
 {"d":"2020-01-06 19:43:51","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"SvUf4Xos78VbIfmi"}
+{"d":"2020-01-15 14:08:08","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"SztstTGpJlc4NTYu"}
 {"d":"2019-08-19 20:31:14","l":"admin","c":"root","ip":"127.0.0.1","_id":"T1Do9g3TwQ2U5znZ"}
 {"d":"2019-08-11 19:17:25","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"TAkOX1Z2hfzSatcN"}
 {"d":"2019-08-18 14:10:37","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"TUUbGu4PecmtzP3e"}
@@ -289,6 +297,7 @@
 {"d":"2019-08-15 16:15:49","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"Z4WfkJTT3YJ3k4oz"}
 {"d":"2020-01-06 19:18:01","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"ZC83HrVYaau9X074"}
 {"d":"2019-08-13 17:33:54","l":"bistrikh","c":"pupil","ip":"127.0.0.1","_id":"ZGiTuJM19alALr68"}
+{"d":"2020-01-15 13:10:32","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"ZKauOWRpd5zqjZqJ"}
 {"d":"2019-08-10 13:34:15","l":"admin","ip":"127.0.0.1","_id":"ZZXXbt1Ouae3OQSv"}
 {"d":"2019-09-18 12:51:56","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"ZiU0NtzpnbupKyS0"}
 {"d":"2019-08-10 14:47:46","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"Zk7idmEjvrRtCsvj"}
@@ -353,6 +362,7 @@
 {"d":"2019-12-01 16:31:51","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"huvJRbzR0tIsbiE4"}
 {"d":"2019-08-18 14:21:05","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"iG9W5hv0flRqBcia"}
 {"d":"2019-08-18 14:25:42","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"iGlIRazjVrHVblw1"}
+{"d":"2020-01-15 13:48:52","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"iLIJA2ERuchAS3Rw"}
 {"d":"2020-01-06 21:43:07","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"iUDSyTtPcTpWsVBv"}
 {"d":"2019-08-15 12:43:55","l":"davidov","c":"pupil","ip":"127.0.0.1","_id":"ibCzpwnNW793hdNb"}
 {"d":"2019-08-11 15:55:51","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"iq14HJ3dbxSaEfOv"}
@@ -364,6 +374,7 @@
 {"d":"2019-08-13 07:45:36","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"jW5nvqTzqmRKRgjH"}
 {"d":"2019-08-14 15:16:01","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"jbOGQHvGoZizmMBT"}
 {"d":"2019-08-10 13:24:57","l":"goldin_staff","ip":"127.0.0.1","_id":"jceX1cGxIrYSlIgA"}
+{"d":"2020-01-15 14:03:15","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"jka01IZM3DN2ZRrO"}
 {"d":"2020-01-06 21:15:22","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"jrfKnl02f2OBAs7H"}
 {"d":"2019-08-18 14:43:01","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"jrv6Jlb1rUTN7vec"}
 {"d":"2019-08-12 14:44:32","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"kPZr1C8OSt82CuVx"}
@@ -483,14 +494,16 @@
 {"d":"2020-01-06 21:18:20","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"zYS1IyXH3nuAX1YN"}
 {"d":"2019-08-12 14:46:39","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"zeFOFM6xCaaytquq"}
 {"d":"2019-08-15 17:13:11","l":"elkin","c":"pupil","ip":"127.0.0.1","_id":"ziUia6MtPA1448vx"}
-{"d":"2020-01-15 12:48:01","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"EozfOJ6doZmoSi59"}
-{"d":"2020-01-15 12:58:08","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"H22YRqJGqlXYE0WH"}
-{"d":"2020-01-15 13:10:32","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"ZKauOWRpd5zqjZqJ"}
-{"d":"2020-01-15 13:31:45","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"6HSOkRUnX95OXJvi"}
-{"d":"2020-01-15 13:36:48","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"8IZpO5D7saOIy1Q3"}
-{"d":"2020-01-15 13:48:52","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"iLIJA2ERuchAS3Rw"}
-{"d":"2020-01-15 13:51:39","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"ElKBBnJ6F4ZrbQAr"}
-{"d":"2020-01-15 13:56:02","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"HrSBYE8cxhb6L4hH"}
-{"d":"2020-01-15 14:03:15","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"jka01IZM3DN2ZRrO"}
-{"d":"2020-01-15 14:07:07","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"HjIHB5W2EwBT1sDa"}
-{"d":"2020-01-15 14:08:08","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"SztstTGpJlc4NTYu"}
+{"d":"2020-01-15 17:45:12","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"Xu4Tjy4AEw9gF5oL"}
+{"d":"2020-01-15 17:58:22","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"hRYLEtHZTdBDrELT"}
+{"d":"2020-01-15 18:01:44","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"fhyAMkscI6ymtrbI"}
+{"d":"2020-01-15 18:02:59","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"JRlmDgvm3zMCyWSy"}
+{"d":"2020-01-15 18:05:42","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"YgfD5wbwkFOlzuqh"}
+{"d":"2020-01-15 18:08:32","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"WFfu5TGrdG2gYXoT"}
+{"d":"2020-01-15 18:16:30","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"Cnxh86algB9dWDII"}
+{"d":"2020-01-15 18:18:20","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"z0fC42izJhJvFEk0"}
+{"d":"2020-01-15 18:20:47","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"LEOzVavI9s4ljfOI"}
+{"d":"2020-01-15 18:23:31","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"GafWjFO4wmOjgItB"}
+{"d":"2020-01-15 18:24:55","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"YX616c34QST74fF6"}
+{"d":"2020-01-15 18:25:59","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"796GAKQLn2FmpUep"}
+{"d":"2020-01-15 18:29:02","l":"goldin","c":"staff","ip":"127.0.0.1","_id":"cRUceIElImo5puUB"}
