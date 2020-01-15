@@ -10,7 +10,8 @@
 // 
 // Возвращается сериализованный в строку объект вида
 // {
-//   "className": "8А",   
+//   "className": "8А",
+//   "tutor": "Петров Иван Сидорович", 
 //   "content": [
 //      {
 //         "list": ["Иванов В.", "Петров П.", ...],
@@ -27,7 +28,7 @@
 const grGet = require("./gradesGet");
 
 module.exports = async (args) => {
-   let resp = {className: '', content: []};
+   let resp = {className: '', tutor: "не назначен", content: []};
    try {
       if (args.length != 2) return "none";
       let clName = args[0].substr(0,  3).trim(),
@@ -35,16 +36,24 @@ module.exports = async (args) => {
 
       if (!clName || !lg) return "none";
       
+      // Определяем логин классного руководителя
+      let tutorLgn = '';
+      let clRes = await dbFind("curric", {type: "class", className: clName});
+      if (clRes.length) tutorLgn = clRes[0].tutor ? clRes[0].tutor : '';
+      
       // Проверяем полномочия автора запроса на запрашиваемый класс
       let res = await dbFind("staff", {Ulogin: lg});
       if (!res.length) return "none";
-      if (!res[0].admin) {         
-         let clRes = await dbFind("curric", {type: "class", className: clName});
-         if (!clRes.length)        return "none";
-         if (clRes[0].tutor != lg) return "none";
-      }
+      if (!res[0].admin) if (tutorLgn != lg) return "none";
       
       resp.className = clName;
+      
+      // ФИО классного руководителя
+      if (tutorLgn) {
+         let tutRes = await dbFind("staff", {Ulogin: tutorLgn});
+         if (tutRes.length) resp.tutor =
+            `${tutRes[0].Ufamil} ${tutRes[0].Uname} ${tutRes[0].Uotch}`;
+      }
       
       // Забираем из таблицы topics все записи данного класса и его подгрупп
       // и сортируем полученный массив по кодам предметов
@@ -81,7 +90,7 @@ module.exports = async (args) => {
          
          // Фамилия, имя, отчество педагога
          let tRes = await dbFind("staff", {Ulogin: keyArr[2]});
-         if (res.length) contElem.p =
+         if (tRes.length) contElem.p =
             `${tRes[0].Ufamil} ${tRes[0].Uname} ${tRes[0].Uotch}`;
             
          // Массив с датами, весами, темами, дз и отметками
