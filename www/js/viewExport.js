@@ -59,6 +59,12 @@ stl.textContent = `
    h3 + .topicsStr div {border-left:0.25pt solid black}
    h3 + .topicsStr div:first-child {border-left:none}
    
+   /* Таблица со сводной ведомостью успеваемости */
+   table {border-collapse:collapse; width:100%}
+   th, td {padding:2pt; border:0.25pt solid black; text-align:center}
+   th {font-weight:normal}
+   td:first-child {text-align:left}
+   
    @media screen {
       html {background:#ccc}
       body {background:white; margin:2cm auto; padding-top:1cm;}
@@ -80,14 +86,19 @@ let doc = `
 doc += `<section>{{toc}}</section>`;
 let toc = '';
 
+let listFull = new Set(); // полный список класса
 let pageNum = 2;
 
 // Цикл по предметам в данном классе
 for (let subjObj of scole.content) {
    
-   // Формируем колонку с фамилиями учащихся
+   // Формируем колонку с фамилиями учащихся;
+   // заодно накапливаем все фамилии в множестве listFull
    let pupCol = "<div class='pupCol'><div>&nbsp;</div>";
-   for (let pupil of subjObj.list) pupCol += `<div>${pupil}</div>`;
+   for (let pupil of subjObj.list) {
+      pupCol += `<div>${pupil}</div>`;
+      listFull.add(pupil);
+   }
    pupCol += "</div>";
    
    // Формируем элемент оглавления
@@ -130,6 +141,43 @@ for (let subjObj of scole.content) {
       lessNum++;
    }   
    doc += currPageLeft + currPageRight;
+}
+
+// Сводная ведомость учета успеваемости
+toc += `<p><b>${pageNum}</b>&emsp;Сводная ведомость учета успеваемости</p>`;
+doc += `<nav>${pageNum}</nav>`; pageNum++;
+doc += `<h3>Сводная ведомость учета успеваемости ${scole.className} класса<br>`
+     + `<small>Классный руководитель: ${scole.tutor}</small></h3>`;
+
+// Полный список учащихся, разбитый по 2 (массив pup2):
+// [["Кац И.", "Ким Ю."], ["Иванов И.", "Петров П."], ...]
+let pupils = [...listFull].sort((a,b) => a.localeCompare(b, "ru"));
+let pup2   = [], innerArr;
+for (let i=0; i<Math.ceil(pupils.length / 2); i++) {
+   innerArr = [];
+   for (let j=0; j<2; j++) if(pupils[2*i+j]) innerArr.push(pupils[2*i+j]);
+   pup2.push(innerArr);
+}
+
+// Цикл по этим двойкам (каждой двойке соответствует страница с таблицей)
+for (let vNum=0; vNum<pup2.length; vNum++) {
+   if (vNum) doc += `<nav>${pageNum}</nav>`; pageNum++;
+   
+   // Печатаем заголовочную часть таблицы с фио детей и учебными периодами
+   // (массив учебных периодов PERDS подписан спереди скриптом export.js)
+   let itVal = PERDS.length;
+   doc += "<table><tr><th rowspan='2'>Предмет и учитель</th>";
+   for (let pup of pup2[vNum]) {doc += `<th colspan='${itVal}'>${pup}</th>`;}
+   doc += "</tr><tr>";
+   for (let pup of pup2[vNum]) {
+      for (let i=0; i<itVal; i++) doc += `<th>${PERDS[i]}</th>`;
+   }
+   doc += "</tr>";
+   
+   // Цикл по предметам в данном классе, формируем строки таблицы
+   
+   
+   doc += "</table>";
 }
 
 doc += "<aside><p>В настоящем журнале пронумеровано,<br>" +

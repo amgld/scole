@@ -7,6 +7,10 @@
 // Объект со списком всех предметов
 let expSbListFull = {};
 
+// Учебные периоды типа ["1ч", "2ч", ...]
+let PERDS = [];
+for (let perN=0; perN<STPER.length; perN++) PERDS[perN] = STPER[perN][0];
+
 // Функция получает файл журнала с бэкенда и отдает его юзеру
 const getExpFile = async () => {   
    // Получаем файл со скриптом показа журнала   
@@ -43,7 +47,8 @@ const getExpFile = async () => {
    
    fileContent = "<!DOCTYPE html><html lang='ru'><head>"
       + `<meta charset='utf-8'></head><body><article>${JSON.stringify(expObj)}`
-      + `</article><script>${scrContent}</script></body></html>`;
+      + `</article><script>"use strict"; const PERDS = ${JSON.stringify(PERDS)}`
+      + `</script><script>${scrContent}</script></body></html>`;
 
    // Отдаем юзеру
    let dataLink = new Blob([fileContent], {type: "text/html"});
