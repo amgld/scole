@@ -9,9 +9,9 @@
 // Класс, предмет и учитель для отображаемой странички
 let rgClassName = '', rgSubjCode = '', rgTeachLgn = '';
 
-// Объекты с темами уроков, дз и весами отметок, а также
+// Объекты с темами уроков, дз, весами отметок, к-вом часов занятия, а также
 // со списком детей и отметками (оба - для текущей отображаемой страницы)
-// topicsObj = {d601: {t: "Африка", h: "Учить главу 4", w: 4},...}
+// topicsObj = {d601: {t: "Африка", h: "Учить главу 4", w: 4, v:2},...}
 // gradesObj =
 //    {
 //       puList: ["ivanov", "petrov",...],
@@ -28,6 +28,10 @@ let regTopPH = `Введите тему урока\n(если тема пуст�
 let selWeightInner = '';
 for (let i=0; i<9; i++) selWeightInner += `<option value=${i}>${i/2}</option>`;
 
+// Содержимое select выбора количества часов
+let selVolInner = '';
+for (let i=1; i<8; i++) selVolInner += `<option value="${i}">${i} ч</option>`;
+
 // Формирование контента страницы (regNow, regYst, regYfin определены в ini.js)
 createSection("register", `
    <select id="regClassSel" onChange="regPagesSelLoad(this.value);"></select>
@@ -39,6 +43,7 @@ createSection("register", `
                 min="${regYst}" max="${regYfin}" value="${regNow}">
          <textarea placeholder="${regTopPH}"></textarea>
          <input id="regTopHTask" type="text" placeholder="Домашнее задание">
+         <select id="regTopVol">${selVolInner}</select>
          <span>Вес отметок (от 0 до 4)</span>
          <select id="regTopWeight">${selWeightInner}</select>
          <button onClick="topicEdit()"> &gt;&gt; </button>

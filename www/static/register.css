@@ -81,11 +81,13 @@ div#regJustTopics p b {
 div#regJustTopics p b:hover {
    text-decoration:underline; cursor:pointer;}
    
-/* ВЫБОР ВЕСА ОТМЕТОК ПРИ ВВОДЕ ТЕМЫ
+/* ВЫБОР ВЕСА ОТМЕТОК И КОЛИЧЕСТВА ЧАСОВ ПРИ ВВОДЕ ТЕМЫ
    ----------------------------------------------------- */
-select#regTopWeight {
+select#regTopWeight, select#regTopVol {
    padding:0px; font-size:90%; font-weight:bold;
    text-align:center; text-align-last: center;}
+select#regTopVol {
+   margin-right:10px;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */

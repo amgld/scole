@@ -105,9 +105,14 @@ const topicEdit = async () => {
           topic = dqs("#regNewTopic textarea").value.replace(/\s+/g, ' ').trim(),
           hometask = dqs("#regTopHTask").value.replace(/\s+/g, ' ').trim(),
           weight = dqs("#regTopWeight").value.toString().trim();
+          volume = dqs("#regTopVol").value.toString().trim();
       if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}
       if (!/^[0-8]{1}$/.test(weight)) {
          info(1, "Вес должен быть числом<br>от 0 до 4 с шагом 0.5");
+         return;         
+      }
+      if (!/^[1-7]{1}$/.test(volume)) {
+         info(1, "Количество часов<br>должно быть от 1 до 7");
          return;         
       }
       if (!topic) if (!confirm(regWarn)) return;
@@ -115,7 +120,7 @@ const topicEdit = async () => {
       // Производим запрос к API (логин учителя не передается,
       // берется из данных авторизации модулем API index.js)
       let apiResp = await apireq(
-         "topicEdit", [className, subj, dt, topic, hometask, weight]
+         "topicEdit", [className, subj, dt, topic, hometask, weight, volume]
       );
       if (apiResp !== "success") {
          info(1, "Ошибка на сервере."); return;         
@@ -132,7 +137,8 @@ const topicEdit = async () => {
             delete gradesObj[dt];
          }            
          else
-            if (topic) topicsObj[dt] = {t:topic, h:hometask, w:Number(weight)};
+            if (topic) topicsObj[dt] =
+               {t:topic, h:hometask, w:Number(weight), v:Number(volume)};
          topicsShow();
       }
    }
@@ -140,7 +146,7 @@ const topicEdit = async () => {
 }
 
 // **************************************************************************
-// Загрузка тем уроков, дз и весов отметок из базы
+// Загрузка тем уроков, дз, весов отметок и количества часов из базы
 const topicsGet = async (className, subjCode, teachLgn) => {
    let apiResp = await apireq("topicsGet", [className, subjCode, teachLgn]);
    if (apiResp != "none") return JSON.parse(apiResp);
@@ -148,16 +154,17 @@ const topicsGet = async (className, subjCode, teachLgn) => {
 }
 
 // **************************************************************************
-// Показ тем уроков, дз и весов отметок на странице (из объекта topicsObj)
+// Показ тем уроков, дз, весов отметок и к-ва часов (из объекта topicsObj)
 const topicsShow = () => {
    let content = '';
    if (!Object.keys(topicsObj).length) content = "<b>Тем уроков не найдено</b>";
    else {
       let dates = Object.keys(topicsObj).sort();
       for (let dt of dates) {
+         let vol = topicsObj[dt].v ? ` (${topicsObj[dt].v}&thinsp;ч)` : '';
          let dz = topicsObj[dt].h ? ` <span>[${topicsObj[dt].h}]</span>` : '';
          content += `<p><b onClick="dtFocus('${dt}')">${dateConv(dt)}</b> `
-                  + `${topicsObj[dt].t}${dz}</p>`;
+                  + `${topicsObj[dt].t}${vol}${dz}</p>`;
       }
    }
    dqs("#regJustTopics").innerHTML = content;
