@@ -41,6 +41,8 @@ div#regGrades > table td {
    white-space:nowrap; overflow: hidden; text-overflow:ellipsis; cursor:pointer;}
 div#regGrades table tr:nth-child(2) td {
    font-weight:bold; color:gray; border-bottom-width:2px}
+div#regGrades table tr:nth-child(2) td.r {
+   text-align:right;}
 div#regGrades input {
    width:38px; height:calc(100% - 4px); border:none; border-radius:0px;
    margin:0px; padding:0px; font-family:fnt; text-align:center; outline:none;}

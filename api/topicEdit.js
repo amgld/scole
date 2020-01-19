@@ -4,32 +4,34 @@
  */
 "use strict";
 
-// В запросе приходят [класс, предмет, дата, тема, дз, вес, учитель]
+// В запросе приходят [класс, предмет, дата, тема, дз, вес, к-во часов, учитель]
 // (логин учителя из фронтенда в массиве аргументов не передается,
 // подписывается модулем API index.js)
-// NB! Вес приходит как строка, но в базу пишется как число!
+// NB! Вес и часы приходят как строки, но в базу пишутся как числа!
 // Дата приходит в формате "d607", где 6 - номер месяца
 // (сентябрь = 0, май = 8), 07 - число месяца
 // Пример: ["8Ж-дев", "s110", "d113", "Тема", "ДЗ", "4", "ivanov"]
 // Возвращает success или none
 // Данные хранятся в коллекции topics (одна запись - один урок):
 // {
-//    g: "8Ж-дев", s: "s110",   l: "ivanov",
-//    d: "d113",   t: "Африка", h: "Глава 4", w: "4"
+//    "g": "8Ж-дев", "s": "s110",   "l": "ivanov",
+//    "d": "d113",   "t": "Африка", "h": "Глава 4", "w": 4, "v": 2
 // }
-module.exports = async argsObj => {   
+module.exports = async argsObj => {
    try {
-      if (argsObj.length != 7) return "none";
+      if (argsObj.length != 8) return "none";
       let gr = argsObj[0].substr(0,  20).trim(),
           sb = argsObj[1].substr(0,   4).trim(),          
           dt = argsObj[2].substr(0,   4).trim(),
           tp = argsObj[3].substr(0, 300).trim(),
           ht = argsObj[4].substr(0, 300).trim(),
           wt = argsObj[5].substr(0,   1).trim(),
-          lg = argsObj[6].substr(0,  20).trim();
+          vl = argsObj[6].substr(0,   1).trim(),
+          lg = argsObj[7].substr(0,  20).trim();
 
-      if (!gr || !sb || !lg || !dt || !wt) return "none";
+      if (!gr || !sb || !lg || !dt || !wt || !vl) return "none";
       if (!/^[0-8]{1}$/.test(wt))          return "none"; wt = Number(wt);
+      if (!/^[1-7]{1}$/.test(vl))          return "none"; vl = Number(vl);
       if (!/^d[0-9][0-3][0-9]$/.test(dt))  return "none";
       if (Number(dt.substr(2, 2)) > 31)    return "none";
       
@@ -45,8 +47,10 @@ module.exports = async argsObj => {
          else if (!distr[sb].includes(gr)) return "none";
       }
       
+      // Количество часов пишем в базу только в случае, если оно не равно 1
       let objFind = {g: gr, s: sb, l: lg, d: dt},
           objNew  = {...objFind, t:tp, h:ht, w:wt};
+      if (vl != 1) objNew.v = vl;
       
       // Проверяем, нет ли уже такого урока      
       let lessons = await dbFind("topics", objFind);

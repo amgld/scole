@@ -104,7 +104,7 @@ const topicEdit = async () => {
           dtDay = Number(dt.substr(-2,2)),
           topic = dqs("#regNewTopic textarea").value.replace(/\s+/g, ' ').trim(),
           hometask = dqs("#regTopHTask").value.replace(/\s+/g, ' ').trim(),
-          weight = dqs("#regTopWeight").value.toString().trim();
+          weight = dqs("#regTopWeight").value.toString().trim(),
           volume = dqs("#regTopVol").value.toString().trim();
       if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}
       if (!/^[0-8]{1}$/.test(weight)) {
@@ -136,9 +136,12 @@ const topicEdit = async () => {
             if (apiResp !== "success") info(1, "Ошибка на сервере.");
             delete gradesObj[dt];
          }            
-         else
-            if (topic) topicsObj[dt] =
-               {t:topic, h:hometask, w:Number(weight), v:Number(volume)};
+         else 
+            if (topic) {
+               topicsObj[dt] = {t:topic, h:hometask, w:Number(weight)};
+               if (volume != '1') (topicsObj[dt]).v = Number(volume);
+            }
+
          topicsShow();
       }
    }
@@ -299,7 +302,8 @@ const gradesShow = () => {
    else {
       // Список детей
       content = "<table id='regPupList'>"
-              + "<tr><td>&nbsp;</td></tr><tr><td>&nbsp;</td></tr>";
+              + "<tr><td>&nbsp;</td></tr>"
+              + "<tr><td class='r'>Вес отметок&nbsp;</td></tr>";
       for (let i=0; i<gradesObj.pnList.length; i++) {
          let n = (i > 8) ? i+1 : "  " + (i+1);
          content += `<tr><td id="rp${i}" title="Кликните для показа статистики"`
