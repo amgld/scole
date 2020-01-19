@@ -51,9 +51,10 @@ stl.textContent = `
       display:inline-block; padding:3pt; text-align:center; vertical-align:top;
       -webkit-hyphens:auto; -moz-hyphens:auto; -ms-hyphens:auto; hiphens:auto;}
    .topicsStr div:nth-child(1) {width:1cm; border-left:none}
-   .topicsStr div:nth-child(2) {width:0.8cm}
-   .topicsStr div:nth-child(3) {width:7cm; text-align:left}
-   .topicsStr div:nth-child(4) {width:6cm; text-align:left}
+   .topicsStr div:nth-child(2) {width:0.6cm}
+   .topicsStr div:nth-child(3) {width:0.8cm}
+   .topicsStr div:nth-child(4) {width:6.4cm; text-align:left}
+   .topicsStr div:nth-child(5) {width:6cm; text-align:left}
    h3 + .topicsStr div:nth-child(3), h3 + .topicsStr div:nth-child(4) {
       text-align:center;}
    h3 + .topicsStr div {border-left:0.25pt solid black}
@@ -145,7 +146,7 @@ for (let subjObj of scole.content) {
          currPageRight  = `<nav>${pageNum}</nav>`; pageNum++;
          currPageRight += `<h3>${subjObj.p}</h3>`;
          currPageRight += "<div class='topicsStr'>"
-            + "<div>Дата</div><div>Вес</div>"
+            + "<div>Дата</div><div>ч</div><div>Вес</div>"
             + "<div>Содержание урока</div><div>Задание на дом</div>"
             + "</div>";
       }
@@ -156,10 +157,13 @@ for (let subjObj of scole.content) {
       currPageLeft += "</div>";
       
       // Подписываем текущую тему в таблицу с темами
-      if (lessObj.t)
+      if (lessObj.t) {
+         let vol = lessObj.v ? lessObj.v : 1;
          currPageRight += `<div class='topicsStr'><div>${lessObj.d}</div>`
-            + `<div>${lessObj.w}</div><div>${lessObj.t.substr(0,120)}</div>`
+            + `<div>${vol}</div><div>${(lessObj.w)/2}</div>`
+            + `<div>${lessObj.t.substr(0,120)}</div>`
             + `<div>${lessObj.h.substr(0,120)}</div></div>`;
+      }
       
       lessNum++;
    }   

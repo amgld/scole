@@ -18,7 +18,10 @@
 //         "s":    "s110",
 //         "p":    "Кулебякин Иван Петрович",
 //         "l": [
-//            {"d":"d403","w":2,"t":"Африка","h":"№ 234", "g":["3 4н", ...]},
+//            {
+//               "d":"d403", "w":2, "v":2,      // только если v существует
+//               "t":"Африка", "h":"№ 234", "g":["3 4н", ...]
+//            },
 //            ...
 //          ]
 //      },
@@ -67,14 +70,16 @@ module.exports = async (args) => {
       // "Группа^кодПредм^Учитель" и значениями - массивами объектов из
       // остальных полей, например:
       // objTopics["10Б-мальч^s110^pupkin"] =
-      //    [{d: "d004", t: "Африка", h: "Учить термины", w: 2}, ...]
+      //    [{d: "d004", t: "Африка", h: "Учить термины", w: 2, v:2}, ...]
       let objTopics = {};
       for (let currT of resTopics) {
          if (!objTopics[`${currT.g}^${currT.s}^${currT.l}`])
             objTopics[`${currT.g}^${currT.s}^${currT.l}`] = [];
             
-         objTopics[`${currT.g}^${currT.s}^${currT.l}`]
-            .push({d: currT.d, t: currT.t, h: currT.h, w: currT.w});         
+         let newRec = {d: currT.d, t: currT.t, h: currT.h, w: currT.w};
+         if (currT.v) newRec.v = currT.v;
+            
+         objTopics[`${currT.g}^${currT.s}^${currT.l}`].push(newRec);         
       }
       
       // Идем по этому объекту и формируем resp.content
@@ -93,7 +98,7 @@ module.exports = async (args) => {
          if (tRes.length) contElem.p =
             `${tRes[0].Ufamil} ${tRes[0].Uname} ${tRes[0].Uotch}`;
             
-         // Массив с датами, весами, темами, дз и отметками
+         // Массив с датами, весами, часами, темами, дз и отметками
          let topicsArr = objTopics[currGST];
          for (let currT of topicsArr) {
             let marks = grData[currT.d];
@@ -102,9 +107,9 @@ module.exports = async (args) => {
                for (let i=0; i<contElem.list.length; i++) marks[i] = '';
             }
             marks = marks.map(x => x.replace(/999/g, "зач"));
-            contElem.l.push(
-               {d:currT.d, w:currT.w, t:currT.t, h:currT.h, g:marks}
-            );
+            let newEl = {d:currT.d, w:currT.w, t:currT.t, h:currT.h, g:marks};
+            if (currT.v) newEl.v = currT.v;
+            contElem.l.push(newEl);
          }
          // Добавляем еще в contElem.l все итоговые отметки
          for (let k of Object.keys(grData)) if (k.length == 5) {
