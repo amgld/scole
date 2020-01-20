@@ -360,6 +360,7 @@ const dtFocus = dt => {
       dqs("#regNewTopic textarea").value = '';
       dqs("#regTopHTask").value = '';
       dqs("#regTopWeight").value = 2;
+      dqs("#regTopVol").value = 1;
       
       // Проматываем таблицу отметок к концу
       if (dqs("#regGrades div")) {
@@ -374,6 +375,7 @@ const dtFocus = dt => {
       dqs("#regNewTopic textarea").value = topicsObj[dt].t;
       dqs("#regTopHTask").value = topicsObj[dt].h;
       dqs("#regTopWeight").value = topicsObj[dt].w;
+      dqs("#regTopVol").value = topicsObj[dt].v ? topicsObj[dt].v : 1;
       
       // Прокручиваем таблицу с отметками, чтобы дата была видима
       let colonObj = dqs(`#${dt}-0`).parentNode.parentNode;

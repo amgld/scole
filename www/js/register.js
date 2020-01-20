@@ -30,7 +30,7 @@ for (let i=0; i<9; i++) selWeightInner += `<option value=${i}>${i/2}</option>`;
 
 // Содержимое select выбора количества часов
 let selVolInner = '';
-for (let i=1; i<8; i++) selVolInner += `<option value="${i}">${i} ч</option>`;
+for (let i=1; i<8; i++) selVolInner += `<option value="${i}"> ${i} ч </option>`;
 
 // Формирование контента страницы (regNow, regYst, regYfin определены в ini.js)
 createSection("register", `
