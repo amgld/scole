@@ -32,7 +32,7 @@ global.admPwd  = PWD;
 /* ИНИЦИАЛИЗАЦИЯ КОЛЛЕКЦИЙ БАЗЫ ДАННЫХ
  * ----------------------------------------------------------------------- */
 global.db  = {};
-db.staff   = new nedb({filename: __dirname + "/db/staff.db",   autoload: true});
+db.staff    = new nedb({filename: __dirname + "/db/staff.db",    autoload: true});
 db.pupils  = new nedb({filename: __dirname + "/db/pupils.db",  autoload: true});
 db.curric  = new nedb({filename: __dirname + "/db/curric.db",  autoload: true});
 db.distrib = new nedb({filename: __dirname + "/db/distrib.db", autoload: true});
@@ -222,10 +222,15 @@ https.createServer(httpsOpt, (zapros, otvet) => {
 // Перенаправление с http на https
 const http = require("http");
 http.createServer((zapros, otvet) => {
-    otvet.writeHead(
-       301, {"Location": "https://" + zapros.headers["host"] + zapros.url}
-    );
-    otvet.end();
+   try {
+      otvet.writeHead(
+         301, {"Location": "https://" + zapros.headers["host"] + zapros.url}
+      ); otvet.end();
+   }
+   catch (e) {
+      otvet.writeHead(404, {"Content-Type": "text/html", "Server": SERVER});
+      otvet.end(ERR404);
+   }
 }).listen(80);
 
 let now = (new Date()).toString().replace(/ \(.*\)/, '');
