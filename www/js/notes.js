@@ -19,7 +19,6 @@ const ntAdd = async (pupil) => {
 
 // Формирование списка детей в селекте выбора учащегося
 const ntPupListShow = async () => {
-   dqs("#ntResult").innerHTML = '';
    let clName = dqs("#ntSelClass").value;
    let apiResp = await apireq("pupilsList", [clName]);
    if (apiResp != "none") {
@@ -35,15 +34,20 @@ const ntPupListShow = async () => {
    }
    else {
       dqs("#ntSelPupil").innerHTML = '';
-      dqs("#ntResult").innerHTML =
-         "<p><b>В классе (группе) нет учащихся!</b></p>";
+      info(0, "В этом классе (группе) нет учащихся!");
    }
 }
 
 // Формирование контента страницы
 createSection("notes", `
+   <div id="ntAddForm">
+   <h3>Добавление новой заметки</h3>
    <select id="ntSelClass" onChange="ntPupListShow()"></select>
-   <select id="ntSelPupil" onChange="ntAdd(this.value)"></select>
+   <select id="ntSelPupil"></select>
+   <p>Форма добавления заметки</p>
+   </div>
+   
+   <h3>Все заметки</h3>
    <div id="ntResult"><img src='/static/preloader.gif'></div>
 `);
 
@@ -54,8 +58,7 @@ getContent.notes = async () => {
    
    // Если он учащийся или родитель, показываем заметки ему и классу
    if (ntRole == "pupil" || ntRole == "parent") {
-      dqs("#ntSelClass").style.display = "none";
-      dqs("#ntSelPupil").style.display = "none";
+      dqs("#ntAddForm").style.display  = "none";
       ntShow(uLogin);
    }  
    else {
