@@ -7,12 +7,12 @@
 // Текущий список класса
 let ntClList = [];
 
-// Показ всех заметок одному ученику (и его классу)
+// Показ всех заметок одному ученику
 const ntShow = async (pupil) => {
    dqs("#ntResult").innerHTML = `<h3>Заметки для ${pupil} типа показаны</h3>`;
 }
 
-// Добавление заметки (в аргументе что-то типа ivanov^Иванов И.)
+// Добавление заметки (в аргументе что-то типа ivanov^Иванов И. или 8Б-мальч^)
 const ntAdd = async (pupil) => {
    alert (`Заметка для ${pupil} типа добавлена.`);
 }
@@ -20,16 +20,17 @@ const ntAdd = async (pupil) => {
 // Формирование списка детей в селекте выбора учащегося
 const ntPupListShow = async () => {
    let clName = dqs("#ntSelClass").value;
-   let apiResp = await apireq("pupilsList", [clName]);
-   if (apiResp != "none") {
-      ntClList = JSON.parse(apiResp);
+   let ntResp = await apireq("gradesGet", [clName, '', "a"]);
+   if (ntResp == "none") {info(1, "Не могу получить список учащихся"); return;}
+   let ntObj = JSON.parse(ntResp);
+   let pupLgnArr = ntObj.puList ? ntObj.puList : []; // логины детей
+   
+   if (pupLgnArr.length) {
       let selPupilInner = `<option value="${clName}^">ВСЕМ УЧАЩИМСЯ</option>`;
-      for (let pup of ntClList) {
-         let imya = pup[0].split(' ')[1] || 'N';
-         pup[0] = pup[0].split(' ')[0] + ` ${imya[0]}.`;
-         selPupilInner +=
-            `<option value="${pup[1]}^${pup[0]}">${pup[0]}</option>`;
-      }
+      for (let i=0; i<pupLgnArr.length; i++) selPupilInner +=
+         `<option value="${pupLgnArr[i]}^${ntObj.pnList[i]}">` +
+         `${ntObj.pnList[i]}</option>`;
+     
       dqs("#ntSelPupil").innerHTML = selPupilInner;
    }
    else {
