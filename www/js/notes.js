@@ -17,8 +17,23 @@ const ntCount = () => {
    dqs("#ntAddForm span:nth-child(2)").innerHTML = NTVAL - val;
 }
 
+// Удаление заметки по ее id
+const ntDel = async (id) => {
+   if (!confirm("Вы уверены?")) return;
+   let apiResp = await apireq("notesDel", [id]);
+   if (apiResp != "none") ntShow('');
+   else info(1, "Ошибка на сервере,<br>заметка не удалена.");
+}
+
 // Показ всех заметок (если pupil == '', показываются заметки, добавленные
 // пользователем-сотрудником, иначе заметки для ученика и его класса/групп)
+// Получаем массив объектов вида
+// {
+//    _id:"Wo58", dt:"2020-01-28",
+//    r: "ivanov", rf:"Иванов В. (8Б)",
+//    t: "Ура!",
+//    a: "petrov", af:"Петров И. И."
+// }
 const ntShow = async (pupil) => {
    dqs("#ntResult").innerHTML = "<img src='/static/preloader.gif'>";
    let ntResp = await apireq("notesGet", [pupil]);
@@ -26,12 +41,34 @@ const ntShow = async (pupil) => {
       info(1, "Ошибка на сервере.<br>Заметки не получены.");
       return;
    }
-   dqs("#ntResult").innerHTML = `<p>${ntResp}</p>`;
+   let notesArr = JSON.parse(ntResp);
+   if (!notesArr.length) {
+      dqs("#ntResult").innerHTML = `<p><b>Заметок нет</b></p>`;
+      return;
+   }
+   let res = "<table><tr><th>&nbsp;</th><th>&nbsp;</th><th>Кому</th>"
+           + "<th>От&nbsp;кого</th><th>Текст заметки</th></tr>";
+   for (let i=0; i< notesArr.length; i++) {
+      let dtArr = (notesArr[i].dt.split(' ')[0]).split('-'),
+          time  = notesArr[i].dt.split(' ')[1],
+          dt    = `${dtArr[2]}.${dtArr[1]}&nbsp;${time}`,
+          rcpt  = notesArr[i].rf.replace(/\s/g, "&nbsp;"),
+          auth  = notesArr[i].af.replace(/\s/g, "&nbsp;");
+          
+      let role = dqs("#selRole").value;
+      let del = (role == "pupil" || role == "parent") ?
+         `<td>${i+1}</td>` : `<td title="Удалить заметку" ` +
+         `onClick=ntDel("${notesArr[i]._id}")>&#10060;</td>`;
+
+      res += `<tr>${del}<td>${dt}</td><td>${rcpt}</td>`
+           + `<td>${auth}</td><td>${notesArr[i].t}</td></tr>`;
+   }
+   dqs("#ntResult").innerHTML = res + "</table>";
 }
 
 // Добавление заметки
 const ntAdd = async () => {
-   let ntRcpt = dqs("#ntSelPupil").value.trim(), // uLogin
+   let ntRcpt = dqs("#ntSelPupil").value.trim(),
        ntText = dqs("#ntAddForm textarea").value.trim();
    if (!ntRcpt) {info (1, "Не выбран учащийся!"); return;}
    if (!ntText) {info (1, "Не введен текст заметки!"); return;}
