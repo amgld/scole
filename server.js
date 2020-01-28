@@ -31,15 +31,13 @@ global.admPwd  = PWD;
 
 /* ИНИЦИАЛИЗАЦИЯ КОЛЛЕКЦИЙ БАЗЫ ДАННЫХ
  * ----------------------------------------------------------------------- */
+const dbTables = [
+   "staff", "pupils", "curric", "distrib", "grades", "spravki", "topics",
+   "authlog", "notes"
+];
 global.db  = {};
-db.staff    = new nedb({filename: __dirname + "/db/staff.db",    autoload: true});
-db.pupils  = new nedb({filename: __dirname + "/db/pupils.db",  autoload: true});
-db.curric  = new nedb({filename: __dirname + "/db/curric.db",  autoload: true});
-db.distrib = new nedb({filename: __dirname + "/db/distrib.db", autoload: true});
-db.grades  = new nedb({filename: __dirname + "/db/grades.db",  autoload: true});
-db.spravki = new nedb({filename: __dirname + "/db/spravki.db", autoload: true});
-db.topics  = new nedb({filename: __dirname + "/db/topics.db",  autoload: true});
-db.authlog = new nedb({filename: __dirname + "/db/authlog.db", autoload: true});
+for (let dbN of dbTables) db[dbN] =
+   new nedb({filename: `${__dirname}/db/${dbN}.db`, autoload: true});
 
 
 /* ОПРЕДЕЛЕНИЯ ФУНКЦИЙ
@@ -201,7 +199,7 @@ https.createServer(httpsOpt, (zapros, otvet) => {
          let logFuncs = ["login", "classAdd", "classDel", "subjAdd", "subjEdit",
             "subjDel", "usAddEdit", "usImport", "usSetAdmin", "usBlock",
             "usChPwd", "tutorSet", "distrEdit", "topicEdit", "gradeAdd",
-            "subgrEdit", "subgrPups", "sprAdd", "sprDel"];
+            "subgrEdit", "subgrPups", "sprAdd", "sprDel", "notesAdd"];
          try {
             let postDataObj = JSON.parse(postData);
             let logLogin    = postDataObj.l || "none";

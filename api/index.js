@@ -23,7 +23,7 @@ const modReq = {
    "parCodes":    [1,1], "jrnGet":      [1,1], "absentGet":     [1,1],
    "pupilsList":  [1,1], "sprAdd":      [1,1], "sprGet":        [1,1],
    "sprDel":      [1,1], "sprResp":     [1,1], "tabelGet":      [1,1],
-   "export":      [1,1]
+   "export":      [1,1], "notesAdd":    [1,1], "notesGet":      [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -39,24 +39,25 @@ const RIGHTS = {
    "admin":   [
       "classesList", "subjList", "teachList", "tutorSet", "tutorsList",
       "distrGet", "distrEdit", "classesGroups", "topicsGet", "gradesGet",
-      "absentGet", "pupilsList", "sprResp", "export"
+      "absentGet", "pupilsList", "sprResp", "export", "notesAdd", "notesGet"
    ],
    "teacher": [
-      "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd"
+      "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd",
+      "notesAdd", "notesGet"
    ],
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",
       "gradesGet", "subgrEdit", "subgrPups", "parCodes", "absentGet",
       "pupilsList", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
-      "export"
+      "export", "notesAdd", "notesGet"
    ],
    "pupil":   [
       "subjList", "teachList", "jrnGet", "absentGet", "sprGet", "sprResp",
-      "tabelGet"
+      "tabelGet", "notesGet"
    ],
    "parent":  [
       "subjList", "teachList", "jrnGet", "absentGet", "sprGet", "sprResp",
-      "tabelGet"
+      "tabelGet", "notesGet"
    ]
 };
 for (let item in RIGHTS) RIGHTS[item].push("login");
@@ -87,7 +88,7 @@ module.exports = async (post, addr) => {
    let fNames = [
       "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet",
       "absentGet", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
-      "export"
+      "export", "notesAdd", "notesGet"
    ];
    if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
       

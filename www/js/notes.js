@@ -7,12 +7,6 @@
 // Максимальное число знаков в заметке
 const NTVAL = 200;
 
-// Текущий список класса
-let ntClList = [];
-
-// Массив с публикуемыми заметками
-let notes = [];
-
 // Фокус на поле добавления новой заметки
 const inpFocus = () => dqs("#ntAddForm textarea").focus();
 
@@ -23,16 +17,32 @@ const ntCount = () => {
    dqs("#ntAddForm span:nth-child(2)").innerHTML = NTVAL - val;
 }
 
-// Показ всех заметок одному ученику
+// Показ всех заметок (если pupil == '', показываются заметки, добавленные
+// пользователем-сотрудником, иначе заметки для ученика и его класса/групп)
 const ntShow = async (pupil) => {
-   dqs("#ntResult").innerHTML = `<h3>Заметки для ${pupil} типа показаны</h3>`;
+   dqs("#ntResult").innerHTML = "<img src='/static/preloader.gif'>";
+   let ntResp = await apireq("notesGet", [pupil]);
+   if (ntResp == "none") {
+      info(1, "Ошибка на сервере.<br>Заметки не получены.");
+      return;
+   }
+   dqs("#ntResult").innerHTML = `<p>${ntResp}</p>`;
 }
 
 // Добавление заметки
 const ntAdd = async () => {
-   let ntRcpt = dqs("#ntSelPupil").value, // uLogin
+   let ntRcpt = dqs("#ntSelPupil").value.trim(), // uLogin
        ntText = dqs("#ntAddForm textarea").value.trim();
-   alert (`Кому: ${ntRcpt}; текст: ${ntText}`);
+   if (!ntRcpt) {info (1, "Не выбран учащийся!"); return;}
+   if (!ntText) {info (1, "Не введен текст заметки!"); return;}
+   
+   let ntResp = await apireq("notesAdd", [ntRcpt, ntText]);
+   if (ntResp == "none") {
+      info(1, "Ошибка на сервере.<br>Заметка не добавлена.");
+      return;
+   }
+   info (0, "Заметка успешно добавлена.");
+   ntShow('');
 }
 
 // Формирование списка детей в селекте выбора учащегося
@@ -69,8 +79,7 @@ createSection("notes", `
    <button type="button" onClick="ntAdd()">Сохранить</button>
    </div>
    
-   <h3>Все заметки</h3>
-   <div id="ntResult"><img src='/static/preloader.gif'></div>
+   <h3>Все заметки</h3><div id="ntResult"></div>
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
@@ -78,7 +87,7 @@ getContent.notes = async () => {
    
    let ntRole = dqs("#selRole").value;   
    
-   // Если он учащийся или родитель, показываем заметки ему и классу
+   // Если он учащийся или родитель, показываем заметки ему и классу/группам
    if (ntRole == "pupil" || ntRole == "parent") {
       dqs("#ntAddForm").style.display  = "none";
       ntShow(uLogin);
@@ -105,6 +114,7 @@ getContent.notes = async () => {
       }
       dqs("#ntSelClass").innerHTML = selClassInner;
       ntPupListShow(); // показываем список учащихся этого класса или группы
+      ntShow('');      // показываем все введенные им заметки
       inpFocus();      // фокус на поле ввода новой заметки
    }
 };
