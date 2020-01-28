@@ -324,6 +324,14 @@ section#notes textarea {
    border:1px solid #963; border-radius:3px;}
 section#notes button {
    margin:5px auto;}
+section#notes table {
+   margin:auto; border-collapse:collapse;}
+section#notes table th, section#notes table td {
+   padding:3px 5px; border:1px solid #963;}
+section#notes table td[title] {
+   cursor:pointer;}
+section#notes table td:last-child {
+   text-align:left;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */

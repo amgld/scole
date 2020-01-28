@@ -27,13 +27,6 @@ const ntDel = async (id) => {
 
 // Показ всех заметок (если pupil == '', показываются заметки, добавленные
 // пользователем-сотрудником, иначе заметки для ученика и его класса/групп)
-// Получаем массив объектов вида
-// {
-//    _id:"Wo58", dt:"2020-01-28",
-//    r: "ivanov", rf:"Иванов В. (8Б)",
-//    t: "Ура!",
-//    a: "petrov", af:"Петров И. И."
-// }
 const ntShow = async (pupil) => {
    dqs("#ntResult").innerHTML = "<img src='/static/preloader.gif'>";
    let ntResp = await apireq("notesGet", [pupil]);
@@ -50,8 +43,7 @@ const ntShow = async (pupil) => {
            + "<th>От&nbsp;кого</th><th>Текст заметки</th></tr>";
    for (let i=0; i< notesArr.length; i++) {
       let dtArr = (notesArr[i].dt.split(' ')[0]).split('-'),
-          time  = notesArr[i].dt.split(' ')[1],
-          dt    = `${dtArr[2]}.${dtArr[1]}&nbsp;${time}`,
+          dt    = `${dtArr[2]}.${dtArr[1]}`,
           rcpt  = notesArr[i].rf.replace(/\s/g, "&nbsp;"),
           auth  = notesArr[i].af.replace(/\s/g, "&nbsp;");
           
