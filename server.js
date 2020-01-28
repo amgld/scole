@@ -199,7 +199,8 @@ https.createServer(httpsOpt, (zapros, otvet) => {
          let logFuncs = ["login", "classAdd", "classDel", "subjAdd", "subjEdit",
             "subjDel", "usAddEdit", "usImport", "usSetAdmin", "usBlock",
             "usChPwd", "tutorSet", "distrEdit", "topicEdit", "gradeAdd",
-            "subgrEdit", "subgrPups", "sprAdd", "sprDel", "notesAdd"];
+            "subgrEdit", "subgrPups", "sprAdd", "sprDel", "notesAdd",
+            "notesDel"];
          try {
             let postDataObj = JSON.parse(postData);
             let logLogin    = postDataObj.l || "none";
