@@ -312,6 +312,19 @@ section#export li {
 section#export h3#expMan {
    margin-top:24pt;}
    
+/* БЛОК РАБОТЫ С ЗАМЕТКАМИ
+   ---------------------------------------------------- */
+section#notes p {
+   margin:5px 0px 0px; font-size:90%;}
+section#notes span {
+   font-weight:bold;}
+section#notes textarea {
+   display:block; height:5em; width: 800px; max-width:98%; margin:5px auto 0px;
+   padding:3pt; font-size:100%; outline: none; resize: none;
+   border:1px solid #963; border-radius:3px;}
+section#notes button {
+   margin:5px auto;}
+   
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
 @media (max-width: 960px) {

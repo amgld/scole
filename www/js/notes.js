@@ -4,17 +4,35 @@
  */
 "use strict";
 
+// Максимальное число знаков в заметке
+const NTVAL = 200;
+
 // Текущий список класса
 let ntClList = [];
+
+// Массив с публикуемыми заметками
+let notes = [];
+
+// Фокус на поле добавления новой заметки
+const inpFocus = () => dqs("#ntAddForm textarea").focus();
+
+// Подсчет знаков в поле добавления заметки
+const ntCount = () => {
+   let val = dqs("#ntAddForm textarea").value.length;
+   dqs("#ntAddForm span:first-child").innerHTML = val;
+   dqs("#ntAddForm span:nth-child(2)").innerHTML = NTVAL - val;
+}
 
 // Показ всех заметок одному ученику
 const ntShow = async (pupil) => {
    dqs("#ntResult").innerHTML = `<h3>Заметки для ${pupil} типа показаны</h3>`;
 }
 
-// Добавление заметки (в аргументе что-то типа ivanov^Иванов И. или 8Б-мальч^)
-const ntAdd = async (pupil) => {
-   alert (`Заметка для ${pupil} типа добавлена.`);
+// Добавление заметки
+const ntAdd = async () => {
+   let ntRcpt = dqs("#ntSelPupil").value, // uLogin
+       ntText = dqs("#ntAddForm textarea").value.trim();
+   alert (`Кому: ${ntRcpt}; текст: ${ntText}`);
 }
 
 // Формирование списка детей в селекте выбора учащегося
@@ -26,12 +44,12 @@ const ntPupListShow = async () => {
    let pupLgnArr = ntObj.puList ? ntObj.puList : []; // логины детей
    
    if (pupLgnArr.length) {
-      let selPupilInner = `<option value="${clName}^">ВСЕМ УЧАЩИМСЯ</option>`;
+      let selPupilInner = `<option value="${clName}">ВСЕМ УЧАЩИМСЯ</option>`;
       for (let i=0; i<pupLgnArr.length; i++) selPupilInner +=
-         `<option value="${pupLgnArr[i]}^${ntObj.pnList[i]}">` +
-         `${ntObj.pnList[i]}</option>`;
+         `<option value="${pupLgnArr[i]}">${ntObj.pnList[i]}</option>`;
      
       dqs("#ntSelPupil").innerHTML = selPupilInner;
+      inpFocus();
    }
    else {
       dqs("#ntSelPupil").innerHTML = '';
@@ -44,8 +62,11 @@ createSection("notes", `
    <div id="ntAddForm">
    <h3>Добавление новой заметки</h3>
    <select id="ntSelClass" onChange="ntPupListShow()"></select>
-   <select id="ntSelPupil"></select>
-   <p>Форма добавления заметки</p>
+   <select id="ntSelPupil" onChange="inpFocus()"></select>
+   <p>Введено <span>0</span> зн.; осталось <span>${NTVAL}</span> зн.</p>
+   <textarea placeholder="Текст заметки (не более ${NTVAL} знаков)"
+      maxlength="${NTVAL}" onKeyUp=ntCount()></textarea>
+   <button type="button" onClick="ntAdd()">Сохранить</button>
    </div>
    
    <h3>Все заметки</h3>
@@ -84,5 +105,6 @@ getContent.notes = async () => {
       }
       dqs("#ntSelClass").innerHTML = selClassInner;
       ntPupListShow(); // показываем список учащихся этого класса или группы
+      inpFocus();      // фокус на поле ввода новой заметки
    }
 };
