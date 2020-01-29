@@ -6,9 +6,33 @@
 
 // Показ лога (аргумент - тип: 0 - дети, 1 - сотрудники, 2 - все)
 const ulShow = async tip => {
-   let source = ["#ulSelPupil", "#ulSelStaff", "#ulDt"];
-   let name   = dqs(source[tip]).value;
-   dqs("#ulResult").innerHTML = `<p>Лог: ${name}</p>`;
+   let roles = {
+         "pupil":"учащийся", "par":"родитель",
+         "staff":"сотрудник", "root":"гл.&nbsp;администратор"
+       },
+       source = ["#ulSelPupil", "#ulSelStaff", "#ulDt"],
+       name   = dqs(source[tip]).value;
+   
+   let resp = await apireq("logGet", [tip, name]);
+   if (resp == "none") {info(1, "Данные не получены с сервера"); return;}
+   let logArr = JSON.parse(resp);
+   
+   if (!logArr.length) {
+      dqs("#ulResult").innerHTML =
+         "В логе нет записей, удовлетворяющих заданному фильтру";
+      return;
+   }
+   
+   let res = "<table><tr><th><nobr>Дата и время</nobr></th><th>Логин</th>" +
+             "<th>Роль</th><th><nobr>IP-адрес</nobr></th></tr>";
+   for (let rec of logArr) {
+      let dtArr = (rec.d.split(' ')[0]).split('-'),
+          dt    = `${dtArr[2]}.${dtArr[1] ${rec.d.split(' ')[1]}`;
+      res += `<tr><td>${dt}</td><td>${rec.l}</td>`
+           + `<td>${roles[rec.c]}</td><td>${rec.ip}</td></tr>`;
+   }
+   
+   dqs("#ulResult").innerHTML = res + "</table>";
 }
 
 // Формирование списка детей в селекте выбора учащегося
@@ -37,19 +61,19 @@ createSection("userlog", `
    <p>Просмотр лога класса или одного учащегося (родителя)</p>
    <select id="ulSelClass" onChange="ulPupListShow()"></select>
    <select id="ulSelPupil"></select>
-   <button type="button" onClick="ulShow(0)">Показать</button>
+   <button type="button" onClick="ulShow(0)"> &gt;&gt; </button>
    
    <div id="ulStaff">
    <p>Просмотр лога одного сотрудника</p>
    <select id="ulSelStaff"></select>
-   <button type="button" onClick="ulShow(1)">Показать</button>
+   <button type="button" onClick="ulShow(1)"> &gt;&gt; </button>
    </div>
    
    <div id="ulAll">
    <p>Просмотр лога всех пользователей за одни сутки</p>
    <input id="ulDt" type="date"
           min="${regYst}" max="${regYfin}" value="${regNow}">
-   <button type="button" onClick="ulShow(2)">Показать</button>
+   <button type="button" onClick="ulShow(2)"> &gt;&gt; </button>
    </div>
    
    <h3>Лог авторизации пользователей</h3><div id="ulResult"></div>

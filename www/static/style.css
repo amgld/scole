@@ -335,6 +335,20 @@ section#notes table td[title] {
 section#notes table td:last-child {
    text-align:left;}
    
+/* БЛОК РАБОТЫ С ЛОГАМИ
+   ---------------------------------------------------- */
+section#userlog p {
+   margin:10px 0px 5px; font-weight:bold;}
+section#userlog select, section#userlog button {
+   margin:0px 10px;}
+section#userlog table {
+   margin:auto; border-collapse:collapse;}
+section#userlog table th, section#userlog table td {
+   padding:3px 5px; border:1px solid #963;}
+section#userlog table th {
+   font-size:90%;}
+*/
+   
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
 @media (max-width: 960px) {
