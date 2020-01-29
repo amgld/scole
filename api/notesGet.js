@@ -38,7 +38,7 @@ module.exports = async (args) => {
             
       // Читаем документы из базы и отдаем
       let resp = await dbFind("notes", request);
-      resp.sort((a, b) => a.dt < b.dt);
+      resp.sort((a, b) => (a.dt <= b.dt) ? 1 : -1);
       return JSON.stringify(resp);
    }
    catch(e) {return "none";}
