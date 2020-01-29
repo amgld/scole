@@ -4,7 +4,7 @@
  */
 "use strict";
 
-// Максимальное число знаков в заметке
+// Максимальное число знаков в заметке (на серверной стороне режется по 500)
 const NTVAL = 200;
 
 // Фокус на поле добавления новой заметки
@@ -39,7 +39,7 @@ const ntShow = async (pupil) => {
       dqs("#ntResult").innerHTML = `<p><b>Заметок нет</b></p>`;
       return;
    }
-   let res = "<table><tr><th>&nbsp;</th><th>&nbsp;</th><th>Кому</th>"
+   let res = "<table><tr><th>&nbsp;</th><th>Дата</th><th>Кому</th>"
            + "<th>От&nbsp;кого</th><th>Текст заметки</th></tr>";
    for (let i=0; i< notesArr.length; i++) {
       let dtArr = (notesArr[i].dt.split(' ')[0]).split('-'),
