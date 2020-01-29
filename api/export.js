@@ -127,5 +127,5 @@ module.exports = async (args) => {
       
       return JSON.stringify(resp);
    }
-   catch(e) {console.info(e); return "none";}
+   catch(e) {return "none";}
 };

@@ -13,6 +13,7 @@ const ulShow = async tip => {
        source = ["#ulSelPupil", "#ulSelStaff", "#ulDt"],
        name   = dqs(source[tip]).value;
    
+   tip = (tip == 2) ? 1 : tip;
    let resp = await apireq("logGet", [tip, name]);
    if (resp == "none") {info(1, "Данные не получены с сервера"); return;}
    let logArr = JSON.parse(resp);
@@ -44,7 +45,7 @@ const ulPupListShow = async () => {
    let pupLgnArr = ulObj.puList ? ulObj.puList : []; // логины детей
    
    if (pupLgnArr.length) {
-      let selPupilInner = `<option value="${clName}">ВЕСЬ КЛАСС</option>`;
+      let selPupilInner = '';
       for (let i=0; i<pupLgnArr.length; i++) selPupilInner +=
          `<option value="${pupLgnArr[i]}">${ulObj.pnList[i]}</option>`;     
       dqs("#ulSelPupil").innerHTML = selPupilInner;
@@ -58,7 +59,7 @@ const ulPupListShow = async () => {
 // Формирование контента страницы (regNow, regYst, regYfin определены в ini.js)
 createSection("userlog", `
    <h3>Выбор фильтра для просмотра лога авторизации</h3>
-   <p>Просмотр лога класса или одного учащегося (родителя)</p>
+   <p>Просмотр лога одного учащегося (родителя)</p>
    <select id="ulSelClass" onChange="ulPupListShow()"></select>
    <select id="ulSelPupil"></select>
    <button type="button" onClick="ulShow(0)"> &gt;&gt; </button>
@@ -82,8 +83,9 @@ createSection("userlog", `
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
 getContent.userlog = async () => {
    
-   let ulRole = dqs("#selRole").value;
-   let selClassInner = '', selStaffInner = '';
+   let ulRole = dqs("#selRole").value,
+       selClassInner = '',
+       selStaffInner = "<option value='admin'>Гл. администратор</option>";
    
    dqs("#ulStaff").style.display = "none";
    dqs("#ulAll").style.display   = "none";
