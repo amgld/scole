@@ -153,7 +153,7 @@ getContent.notes = async () => {
       }
       else {
          dqs("#ntAddForm").style.display  = "none";
-         dqs("#ntResult").innerHTML = "У вас нет доступных классов";
+         dqs("#ntResult").innerHTML = "<p>У вас нет доступных классов</p>";
       }
    }
 };
