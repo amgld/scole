@@ -114,16 +114,19 @@ createSection("notes", `
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
 getContent.notes = async () => {
    
-   let ntRole = dqs("#selRole").value;   
+   let ntRole = dqs("#selRole").value,
+       selClassInner = '';
+       
+   dqs("#ntAddForm").style.display  = "block";
+   dqs("#ntAddForm textarea").value = '';
+   ntCount();
    
    // Если он учащийся или родитель, показываем заметки ему и классу/группам
    if (ntRole == "pupil" || ntRole == "parent") {
       dqs("#ntAddForm").style.display  = "none";
       ntShow(uLogin);
    }  
-   else {
-      let selClassInner = '';
-      
+   else {      
       // Если он классный руководитель, показываем ему его классы
       if (ntRole == "tutor")
          for (let cl of uTutorCls) selClassInner += `<option>${cl}</option>`;
@@ -141,9 +144,16 @@ getContent.notes = async () => {
          let ntClasses = classSort(Object.keys(uTeachLoad));
          for (let cl of ntClasses) selClassInner += `<option>${cl}</option>`;
       }
+      
       dqs("#ntSelClass").innerHTML = selClassInner;
-      ntPupListShow(); // показываем список учащихся этого класса или группы
-      ntShow('');      // показываем все введенные им заметки
-      inpFocus();      // фокус на поле ввода новой заметки
+      if (selClassInner) {
+         ntPupListShow(); // показываем список учащихся этого класса или группы
+         ntShow('');      // показываем все введенные им заметки
+         inpFocus();      // фокус на поле ввода новой заметки
+      }
+      else {
+         dqs("#ntAddForm").style.display  = "none";
+         dqs("#ntResult").innerHTML = "У вас нет доступных классов";
+      }
    }
 };
