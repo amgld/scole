@@ -109,8 +109,8 @@ const submLogin = async () => {
          scriptElem.onload = () => headerGen();
          
          // Проверяем и публикуем информацию о новых заметках для юзера
-         if (uRoles == "pupil" || uRoles == "par") {
-            let apiResp = await apireq("notesCheck", [uLogin, uRoles]);
+         if (uLogin != "admin" && uCateg != "staff") {
+            let apiResp = await apireq("notesCheck", [uLogin, uCateg]);
             if (apiResp != "none") {
                dqs("aside").style.display = "block";
                dqs("aside").title = "Для вас имеются новые заметки";

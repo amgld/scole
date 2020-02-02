@@ -51,5 +51,5 @@ module.exports = async (args) => {
       resp.sort((a, b) => (a.d <= b.d) ? 1 : -1);            
       return JSON.stringify(resp);
    }
-   catch(e) {console.info(e); return "none";}
+   catch(e) {return "none";}
 };

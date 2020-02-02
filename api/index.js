@@ -24,7 +24,7 @@ const modReq = {
    "pupilsList":  [1,1], "sprAdd":      [1,1], "sprGet":        [1,1],
    "sprDel":      [1,1], "sprResp":     [1,1], "tabelGet":      [1,1],
    "export":      [1,1], "notesAdd":    [1,1], "notesGet":      [1,1],
-   "notesDel":    [1,1], "logGet":      [1,1]
+   "notesDel":    [1,1], "logGet":      [1,1], "notesCheck":    [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -55,11 +55,11 @@ const RIGHTS = {
    ],
    "pupil":   [
       "subjList", "teachList", "jrnGet", "absentGet", "sprGet", "sprResp",
-      "tabelGet", "notesGet"
+      "tabelGet", "notesGet", "notesCheck"
    ],
    "parent":  [
       "subjList", "teachList", "jrnGet", "absentGet", "sprGet", "sprResp",
-      "tabelGet", "notesGet"
+      "tabelGet", "notesGet", "notesCheck"
    ]
 };
 for (let item in RIGHTS) RIGHTS[item].push("login");
