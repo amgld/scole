@@ -121,6 +121,9 @@ getContent.notes = async () => {
    dqs("#ntAddForm textarea").value = '';
    ntCount();
    
+   // Отключаем информацию о наличии новых заметок
+   dqs("aside").style.display  = "none";
+   
    // Если он учащийся или родитель, показываем заметки ему и классу/группам
    if (ntRole == "pupil" || ntRole == "parent") {
       dqs("#ntAddForm").style.display  = "none";

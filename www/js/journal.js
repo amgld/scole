@@ -138,5 +138,8 @@ getContent.journal = async () => {
    dqs("#jrnSubj").style.display = "block";
       
    // Формируем контент страницы по данному предмету и учителю
-   jrnContLoad();   
+   jrnContLoad();
+   
+   // Проверяем наличие новых заметок и, если они есть, публикуем сообщение
+   newNotes();
 }

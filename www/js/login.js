@@ -107,6 +107,15 @@ const submLogin = async () => {
             document.body.appendChild(scriptElem);
          }         
          scriptElem.onload = () => headerGen();
+         
+         // Проверяем и публикуем информацию о новых заметках для юзера
+         if (uRoles == "pupil" || uRoles == "par") {
+            let apiResp = await apireq("notesCheck", [uLogin, uRoles]);
+            if (apiResp != "none") {
+               dqs("aside").style.display = "block";
+               dqs("aside").title = "Для вас имеются новые заметки";
+            }
+         }
       }
    }
 }
