@@ -6,29 +6,29 @@
 
 // Получение и показ статистики о своевременности заполнения журнала
 const stSloven = async () => {
-   dqs("#stResult") = "<img src='/static/preloader.gif'>";
-   dqs("#stResult") = "Результат по своевременности";
+   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
+   dqs("#stResult").innerHTML = "Результат по своевременности";
 }
 
 // Получение и показ статистики по параллели классов
 const stClasses = async () => {
-   dqs("#stResult") = "<img src='/static/preloader.gif'>";
+   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
    let parallN = dqs("#stSelParall").value;
-   dqs("#stResult") = `Результат по параллели классов: ${parallN}`;
+   dqs("#stResult").innerHTML = `Результат по параллели классов: ${parallN}`;
 }
 
 // Получение и показ статистики по одному учителю
 const stTeach = async () => {
-   dqs("#stResult") = "<img src='/static/preloader.gif'>";
+   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
    let teacher = dqs("#stSelTeach").value;
-   dqs("#stResult") = `Результат по одному учителю: ${teacher}`;
+   dqs("#stResult").innerHTML = `Результат по одному учителю: ${teacher}`;
 }
 
 // Получение и показ статистики по одному предмету
 const stSubj = async () => {
-   dqs("#stResult") = "<img src='/static/preloader.gif'>";
+   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
    let subj = dqs("#stSelSubj").value;
-   dqs("#stResult") = `Результат по одному предмету: ${subj}`;
+   dqs("#stResult").innerHTML = `Результат по одному предмету: ${subj}`;
 }
 
 // Формирование контента страницы
@@ -74,7 +74,7 @@ getContent.stat = async () => {
    let stAllTeach = JSON.parse(apiResp).sort(
        (u1, u2) => (u1.fio).localeCompare(u2.fio, "ru"));      
    for (let t of stAllTeach)
-      selTeachInner += `<option value="${st.login}">${st.fio}</option>`;
+      selTeachInner += `<option value="${t.login}">${t.fio}</option>`;
    dqs("#stSelTeach").innerHTML = selTeachInner;
    
    // Показываем все предметы
