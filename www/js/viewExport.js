@@ -55,7 +55,9 @@ stl.textContent = `
    .topicsStr div:nth-child(3) {width:0.8cm}
    .topicsStr div:nth-child(4) {width:6.4cm; text-align:left}
    .topicsStr div:nth-child(5) {width:6cm; text-align:left}
-   h3 + .topicsStr div:nth-child(3), h3 + .topicsStr div:nth-child(4) {
+   h3 + .topicsStr div:nth-child(3),
+   h3 + .topicsStr div:nth-child(4),
+   h3 + .topicsStr div:nth-child(5) {
       text-align:center;}
    h3 + .topicsStr div {border-left:0.25pt solid black}
    h3 + .topicsStr div:first-child {border-left:none}
