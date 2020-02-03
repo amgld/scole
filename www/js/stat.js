@@ -4,31 +4,38 @@
  */
 "use strict";
 
+// Запрос к API для получения статистики
+const getStat = async (tip, variable) => {
+   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
+   let resp = await apireq("statGet", [tip, variable]);
+   if (resp == "none") {
+      dqs("#stResult").innerHTML = "Не удалось получить данные";
+      return 0;
+   }
+   return JSON.parse(resp);
+}
+
 // Получение и показ статистики о своевременности заполнения журнала
 const stSloven = async () => {
-   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
-   dqs("#stResult").innerHTML = "Результат по своевременности";
+   let stObj = await getStat("sloven", 'a');
 }
 
 // Получение и показ статистики по параллели классов
 const stClasses = async () => {
-   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
-   let parallN = dqs("#stSelParall").value;
-   dqs("#stResult").innerHTML = `Результат по параллели классов: ${parallN}`;
+   let parallN = dqs("#stSelParall").value.toString();
+   let stObj = await getStat("classes", parallN);
 }
 
 // Получение и показ статистики по одному учителю
 const stTeach = async () => {
-   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
    let teacher = dqs("#stSelTeach").value;
-   dqs("#stResult").innerHTML = `Результат по одному учителю: ${teacher}`;
+   let stObj = await getStat("teacher", teacher);
 }
 
 // Получение и показ статистики по одному предмету
 const stSubj = async () => {
-   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
    let subj = dqs("#stSelSubj").value;
-   dqs("#stResult").innerHTML = `Результат по одному предмету: ${subj}`;
+   let stObj = await getStat("subject", subj);
 }
 
 // Формирование контента страницы
