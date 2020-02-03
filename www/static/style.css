@@ -335,17 +335,19 @@ section#notes table td[title] {
 section#notes table td:last-child {
    text-align:left;}
    
-/* БЛОК РАБОТЫ С ЛОГАМИ
+/* БЛОКИ РАБОТЫ С ЛОГАМИ И СТАТИСТИКОЙ
    ---------------------------------------------------- */
-section#userlog p {
+section#userlog p, section#stat p {
    margin:10px 0px 5px; font-weight:bold;}
-section#userlog select, section#userlog button {
+section#userlog select, section#userlog button,
+section#stat select, section#stat button {
    margin:0px 5px;}
-section#userlog table {
+section#userlog table, section#stat table {
    margin:auto; border-collapse:collapse;}
-section#userlog table th, section#userlog table td {
+section#userlog table th, section#userlog table td,
+section#stat table th, section#stat table td {
    padding:3px 5px; border:1px solid #963;}
-section#userlog table th {
+section#userlog table th, section#stat table th {
    font-size:90%;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ

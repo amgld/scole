@@ -118,7 +118,7 @@ const subjDef = {
 const sbListFullGet = async () => {
    let apiResp   = await apireq("subjList");
    let sbListDop = JSON.parse(apiResp);
-   return {...subjDef, ...sbListDop};
+   return subjSort({...subjDef, ...sbListDop});
 }
 
 // Виды документов о пропусках уроков
