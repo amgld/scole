@@ -116,7 +116,8 @@ const subjDef = {
 
 // Получение объекта со списком всех предметов {"s403":"Физика", ...}
 const sbListFullGet = async () => {
-   let apiResp   = await apireq("subjList");
+   let apiResp = await apireq("subjList");
+   if (apiResp == "none") return {};
    let sbListDop = JSON.parse(apiResp);
    return subjSort({...subjDef, ...sbListDop});
 }

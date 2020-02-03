@@ -35,8 +35,8 @@ const stSubj = async () => {
 createSection("stat", `
    <h3>Выбор типа статистических данных</h3>
    
-   <button type="button" onClick="stSloven()"
-      > Своевременность заполнения журнала </button>
+   <p>Своевременность заполнения журнала
+   <button type="button" onClick="stSloven()"> &gt;&gt; </button></p>
    
    <p>Статистика по параллели классов</p>
    <select id="stSelParall"></select>
@@ -58,19 +58,20 @@ createSection("stat", `
 getContent.stat = async () => {   
    dqs("#stResult").innerHTML = "Нет данных";
    
-   // Показываем все параллели классов
+   // Показываем все номера параллелей классов
    let selClassInner = '';
    let apiResp = await apireq("classesList");
-   if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
-   let stClasses = JSON.parse(apiResp).map(x => x.replace(/[^0-9]/g, ''));
-   for (let cl of stClasses)
+   if (apiResp == "none") {info(1, "Не могу получить список классов"); return;}
+   let stClasses = classSort(JSON.parse(apiResp))
+                 . map(x => x.replace(/[^0-9]/g, ''));
+   for (let cl of new Set(stClasses))
       selClassInner += `<option>${cl}</option>`;
    dqs("#stSelParall").innerHTML = selClassInner;
       
-   // Показываем всех сотрудников
+   // Показываем всех учителей
    let selTeachInner = '';
    apiResp = await apireq("teachList");
-   if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
+   if (apiResp == "none") {info(1, "Не могу получить список учителей"); return;}
    let stAllTeach = JSON.parse(apiResp).sort(
        (u1, u2) => (u1.fio).localeCompare(u2.fio, "ru"));      
    for (let t of stAllTeach)
@@ -80,6 +81,10 @@ getContent.stat = async () => {
    // Показываем все предметы
    let selSubjInner = '';
    let stSubjList = await sbListFullGet();
+   if (!Object.keys(stSubjList).length) {
+      info(1, "Не могу получить список предметов");
+      return;
+   }
    for (let k of Object.keys(stSubjList))
       selSubjInner += `<option value="${k}">${stSubjList[k]}</option>`;
    dqs("#stSelSubj").innerHTML = selSubjInner;   
