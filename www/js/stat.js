@@ -4,38 +4,58 @@
  */
 "use strict";
 
-// Запрос к API для получения статистики
-const getStat = async (tip, variable) => {
-   dqs("#stResult").innerHTML = "<img src='/static/preloader.gif'>";
-   let resp = await apireq("statGet", [tip, variable]);
-   if (resp == "none") {
-      dqs("#stResult").innerHTML = "Не удалось получить данные";
-      return 0;
+// Объект с кодами и названиями предметов
+let stSubjList = {};
+
+// Запрос к API для получения статистики и публикация результатов
+//    tip - тип запроса ("sloven", "classes", "teacher" или "subject")
+//     hd - заголовок, печатаемый перед таблицей с результатами
+const getStat = async (tip, hd) => {
+   
+   let resEl = dqs("#stResult");
+   resEl.innerHTML = "<img src='/static/preloader.gif'>";
+   let args = {
+      sloven:  "a",
+      classes: dqs("#stSelParall").value.toString(),
+      teacher: dqs("#stSelTeach").value,
+      subject: dqs("#stSelSubj").value
+   };
+   
+   // ФИО выбранного учителя
+   let fioTeach =
+      dqs("#stSelTeach").options[dqs("#stSelTeach").selectedIndex].innerHTML;
+   
+   // Уточнение после подзаголовка перед таблицей
+   let subHead = {
+      sloven:  '',
+      classes: `: ${args[tip]}-е классы`,
+      teacher: `: ${fioTeach}`,
+      subject: `: ${stSubjList(args[tip])}`
+   };
+   
+   let apiResp = await apireq("statGet", [tip, args[tip]]);
+   let resp = [];
+   if (apiResp != "none") resp = JSON.parse(apiResp);  
+   if (!resp.length) {
+      resEl.innerHTML = "<p>Не найдено данных, удовлетворяющих запросу</p>";
+      return;
    }
-   return JSON.parse(resp);
-}
-
-// Получение и показ статистики о своевременности заполнения журнала
-const stSloven = async () => {
-   let stObj = await getStat("sloven", 'a');
-}
-
-// Получение и показ статистики по параллели классов
-const stClasses = async () => {
-   let parallN = dqs("#stSelParall").value.toString();
-   let stObj = await getStat("classes", parallN);
-}
-
-// Получение и показ статистики по одному учителю
-const stTeach = async () => {
-   let teacher = dqs("#stSelTeach").value;
-   let stObj = await getStat("teacher", teacher);
-}
-
-// Получение и показ статистики по одному предмету
-const stSubj = async () => {
-   let subj = dqs("#stSelSubj").value;
-   let stObj = await getStat("subject", subj);
+   
+   resEl.innerHTML = `<p>${hd}${subHead}</p><table>`;
+   
+   // Печатаем заголовочную строку
+   resEl.innerHTML += "<tr>";
+   for (let thInner of resp[0]) resEl.innerHTML += `<th>${thInner}</th>`;
+   resEl.innerHTML += "</tr>";
+   
+   // Печатаем тело таблицы
+   for (let i=1; i<resp.length; i++) {
+      resEl.innerHTML += "<tr>";
+      for (let tdInner of resp[i]) resEl.innerHTML += `<th>${tdInner}</th>`;
+      resEl.innerHTML += "</tr>";
+   }
+   
+   resEl.innerHTML += "</table>";
 }
 
 // Формирование контента страницы
@@ -43,19 +63,27 @@ createSection("stat", `
    <h3>Выбор типа статистических данных</h3>
    
    <p>Своевременность заполнения журнала
-   <button type="button" onClick="stSloven()"> &gt;&gt; </button></p>
+   <button type="button"
+      onClick="getStat('sloven', 'Учителя, не заполняющие журнал более 7 дней')"
+      > &gt;&gt; </button></p>
    
    <p>Статистика по параллели классов</p>
    <select id="stSelParall"></select>
-   <button type="button" onClick="stClasses()"> &gt;&gt; </button>
+   <button type="button"
+      onClick="getStat('classes', 'Статистика по параллели')"
+      > &gt;&gt; </button>
    
    <p>Статистика по одному учителю</p>
    <select id="stSelTeach"></select>
-   <button type="button" onClick="stTeach()"> &gt;&gt; </button>
+   <button type="button"
+      onClick="getStat('teacher', 'Статистика по одному учителю')"
+      > &gt;&gt; </button>
    
    <p>Статистика по одному предмету</p>
    <select id="stSelSubj"></select>
-   <button type="button" onClick="stSubj()"> &gt;&gt; </button>
+   <button type="button"
+      onClick="getStat('subject', 'Статистика по одному предмету')"
+      > &gt;&gt; </button>
    </div>
    
    <h3>Статистические данные</h3><div id="stResult"></div>
@@ -87,7 +115,7 @@ getContent.stat = async () => {
    
    // Показываем все предметы
    let selSubjInner = '';
-   let stSubjList = await sbListFullGet();
+   stSubjList = await sbListFullGet();
    if (!Object.keys(stSubjList).length) {
       info(1, "Не могу получить список предметов");
       return;
