@@ -349,6 +349,8 @@ section#stat table th, section#stat table td {
    padding:3px 5px; border:1px solid #963;}
 section#userlog table th, section#stat table th {
    font-size:90%;}
+section#stat div h3 {
+   margin-top:20px;}
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */

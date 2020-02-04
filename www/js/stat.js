@@ -4,9 +4,6 @@
  */
 "use strict";
 
-// Объект с кодами и названиями предметов
-let stSubjList = {};
-
 // Запрос к API для получения статистики и публикация результатов
 //    tip - тип запроса ("sloven", "classes", "teacher" или "subject")
 //     hd - заголовок, печатаемый перед таблицей с результатами
@@ -21,41 +18,51 @@ const getStat = async (tip, hd) => {
       subject: dqs("#stSelSubj").value
    };
    
+   // Выбранный класс
+   let selParall = dqs("#stSelParall").value;
+   
    // ФИО выбранного учителя
    let fioTeach =
       dqs("#stSelTeach").options[dqs("#stSelTeach").selectedIndex].innerHTML;
+      
+   // Выбранный предмет
+   let selSubj =
+      dqs("#stSelSubj").options[dqs("#stSelSubj").selectedIndex].innerHTML;
    
-   // Уточнение после подзаголовка перед таблицей
+   // Уточнение после заголовка перед таблицей
    let subHead = {
-      sloven:  '',
-      classes: `: ${args[tip]}-е классы`,
-      teacher: `: ${fioTeach}`,
-      subject: `: ${stSubjList(args[tip])}`
+      sloven:  '',              classes: `: ${selParall}-е классы`,
+      teacher: `: ${fioTeach}`, subject: `: ${selSubj}`
    };
+   
+   let resContent = `<h3>${hd}${subHead[tip]}</h3>`;
    
    let apiResp = await apireq("statGet", [tip, args[tip]]);
    let resp = [];
    if (apiResp != "none") resp = JSON.parse(apiResp);  
    if (!resp.length) {
-      resEl.innerHTML = "<p>Не найдено данных, удовлетворяющих запросу</p>";
+      resContent += "<p>Не найдено данных, удовлетворяющих запросу</p>";
+      resEl.innerHTML = resContent;
       return;
    }
    
-   resEl.innerHTML = `<p>${hd}${subHead}</p><table>`;
+   resContent += "<table>";
    
    // Печатаем заголовочную строку
-   resEl.innerHTML += "<tr>";
-   for (let thInner of resp[0]) resEl.innerHTML += `<th>${thInner}</th>`;
-   resEl.innerHTML += "</tr>";
+   resContent += "<tr>";
+   for (let thInner of resp[0]) resContent += `<th>${thInner}</th>`;
+   resContent += "</tr>";
    
    // Печатаем тело таблицы
    for (let i=1; i<resp.length; i++) {
-      resEl.innerHTML += "<tr>";
-      for (let tdInner of resp[i]) resEl.innerHTML += `<th>${tdInner}</th>`;
-      resEl.innerHTML += "</tr>";
+      resContent += "<tr>";
+      for (let tdInner of resp[i]) resContent += `<td>${tdInner}</td>`;
+      resContent += "</tr>";
    }
    
-   resEl.innerHTML += "</table>";
+   resContent += "</table>";
+   
+   resEl.innerHTML = resContent;
 }
 
 // Формирование контента страницы
@@ -84,14 +91,14 @@ createSection("stat", `
    <button type="button"
       onClick="getStat('subject', 'Статистика по одному предмету')"
       > &gt;&gt; </button>
-   </div>
    
-   <h3>Статистические данные</h3><div id="stResult"></div>
+   <div id="stResult"></div>
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
 getContent.stat = async () => {   
-   dqs("#stResult").innerHTML = "Нет данных";
+   dqs("#stResult").innerHTML =
+      "<h3>Статистические данные</h3><p>Выберите тип данных</p>";
    
    // Показываем все номера параллелей классов
    let selClassInner = '';
@@ -115,7 +122,7 @@ getContent.stat = async () => {
    
    // Показываем все предметы
    let selSubjInner = '';
-   stSubjList = await sbListFullGet();
+   let stSubjList = await sbListFullGet();
    if (!Object.keys(stSubjList).length) {
       info(1, "Не могу получить список предметов");
       return;
