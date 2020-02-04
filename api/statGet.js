@@ -59,41 +59,51 @@ module.exports = async (args) => {
          // последние 15 суток (по каждому предмету и классу)
          // в пределах одного календарного года
          case "sloven":
-         resp.push(["Учитель", "Предмет", "Класс", "Последняя<br>запись"]);
+         resp.push(["Учитель", "Предмет", "Класс"]);
          
          // Определяем дату board: 15 суток назад в формате "d613"
-         // (только в пределах текущего календарного года || 1 января)
-         let interval   = 15 * 24 * 3600 * 1000,
-             firstDay   = `${(new Date()).getFullYear()}-01-01`,
-             firstUnix  = Date.parse(firstDay),
-             nowUnix    = Date.now(),
-             boardUnix  = nowUnix - interval < firstUnix ?
-                          firstUnix : nowUnix - interval,
-             bDt        = new Date(boardUnix),
-             board      = INI.dtConv(`${bDt.getFullYear()}-`
-                        + `${(bDt.getMonth() + 1).toString().padStart(2,'0')}-`
-                        + `${(bDt.getDate()).toString().padStart(2,'0')}`);
+         let bDt   = new Date(Date.now() - (15 * 24 * 3600 * 1000)),
+             bYear = bDt.getFullYear(),
+             bMon  = bDt.getMonth() + 1,
+             bDay  = bDt.getDate(),
+             board = `${bYear}-${bMon.toString().padStart(2,'0')}-`
+                   + `${bDay.toString().padStart(2,'0')}`;                   
+         if (bMon == 12 && bDay > 10) board = `${bYear}-12-10`;
+         if (bMon > 5   && bMon < 9)  board = `${bYear}-05-10`;
+         if (bMon == 8  && bDay > 16) board = `${bYear}-09-01`;
+         board = INI.dtConv(board);
          
          // Получаем из базы все записи тем, датированные последними
-         // 15 сутками, в массив объектов вида
-         // {"g":"10А","s":"s430","l":"ivanov","d":"d815"}
+         // 15 сутками, в объект good вида
+         // {ivanov: [["10А", "s430",  "d815"], ...], petrov: [...], ...}
          rs = await dbFind("topics",
-            {$where: function() {return (this.d > board);}}
-         );
+              {$where: function() {return (this.d >= board);}});
+         let good = {};
+         for (let rec of rs) {
+            if (!good[rec.l]) good[rec.l] = [];
+            good[rec.l].push([rec.g, rec.s, rec.d]);
+         }         
          
          // Цикл по массиву с педагогической нагрузкой
          for (let dElem of distrib) {
-            let teacher = teachers[dElem.tLogin] || '';
-            if (!teacher) continue;
+            let teacher = teachers[dElem.tLogin];
+            if (!teacher)       continue;
+            if (!good[dElem.tLogin]) good[dElem.tLogin] = [];
             
             // Цикл по всем предметам данного учителя
+            // Формируем массив goodSb всех уроков по данному предмету
             for (let sb of Object.keys(dElem.tLoad)) {
-               let subject = subjects[sb] || '';
+               let subject = subjects[sb];
                if (!subject) continue;
+               let goodSb = good[dElem.tLogin].filter(x => x[1] == sb);
                
                // Цикл по всем классам или подгруппам этого предмета
                for (let gr of dElem.tLoad[sb]) {
-                  resp.push([teacher, subject, gr, "23.09"]);
+                  let isSloven = true;
+                  for (let lsn of goodSb) {
+                     if (lsn[0] == gr) {isSloven = false; break;}
+                  }
+                  if (isSloven) resp.push([teacher, subject, gr]);
                }
             }
          }
