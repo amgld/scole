@@ -99,7 +99,7 @@ module.exports = async (args) => {
                
                // Цикл по всем классам или подгруппам этого предмета
                for (let gr of dElem.tLoad[sb]) {
-                  let isSloven = true;
+                  let isSloven = true; // должник ли он
                   for (let lsn of goodSb) {
                      if (lsn[0] == gr) {isSloven = false; break;}
                   }
