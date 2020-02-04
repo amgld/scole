@@ -46,7 +46,7 @@ const getStat = async (tip, hd) => {
       return;
    }
    
-   resContent += "<table>";
+   resContent += "<table class='firstLeft'>";
    
    // Печатаем заголовочную строку
    resContent += "<tr>";
@@ -71,7 +71,7 @@ createSection("stat", `
    
    <p>Своевременность заполнения журнала
    <button type="button"
-      onClick="getStat('sloven', 'Учителя, не заполняющие журнал более 7 дней')"
+      onClick="getStat('sloven', 'Учителя, не заполняющие журнал более 14 дней')"
       > &gt;&gt; </button></p>
    
    <p>Статистика по параллели классов</p>

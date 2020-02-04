@@ -344,6 +344,8 @@ section#stat select, section#stat button {
    margin:0px 5px;}
 section#userlog table, section#stat table {
    margin:auto; border-collapse:collapse;}
+section#stat table.firstLeft td:first-child {
+   text-align:left;}
 section#userlog table th, section#userlog table td,
 section#stat table th, section#stat table td {
    padding:3px 5px; border:1px solid #963;}

@@ -49,31 +49,37 @@ module.exports = async (args) => {
       // Получаем список всех предметов в объект вида {s110: "Русский", ...}
       rs = await SB();
       if (rs == "none") return "none";
-      let subjects = INI.sbSort({...INI.sbDef, ...JSON.parse(rs)});
-      
-      // Объект с unix-timestamp'ами начала и окончания учебных периодов
-      // {d628a: [25325, 34634], ...}
-      lets perdsUnix = {};
-      for (let perName of Object.keys(INI.dtsIt))
-         perdsUnix[perName] = [
-            INI.dtConv(INI.dtsIt[perName][2]),
-            INI.dtConv(INI.dtsIt[perName][3])
-         ];
-         
-      console.info(perdsUnix);
-      
-      // Определяем дату 8 суток назад без учета каникул
-      let nowUnix = Date.now();
-      
+      let subjects = INI.sbSort({...INI.sbDef, ...JSON.parse(rs)});      
+                     
       switch (tip) {
          
 // ***** Своевременность заполнения журнала *********************************
 
-         // Отдаем список учителей, последняя запись у которых
-         // не было записей последние 8 суток (без учета каникул;
-         // по каждому предмету и классу)
+         // Отдаем список учителей, у которых не было записей
+         // последние 15 суток (по каждому предмету и классу)
+         // в пределах одного календарного года
          case "sloven":
          resp.push(["Учитель", "Предмет", "Класс", "Последняя<br>запись"]);
+         
+         // Определяем дату board: 15 суток назад в формате "d613"
+         // (только в пределах текущего календарного года || 1 января)
+         let interval   = 15 * 24 * 3600 * 1000,
+             firstDay   = `${(new Date()).getFullYear()}-01-01`,
+             firstUnix  = Date.parse(firstDay),
+             nowUnix    = Date.now(),
+             boardUnix  = nowUnix - interval < firstUnix ?
+                          firstUnix : nowUnix - interval,
+             bDt        = new Date(boardUnix),
+             board      = INI.dtConv(`${bDt.getFullYear()}-`
+                        + `${(bDt.getMonth() + 1).toString().padStart(2,'0')}-`
+                        + `${(bDt.getDate()).toString().padStart(2,'0')}`);
+         
+         // Получаем из базы все записи тем, датированные последними
+         // 15 сутками, в массив объектов вида
+         // {"g":"10А","s":"s430","l":"ivanov","d":"d815"}
+         rs = await dbFind("topics",
+            {$where: function() {return (this.d > board);}}
+         );
          
          // Цикл по массиву с педагогической нагрузкой
          for (let dElem of distrib) {
