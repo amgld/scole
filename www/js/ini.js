@@ -242,8 +242,7 @@ const subjSort = sbObj => {
 // по ключу login в каждом объекте-пользователе
 const userSort = usArray => usArray.sort((u1, u2) => (u1.login > u2.login));
 
-/* ШАБЛОН HTML-ДОКУМЕНТОВ, ОТДАВАЕМЫХ ПОЛЬЗОВАТЕЛЮ ДЛЯ ПЕЧАТИ
---------------------------------------------------------------------- */
+// Шаблон html-документов, отдаваемых пользователю для печати
 const HTML = `<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
 <style>@page {size: A4; margin: 1.5cm}
    body {font: 8pt Arial, sans-serif}
@@ -255,3 +254,10 @@ const HTML = `<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
       padding: 3pt; border: 0.25pt solid black; text-align: center}
    table td:first-child {text-align: left}
 </style></head><body>{{body}}</body></html>`;
+
+// Экспорт некоторых функций и объектов на серверную сторону
+try {
+   module.exports = {
+      dtConv: dateConv, sbSort: subjSort, dtsIt : DTSIT, sbDef: subjDef
+   };
+} catch(e) {;}
