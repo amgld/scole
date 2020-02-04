@@ -29,8 +29,15 @@ module.exports = async (args) => {
       // Проверяем полномочия автора запроса
       let staff = await dbFind("staff", {Ulogin: lg});
       if (!staff.length)   return "none";
-      if (!staff[0].admin) return "none";
+      if (!staff[0].admin) return "none";      
       
+      // Получаем всех учителей в объект вида {"pupkin": "Пупкин В. И.", ...}
+      rs = await dbFind("staff", {$not: {block: true} });
+      if (!rs.length) return "none";      
+      let teachers = {};
+      for (let t of rs)
+         teachers[t.Ulogin] = `${t.Ufamil} ${t.Uname[0]}. ${t.Uotch[0]}.`;
+         
       // Получаем всю педагогическую нагрузку в массив объектов вида
       // {
       //    tLogin: "pupkin",
@@ -38,13 +45,9 @@ module.exports = async (args) => {
       // }
       let distrib = await dbFind("distrib", {});
       if (!distrib.length) return "none";
-      
-      // Получаем всех учителей в объект вида {"pupkin": "Пупкин В. И.", ...}
-      rs = await dbFind("staff", {$not: {block: true} });
-      if (!rs.length) return "none";
-      let teachers = {};
-      for (let t of rs)
-         teachers[t.Ulogin] = `${t.Ufamil} ${t.Uname[0]}. ${t.Uotch[0]}.`;
+      distrib = distrib.filter(x => teachers[x.tLogin]).sort(
+         (a, b) => teachers[a.tLogin].localeCompare(teachers[b.tLogin], "ru")
+      );
          
       // Получаем список всех предметов в объект вида {s110: "Русский", ...}
       rs = await SB();
@@ -130,5 +133,5 @@ module.exports = async (args) => {
       
       return JSON.stringify(resp);
    }
-   catch(e) {console.info(e); return "none";}
+   catch(e) {return "none";}
 };
