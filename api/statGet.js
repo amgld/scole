@@ -51,6 +51,20 @@ module.exports = async (args) => {
       if (rs == "none") return "none";
       let subjects = INI.sbSort({...INI.sbDef, ...JSON.parse(rs)});
       
+      // Объект с unix-timestamp'ами начала и окончания учебных периодов
+      // {d628a: [25325, 34634], ...}
+      lets perdsUnix = {};
+      for (let perName of Object.keys(INI.dtsIt))
+         perdsUnix[perName] = [
+            INI.dtConv(INI.dtsIt[perName][2]),
+            INI.dtConv(INI.dtsIt[perName][3])
+         ];
+         
+      console.info(perdsUnix);
+      
+      // Определяем дату 8 суток назад без учета каникул
+      let nowUnix = Date.now();
+      
       switch (tip) {
          
 // ***** Своевременность заполнения журнала *********************************
