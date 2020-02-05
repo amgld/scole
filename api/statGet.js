@@ -71,7 +71,8 @@ module.exports = async (args) => {
              board = `${bYear}-${bMon.toString().padStart(2,'0')}-`
                    + `${bDay.toString().padStart(2,'0')}`;                   
          if (bMon == 12 && bDay > 10) board = `${bYear}-12-10`;
-         if (bMon > 5   && bMon < 9)  board = `${bYear}-05-10`;
+         if (bMon == 5  && bDay > 25) board = `${bYear}-05-10`;
+         if (bMon  > 5  && bMon <  9) board = `${bYear}-05-10`;
          if (bMon == 8  && bDay > 16) board = `${bYear}-09-01`;
          board = INI.dtConv(board);
          
