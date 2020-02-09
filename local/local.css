@@ -9,11 +9,16 @@ h3.local {
    margin-top:10px;}
 button.local {
    display:block; width:10em; margin:20px auto; background:#963; color:#ff6;
-   border:none; cursor: pointer; padding:3px 10px; font-weight:bold;}
+   border:none; border-radius:5px; cursor: pointer; padding:3px 10px;
+   font-weight:bold;}
 div#loadDB, div#loadResult {
    text-align:center;}
 div#loadDB span {
    padding-right:1em;}
+div#loadDB textarea {
+   display:block; height:15em; width:800px; margin:5px auto 0px;
+   padding:3pt; font-size:90%; outline: none; resize: none;
+   border:1px solid #963; border-radius:3px;}
 
 /* БЛОК ТАКОЙ-ТО
    ---------------------------------------------------- */

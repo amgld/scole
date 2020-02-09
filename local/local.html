@@ -10,12 +10,12 @@
 <meta http-equiv="Cache-Control" content="no-cache">
 <link rel="stylesheet" type="text/css" href="../www/static/style.css">
 <link rel="stylesheet" type="text/css" href="../www/static/register.css">
-<link rel="stylesheet" type="text/css" href="local.icss">
+<link rel="stylesheet" type="text/css" href="local.css">
 <link rel="icon" type="image/x-icon" href="../www/favicon.ico">
 <title>ЭЖ «Шкала»: Просмотр архивов</title>
 
-<script src="nedb.js"></script>
 <script>"use strict";
+if (!String.prototype.padStart) location.assign("../www/browsers.html");
 let db = [], errMess = "<br><b>Ошибка загрузки базы данных!</b>";
 
 // Чтение одного файла с диска и импорт его в базу данных в оперативной памяти
@@ -31,16 +31,18 @@ const readFile = fl => {
          let dbName = fName.replace(".db", '');
          db[dbName] = new Nedb();
          db[dbName].insert(dbArr);
-         document.querySelector("#loadDB").innerHTML +=
-            `Файл <b>${fName}</b> успешно импортирован<br>`;        
+         document.querySelector("#loadDB textarea").innerHTML +=
+            `Файл ${fName} успешно импортирован.\n`;        
       }
       catch(err) {
-         alert("Ошибка импорта файла:\n" + err);
+         document.querySelector("#loadDB textarea").innerHTML +=
+            `Ошибка импорта файла ${fName}:\n${err}\n`;
          document.querySelector("#loadResult").innerHTML = errMess;
       }      
    };
    reader.onerror = err => {
-      alert("Ошибка чтения файла:\n" + err);
+      document.querySelector("#loadDB textarea").innerHTML +=
+         `Ошибка чтения файла:\n${err}.\n`;
       document.querySelector("#loadResult").innerHTML = errMess;
    }
    reader.readAsText(fl, "utf-8");
@@ -48,7 +50,7 @@ const readFile = fl => {
 
 // Загрузка всех архивных файлов из папки db
 const importBase = filesArr => {
-   document.querySelector("#loadDB").innerHTML = '';
+   document.querySelector("#loadDB").innerHTML = "<textarea></textarea>";
    document.querySelector("#loadResult").innerHTML =
         "<br><b>База данных успешно загружена</b>"
       + "<button type='button' class='local' onClick='start()'"
@@ -70,12 +72,11 @@ const importBase = filesArr => {
 </div>
 
 <footer>
-<a href="https://scole.ru/manual/" target="_blank">Помощь</a> &bull;
+<a href="https://scole.ru/manual/" target="_blank">Помощь</a>
 </footer>
 
-<script>
-   if (!String.prototype.padStart) location.assign("/browsers.html");
-</script>
+<script src="nedb.js"></script>
 <script src="../www/js/ini.js"></script>
+
 </body>
 </html>
