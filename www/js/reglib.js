@@ -363,10 +363,7 @@ const dtFocus = dt => {
       dqs("#regTopVol").value = 1;
       
       // Проматываем таблицу отметок к концу
-      if (dqs("#regGrades div")) {
-         let sdvig = dqs("#regGrades div").offsetWidth + 100;
-         dqs("#regGrades div").scrollBy(sdvig, 0);
-      }
+      if (dqs("#regGrades div")) dqs("#regGrades div").scrollBy(99000, 0);
    }
    else if (dt.length > 4) return;
    else {
