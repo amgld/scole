@@ -63,9 +63,11 @@ const importBase = filesArr => {
 
 <div id="content">
    <h1 class="local">ЭЖ «ШКАЛА»: ЛОКАЛЬНАЯ ВЕРСИЯ (ПРОСМОТР АРХИВОВ)</h1>
-   <h3 class="local">Загрузите базу данных (файлы *.db)</h3>
+   <h3 class="local">Загрузка базы данных (файлы *.db)</h3>
    <div id="loadDB">
-      <span>Выберите все файлы папки <b>db</b>:</span>
+      <button type="button"
+         onClick="document.querySelector('#loadDB input').click()"
+         >Выберите все файлы папки db</button>
       <input type="file" multiple onChange="importBase(this.files);">
    </div>
    <div id="loadResult"></div> 
