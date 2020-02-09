@@ -1,0 +1,23 @@
+/**
+ *   ТАБЛИЦА СТИЛЕЙ ЛОКАЛЬНОЙ ВЕРСИИ ЭЛЕКТРОННОГО ЖУРНАЛА «ШКАЛА»
+ *   Copyright © 2020, А.М.Гольдин. Modified BSD License
+ */
+ 
+h1.local {
+   font-size:18pt; margin-top:40px;}
+h3.local {
+   margin-top:10px;}
+button.local {
+   display:block; width:10em; margin:20px auto; background:#963; color:#ff6;
+   border:none; cursor: pointer; padding:3px 10px; font-weight:bold;}
+div#loadDB, div#loadResult {
+   text-align:center;}
+div#loadDB span {
+   padding-right:1em;}
+
+/* БЛОК ТАКОЙ-ТО
+   ---------------------------------------------------- */
+/*
+section#notes p {
+   margin:5px 0px 0px; font-size:90%;}
+*/

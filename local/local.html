@@ -1,0 +1,81 @@
+<!--
+      ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: ЛОКАЛЬНАЯ ВЕРСИЯ ДЛЯ ПРОСМОТРА АРХИВОВ
+      Copyright © 2020, А.М.Гольдин. Modified BSD License
+-->
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Cache-Control" content="no-cache">
+<link rel="stylesheet" type="text/css" href="../www/static/style.css">
+<link rel="stylesheet" type="text/css" href="../www/static/register.css">
+<link rel="stylesheet" type="text/css" href="local.css">
+<link rel="icon" type="image/x-icon" href="../www/favicon.ico">
+<title>ЭЖ «Шкала»: Просмотр архивов</title>
+
+<script src="nedb.js"></script>
+<script>"use strict";
+let db = [], errMess = "<br><b>Ошибка загрузки базы данных!</b>";
+
+// Чтение одного файла с диска и импорт его в базу данных в оперативной памяти
+const readFile = fl => {   
+   let fName = fl.name;
+   let reader = new FileReader();   
+   reader.onload = e => {
+      let strFile = e.target.result;
+      try {
+         let dbArr = JSON.parse(
+            '[' + strFile.trim().replace(/\r/g, '').replace(/\n/g, ',') + ']'
+         );
+         let dbName = fName.replace(".db", '');
+         db[dbName] = new Nedb();
+         db[dbName].insert(dbArr);
+         document.querySelector("#loadDB").innerHTML +=
+            `Файл <b>${fName}</b> успешно импортирован<br>`;        
+      }
+      catch(err) {
+         alert("Ошибка импорта файла:\n" + err);
+         document.querySelector("#loadResult").innerHTML = errMess;
+      }      
+   };
+   reader.onerror = err => {
+      alert("Ошибка чтения файла:\n" + err);
+      document.querySelector("#loadResult").innerHTML = errMess;
+   }
+   reader.readAsText(fl, "utf-8");
+}
+
+// Загрузка всех архивных файлов из папки db
+const importBase = filesArr => {
+   document.querySelector("#loadDB").innerHTML = '';
+   document.querySelector("#loadResult").innerHTML =
+        "<br><b>База данных успешно загружена</b>"
+      + "<button type='button' class='local' onClick='start()'"
+      + ">Начать работу</button>";
+   for (let fl of filesArr) readFile(fl);   
+}
+</script>
+</head>
+<body>
+
+<div id="content">
+   <h1 class="local">ЭЖ «ШКАЛА»: ЛОКАЛЬНАЯ ВЕРСИЯ (ПРОСМОТР АРХИВОВ)</h1>
+   <h3 class="local">Загрузите базу данных (файлы *.db)</h3>
+   <div id="loadDB">
+      <span>Выберите все файлы папки <b>db</b>:</span>
+      <input type="file" multiple onChange="importBase(this.files);">
+   </div>
+   <div id="loadResult"></div> 
+</div>
+
+<footer>
+<a href="https://scole.ru/manual/" target="_blank">Помощь</a> &bull;
+</footer>
+
+<script>
+   if (!String.prototype.padStart) location.assign("/browsers.html");
+</script>
+<script src="../www/js/ini.js"></script>
+</body>
+</html>
