@@ -21,6 +21,8 @@ div#loadDB textarea {
    display:block; height:15em; width:800px; margin:5px auto 0px;
    padding:3pt; font-size:90%; outline: none; resize: none;
    border:1px solid #963; border-radius:3px;}
+#chPwd {
+   display:none;}
 
 /* Блок такой-то
    ---------------------------------------------------- */

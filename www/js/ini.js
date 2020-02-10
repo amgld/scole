@@ -35,7 +35,7 @@ const roleNames = {
 };
 
 // Показываемые пункты меню в зависимости от роли пользователя
-const menuItems = {
+let menuItems = {
    "root": [ 
       ["users",    "Пользователи"],
       ["admins",   "Администраторы"],

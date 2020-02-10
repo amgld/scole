@@ -24,7 +24,7 @@ const regPagesSelLoad = async (className) => {
    if (regRole == "admin" || regRole == "tutor") {
       
       // Получаем массив groups названий подгрупп и самого класса
-      apiResp        = await apireq("classesGroups");
+      let apiResp    = await apireq("classesGroups");
       let groupsList = JSON.parse(apiResp);
       let groups     = classSort(groupsList.filter(x => x.includes(className)));
       

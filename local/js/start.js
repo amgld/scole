@@ -7,15 +7,18 @@
 let uRoles = ["admin"], uLogin = "admin";
 
 const start = () => {
-   dqs("#content").innerHTML = '';
-   let requires = ["info"];
-   for (let rlItem of menuItems["admin"]) requires.push(rlItem[0]);
-   requires.push("header");
-   
+   document.querySelector("#content").innerHTML = '';
+   let requires = [
+      "../www/js/ini", "js/iniLocal", "js/viewExportLocal", "js/exportLocal",
+      "js/apiLocal", "../www/js/info", "../www/js/reglib", "../www/js/register",
+      "../www/js/absent", "../www/js/distrib", "../www/js/groups",
+      "../www/js/achsheet", "../www/js/stat", "../www/js/header"
+   ]; 
+  
    let scriptElem;
    for (let scrName of new Set(requires)) {
       scriptElem = document.createElement("script");
-      scriptElem.src = `../www/js/${scrName}.js`;
+      scriptElem.src = `${scrName}.js`;
       scriptElem.async = false;
       document.body.appendChild(scriptElem);
    }         
