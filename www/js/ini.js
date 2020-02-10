@@ -168,7 +168,7 @@ const createSection = (newId, inner) => {
 // Аргументы: f (имя функции API) и z (строка или объект параметров API)
 // Если параметров нет, функция вызывается с одним аргументом f
 // Переменные uCateg, uLogin, uToken берутся из замыкания
-const apireq = async (f, z) => {
+let apireq = async (f, z) => {
    let body = {t: uCateg, l: uLogin, p: uToken, f: f};
    if (z) body.z = z;
    let opt = {method: "POST", cache: "no-cache", body: JSON.stringify(body)};

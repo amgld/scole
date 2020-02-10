@@ -10,7 +10,7 @@
 const getStat = async (tip, hd) => {
    
    let resEl = dqs("#stResult");
-   resEl.innerHTML = "<img src='/static/preloader.gif'>";
+   resEl.innerHTML = "<img src='static/preloader.gif'>";
    let args = {
       sloven:  "a",
       classes: dqs("#stSelParall").value.toString(),

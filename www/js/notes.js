@@ -28,7 +28,7 @@ const ntDel = async (id) => {
 // Показ всех заметок (если pupil == '', показываются заметки, добавленные
 // пользователем-сотрудником, иначе заметки для ученика и его класса/групп)
 const ntShow = async (pupil) => {
-   dqs("#ntResult").innerHTML = "<img src='/static/preloader.gif'>";
+   dqs("#ntResult").innerHTML = "<img src='static/preloader.gif'>";
    let ntResp = await apireq("notesGet", [pupil]);
    if (ntResp == "none") {
       info(1, "Ошибка на сервере.<br>Заметки не получены.");

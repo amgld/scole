@@ -85,7 +85,7 @@ const jrnContLoad = async () => {
 // Формирование контента страницы (селект для начала невидим в css)
 createSection("journal", `
    <select id="jrnSubj" onChange="jrnContLoad();"></select>
-   <div id="jrnCont"><img src='/static/preloader.gif'></div>
+   <div id="jrnCont"><img src='static/preloader.gif'></div>
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)

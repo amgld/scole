@@ -15,7 +15,7 @@ let absSbList = {};
 // ученика, либо наименование класса типа 11Б
 const absShow = async (clORpup) => {
    
-   dqs("#absResult").innerHTML = "<img src='/static/preloader.gif'>";
+   dqs("#absResult").innerHTML = "<img src='static/preloader.gif'>";
    
    let reqObj = [], onePupil = false;
    if (/[А-Я]/.test(clORpup)) reqObj = [clORpup, ''];   // запрошен весь класс
@@ -212,7 +212,7 @@ const absPupListShow = async () => {
 createSection("absent", `
    <select id="absSelClass" onChange="absPupListShow()"></select>
    <select id="absSelPupil" onChange="absShow(this.value)"></select>
-   <div id="absResult"><img src='/static/preloader.gif'></div>
+   <div id="absResult"><img src='static/preloader.gif'></div>
 `);
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)

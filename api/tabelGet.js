@@ -25,7 +25,7 @@ module.exports = async (argArr) => {
       
       // Администратор ли он?
       let admRes = await dbFind("staff", {Ulogin: user});
-      if (!admRes.length) return "none";
+      if (!admRes.length) admRes = [{}];
       
       // Проверяем полномочия юзера на запрос отметок этого ученика
       if (pupil != user && !admRes[0].admin) {

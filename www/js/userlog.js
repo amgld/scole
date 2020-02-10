@@ -6,7 +6,7 @@
 
 // Показ лога (аргумент - тип: 0 - дети, 1 - сотрудники, 2 - все)
 const ulShow = async tip => {
-   dqs("#ulResult").innerHTML = "<img src='/static/preloader.gif'>";
+   dqs("#ulResult").innerHTML = "<img src='static/preloader.gif'>";
    
    let roles = {
          "pupil":"учащийся", "par":"родитель",

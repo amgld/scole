@@ -384,8 +384,8 @@ const dtFocus = dt => {
 // **************************************************************************
 // Загрузка списка класса, отметок и тем уроков
 const loadGrades = async () => {
-   dqs("#regGrades").innerHTML     = "<img src='/static/preloader.gif'>";
-   dqs("#regJustTopics").innerHTML = "<img src='/static/preloader.gif'>";
+   dqs("#regGrades").innerHTML     = "<img src='static/preloader.gif'>";
+   dqs("#regJustTopics").innerHTML = "<img src='static/preloader.gif'>";
    
    // Получаем класс^предмет^учитель, например 10Ж-мальч^s220^ivanov
    let params = dqs("#regPageSel").value.trim();

@@ -24,7 +24,7 @@ const getExpFile = async () => {
               . replace(/\s+/g, ' ').replace(/¤/g, ' ').trim();
    
    // Получаем собственно файл с данными журнала
-   dqs("#expGet").innerHTML = "<img src='/static/preloader.gif'>";
+   dqs("#expGet").innerHTML = "<img src='static/preloader.gif'>";
    dqs("#expGet").style.display = "inline";
    let className = dqs("#expSelClass").value;
    let fileContent = await apireq("export", [className]);

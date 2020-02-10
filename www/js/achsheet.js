@@ -16,7 +16,7 @@ const grFull = {
 // Собственно генерирование табеля одного ученика
 // В аргументе приходит что-то вроде "pupkin^Пупкин Василий, 8Б класс"
 const achShow = async (pupil) => {
-   dqs("#tabel").innerHTML = "<img src='/static/preloader.gif'>";   
+   dqs("#tabel").innerHTML = "<img src='static/preloader.gif'>";   
    
    // Получаем фамилию, имя и класс ученика для подзаголовка
    let famImCl = pupil.split('^')[1];
