@@ -78,6 +78,7 @@ const achShow = async (pupil) => {
 
 // Формирование списка детей в селекте выбора учащегося
 const achPupListShow = async () => {
+   dqs("#tabel").innerHTML = '';
    let clName = dqs("#achSelClass").value;
    let apiResp = await apireq("pupilsList", [clName]);
    if (apiResp != "none") {
@@ -121,6 +122,15 @@ getContent.achsheet = async () => {
       dqs("#achSelClass").style.display = "none";
       dqs("#achSelPupil").style.display = "none";
       achShow(`${uLogin}^`);
+   }
+   // Если он администратор, показываем ему все классы
+   else if (achRole == "admin") {
+      let apiResp = await apireq("classesList");
+      if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
+      let achAllClasses = classSort(JSON.parse(apiResp));
+      for (let cl of achAllClasses) selClassInner += `<option>${cl}</option>`;
+      dqs("#achSelClass").innerHTML = selClassInner;
+      achPupListShow(); // показываем список детей
    }
    // Если он классный руководитель, показываем ему его классы
    else if (achRole == "tutor") {

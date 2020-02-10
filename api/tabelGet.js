@@ -23,8 +23,12 @@ module.exports = async (argArr) => {
           patt  = /^[a-z0-9]+$/;
       if (!patt.test(pupil) || !patt.test(user)) return "none";
       
+      // Администратор ли он?
+      let admRes = await dbFind("staff", {Ulogin: user});
+      if (!admRes.length) return "none";
+      
       // Проверяем полномочия юзера на запрос отметок этого ученика
-      if (pupil != user) {
+      if (pupil != user && !admRes[0].admin) {
          
          // Определяем класс ребенка
          let pupRes = await dbFind("pupils", {Ulogin: pupil});

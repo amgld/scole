@@ -48,6 +48,7 @@ const menuItems = {
       ["notes",    "Заметки"],
       ["distrib",  "Нагрузка"],
       ["groups",   "Группы"],
+      ["achsheet", "Табели"],
       ["export",   "Экспорт"],
       ["stat",     "Статистика"],
       ["userlog",  "Лог"]
