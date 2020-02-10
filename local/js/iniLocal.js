@@ -10,3 +10,4 @@ menuItems = {"admin": [
    ["groups", "Группы"], ["achsheet", "Табели"], ["export", "Экспорт"],
    ["stat", "Статистика"]
 ]};
+

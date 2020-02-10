@@ -22,5 +22,8 @@ const start = () => {
       scriptElem.async = false;
       document.body.appendChild(scriptElem);
    }         
-   scriptElem.onload = () => headerGen();
+   scriptElem.onload = () => {
+      headerGen();
+      dqs("#progName").innerHTML += ": Просмотр архива (локально)";
+   }
 }
