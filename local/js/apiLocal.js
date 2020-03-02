@@ -19,9 +19,33 @@ apireq = async (func, args) => {
    
    // ***********************************************************************
    // ПОЛУЧЕНИЕ ДАННЫХ О ПОСЕЩАЕМОСТИ
-   // Описание
-	case "absentGet":
- 		;
+   // В запросе приходят ["8Б", "ivanov"]
+   //      8Б - это запрашиваемый класс (пустой, если нужен один ученик)
+   //  ivanov - это запрашиваемый ученик (пустой, если запрашивается класс) 
+   // Возвращается массив, состоящий из объектов вида
+   // {d: "d730", s: s430, p: ivanov, abs: 2} (2 - к-во пропущенных уроков)
+   case "absentGet":   
+   try {
+      let resp = [], bdReq = {};
+      let clName = args[0].substr(0, 20).trim(),
+          pupil  = args[1].substr(0, 20).trim();
+
+      if (!clName && !pupil) return "none";
+      
+      if (pupil) bdReq = {p: pupil};              // если в запросе один ученик      
+      else       bdReq = {c: RegExp('^'+clName)}; // если весь класс
+      
+      let grResp = await dbFind("grades", bdReq);
+      for (let gr of grResp) {
+         let grade = gr.g;
+         if (!grade.includes('н')) continue;
+         let absVal = grade.length - grade.replace(/н/g, '').length;
+         resp.push({d:gr.d, s:gr.s, p:gr.p, abs:absVal});
+      }
+      
+      return JSON.stringify(resp);
+   }
+   catch(e) {return "none";}
 	break;
    
    // ***********************************************************************
@@ -69,16 +93,199 @@ apireq = async (func, args) => {
    
    // ***********************************************************************
    // ЭКСПОРТ ЖУРНАЛА ОДНОГО КЛАССА В HTML-ФАЙЛ
-   // Описание
+   // В запросе приходит ["8Б"]
+   // Возвращается сериализованный в строку объект (описание в api/export.js)
 	case "export":
- 		;
+   try {
+      let resp = {className: '', tutor: "не назначен", content: []};
+      let clName = args[0].substr(0,  3).trim();
+      if (!clName) return "none";
+      
+      // Определяем логин классного руководителя
+      let tutorLgn = '';
+      let clRes = await dbFind("curric", {type: "class", className: clName});
+      if (clRes.length) tutorLgn = clRes[0].tutor ? clRes[0].tutor : '';
+      
+      resp.className = clName;
+      
+      // ФИО классного руководителя
+      if (tutorLgn) {
+         let tutRes = await dbFind("staff", {Ulogin: tutorLgn});
+         if (tutRes.length) resp.tutor =
+            `${tutRes[0].Ufamil} ${tutRes[0].Uname} ${tutRes[0].Uotch}`;
+      }
+      
+      // Забираем из таблицы topics все записи данного класса и его подгрупп
+      // и сортируем полученный массив по кодам предметов
+      let pattern   = new RegExp(`^${clName}`);
+      let resTopics = await dbFind("topics", {g: pattern});
+      resTopics = resTopics.sort(
+         (a,b) => (a.s.substr(1,3) > b.s.substr(1,3)) ? 1 : -1
+      );
+      
+      // Разбираем полученный массив в объект objTopics с ключами вида
+      // "Группа^кодПредм^Учитель" и значениями - массивами объектов из
+      // остальных полей, например:
+      // objTopics["10Б-мальч^s110^pupkin"] =
+      //    [{d: "d004", t: "Африка", h: "Учить термины", w: 2, v:2}, ...]
+      let objTopics = {};
+      for (let currT of resTopics) {
+         if (!objTopics[`${currT.g}^${currT.s}^${currT.l}`])
+            objTopics[`${currT.g}^${currT.s}^${currT.l}`] = [];
+            
+         let newRec = {d: currT.d, t: currT.t, h: currT.h, w: currT.w};
+         if (currT.v) newRec.v = currT.v;
+            
+         objTopics[`${currT.g}^${currT.s}^${currT.l}`].push(newRec);         
+      }
+      
+      // Идем по этому объекту и формируем resp.content
+      for (let currGST of Object.keys(objTopics)) {
+         let keyArr = currGST.split('^');
+         let grGetData =
+            await apireq("gradesGet", [keyArr[0], keyArr[1], keyArr[2]]);
+         let grData = JSON.parse(grGetData);
+         
+         // Список учащихся и название предмета
+         let contElem = {list: [], s: '', p: "Неизвестный N N", l: []};
+         if (grData.pnList) contElem.list = grData.pnList;
+         contElem.s    = keyArr[1];
+         
+         // Фамилия, имя, отчество педагога
+         let tRes = await dbFind("staff", {Ulogin: keyArr[2]});
+         if (tRes.length) contElem.p =
+            `${tRes[0].Ufamil} ${tRes[0].Uname} ${tRes[0].Uotch}`;
+            
+         // Массив с датами, весами, часами, темами, дз и отметками
+         let topicsArr = objTopics[currGST];
+         for (let currT of topicsArr) {
+            let marks = grData[currT.d];
+            if (!marks) {
+               marks = [];
+               for (let i=0; i<contElem.list.length; i++) marks[i] = '';
+            }
+            marks = marks.map(x => x.replace(/999/g, "зач"));
+            let newEl = {d:currT.d, w:currT.w, t:currT.t, h:currT.h, g:marks};
+            if (currT.v) newEl.v = currT.v;
+            contElem.l.push(newEl);
+         }
+         // Добавляем еще в contElem.l все итоговые отметки
+         for (let k of Object.keys(grData)) if (k.length == 5) {
+            let marks = grData[k].map(
+               x => x.replace(/^0$/g, "н/а").replace(/999/g, "зач")
+            );
+            contElem.l.push({d:k, w:0, t:'', h:'', g:marks})
+         }
+         
+         // Сортируем по возрастанию дат
+         contElem.l = contElem.l.sort((a,b) => (a.d > b.d) ? 1 : -1);
+         
+         resp.content.push(contElem);
+      }
+      
+      return JSON.stringify(resp);
+   }
+   catch(e) {return "none";}
 	break;
    
    // ***********************************************************************
    // ПОЛУЧЕНИЕ СПИСКА ДЕТЕЙ И ОТМЕТОК ДЛЯ ОДНОЙ СТРАНИЦЫ
-   // Описание
+   // В запросе приходят [класс(подгруппа), предмет, учитель]
+   // Возвращается none либо объект:
+   // {
+   //    puList: ["ivanov",    "petrov",    ...],
+   //    pnList: ["Иванов И.", "Петров П.", ...],
+   //    d601:   ["нн",        "5",         ...],
+   //    ...
+   // }
+   // Если предмет = '', то возвращаются только puList и pnList, причем
+   // без заблокированных учащихся
 	case "gradesGet":
- 		;
+   try {
+      // Одновременная сортировка двух массивов: первый из логинов, второй из
+      // фамилий (кириллицей). Сортируется второй массив по алфавиту, а первый
+      // массив сортируется в соответствии с отсортированным вторым.
+      // Возвращается массив, состоящий из двух этих отсортированных массивов 
+      const sort2 = (arrLat, arrRus) => {
+         let arrRusNew = [...arrRus], arrLatNew = [];
+         arrRusNew.sort((a, b) => a.localeCompare(b, "ru"));
+         for (let i=0; i<arrRusNew.length; i++) {
+            let iNew = arrRus.indexOf(arrRusNew[i]);
+            arrLatNew[i] = arrLat[iNew];
+         }
+         return [arrLatNew, arrRusNew];
+      }      
+      
+      let gr = argsObj[0].substr(0, 20).trim(),
+          sb = argsObj[1].substr(0,  4).trim(),
+          lg = argsObj[2].substr(0, 20).trim();
+
+      if (!gr || !lg) return "none";
+      
+      let resp = {},
+          puListMain = [], puListBlock = [],
+          pnListMain = [], pnListBlock = [];
+      
+      // Сначала формируем список учеников данного класса (подгруппы)
+      let clName = gr.split('-')[0];
+      let pListArr = await dbFind("pupils", {Uclass: clName});
+      
+      if (pListArr.length && gr.includes('-')) // если запрошена подгруппа
+         pListArr = pListArr.filter(pup => {
+            if (!pup.groups) return false;
+            else if (pup.groups.includes(gr)) return true;
+            else return false;
+         });
+      
+      for (let pup of pListArr) {
+         let newPup = `${pup.Ufamil} ${pup.Uname[0]}.`;
+         if (pup.block) {
+            if(sb) {
+               puListBlock.push(pup.Ulogin);
+               pnListBlock.push(newPup);               
+            }            
+         }
+         else {
+            puListMain.push(pup.Ulogin); pnListMain.push(newPup);        
+         }
+      }
+      if (puListMain.length || puListBlock.length) {
+         let arr2main = sort2(puListMain, pnListMain);
+         puListMain = arr2main[0];
+         pnListMain = arr2main[1];         
+         if (sb) {
+            let arr2block = sort2(puListBlock, pnListBlock);
+            puListBlock = arr2block[0];
+            pnListBlock = arr2block[1];
+            resp.puList = [...puListMain, ...puListBlock];
+            resp.pnList = [...pnListMain, ...pnListBlock];
+         }
+         else {
+            resp.puList = puListMain;
+            resp.pnList = pnListMain;
+         }
+      }
+      else return "{}";
+      
+      // Теперь формируем объекты (по датам) с отметками (если предмет != 0)
+      if (sb) {
+         let grVal = resp.puList.length;
+         let grResp = await dbFind("grades", {c: gr, s: sb, t: lg});      
+         for (let currGr of grResp) {
+            if (resp.puList.includes(currGr.p)) {
+               let i = resp.puList.indexOf(currGr.p);
+               if (!resp[currGr.d]) { // тогда просто массив ''
+                  resp[currGr.d] = [];
+                  for (let i=0; i<grVal; i++) resp[currGr.d][i] = '';
+               }
+               resp[currGr.d][i] = currGr.g;
+            }
+         }
+      }
+      
+      return JSON.stringify(resp);
+   }
+   catch(e) {return "none";}
 	break;
    
    // ***********************************************************************
@@ -109,9 +316,34 @@ apireq = async (func, args) => {
    
    // ***********************************************************************
    // ПОЛУЧЕНИЕ ДАННЫХ ОБ УВАЖИТЕЛЬНЫХ ПРИЧИНАХ ПРОПУСКОВ УРОКОВ
-   // Описание
-	case "sprResp":
- 		;
+   // В запросе приходят ["8Б", "ivanov"]
+   //      8Б - это запрашиваемый класс (пустой, если нужен один ученик)
+   //  ivanov - это запрашиваемый ученик (пустой, если запрашивается класс)
+   // Возвращается объект с датами начала и окончания действия каждой справки
+   // {
+   //    ivanov: [["2019-09-02", "2019-09-13"], ...],
+   //    petrov: ...
+   // }
+	case "sprResp":   
+   try {
+      let resp = {}, bdReq = {};
+      let clName = args[0].substr(0, 20).trim(),
+          pupil  = args[1].substr(0, 20).trim();
+
+      if (!clName && !pupil) return "none";
+      
+      if (pupil) bdReq = {pupil: pupil};    // Если запрашивается один ученик      
+      else       bdReq = {Uclass: clName};  // Если запрашивается класс      
+      let sprResp = await dbFind("spravki", bdReq);
+      for (let spravka of sprResp) {
+         let start = spravka.start, fin = spravka.fin, pupil = spravka.pupil;
+         if (!resp[pupil]) resp[pupil] = [];
+         resp[pupil].push([start, fin]);
+      }
+      
+      return JSON.stringify(resp);
+   }
+   catch(e) {return "none";}
 	break;
    
    // ***********************************************************************
