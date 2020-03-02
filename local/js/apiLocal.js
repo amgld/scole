@@ -379,7 +379,7 @@ apireq = async (func, args) => {
 	case "tabelGet":   
    try {
       let resp = {};
-      let pupil = argArr[0].substr(0, 20).trim();
+      let pupil = args[0].substr(0, 20).trim();
       let res = await dbFind("grades", {p: pupil, d: RegExp("\\w{5}")});
       for (let otm of res) 
          if (otm.g) {
