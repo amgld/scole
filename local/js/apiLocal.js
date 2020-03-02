@@ -428,9 +428,9 @@ apireq = async (func, args) => {
    // }
 	case "topicsGet": 
    try {
-      let gr = argsObj[0].substr(0, 20).trim(),
-          sb = argsObj[1].substr(0,  4).trim(),
-          lg = argsObj[2].substr(0, 20).trim();
+      let gr = args[0].substr(0, 20).trim(),
+          sb = args[1].substr(0,  4).trim(),
+          lg = args[2].substr(0, 20).trim();
 
       if (!gr || !sb || !lg) return "none";
       
