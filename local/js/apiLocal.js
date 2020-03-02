@@ -85,7 +85,8 @@ apireq = async (func, args) => {
    let dgResp = {};
    try {
       let dgRes = await dbFind("distrib", {});
-      if (res.length) for (let tObj of dgRes) dgResp[tObj.tLogin] = tObj.tLoad;
+      if (dgRes.length)
+         for (let tObj of dgRes) dgResp[tObj.tLogin] = tObj.tLoad;
       return JSON.stringify(dgResp);
    }
    catch(e) {return "none";}
