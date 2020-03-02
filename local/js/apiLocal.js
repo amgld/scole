@@ -368,9 +368,27 @@ apireq = async (func, args) => {
    
    // ***********************************************************************
    // ПОЛУЧЕНИЕ ИТОГОВЫХ ОТМЕТОК ОДНОГО УЧАЩЕГОСЯ
-   // Описание
-	case "tabelGet":
- 		;
+   // В аргументах приходит массив типа ["ivanov"],
+   // где ivanov - логин ученика, чьи отметки запрашиваются
+   // Возвращает none или объект с итоговыми отметками по предметам
+   // {
+   //    "s410": {d628a: "5", d831b: "0", ...}
+   //    ...
+   // }
+	case "tabelGet":   
+   try {
+      let resp = {};
+      let pupil = argArr[0].substr(0, 20).trim();
+      let res = await dbFind("grades", {p: pupil, d: RegExp("\\w{5}")});
+      for (let otm of res) 
+         if (otm.g) {
+            if (!resp[otm.s]) resp[otm.s] = {};
+            resp[otm.s][otm.d] = otm.g;
+         }
+      
+      return JSON.stringify(resp);
+   }
+   catch(e) {return "none";}
 	break;
    
    // ***********************************************************************
