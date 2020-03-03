@@ -4,7 +4,7 @@
  */
 "use strict";
 
-apireq = (func, args) => {
+apireq = async (func, args) => {
    switch (func) {
    
    // ***********************************************************************
@@ -25,7 +25,7 @@ apireq = (func, args) => {
       if (pupil) bdReq = {p: pupil};              // если в запросе один ученик      
       else       bdReq = {c: RegExp('^'+clName)}; // если весь класс
       
-      let grResp = dbFind("grades", bdReq);
+      let grResp = await dbFind("grades", bdReq);
       for (let gr of grResp) {
          let grade = gr.g;
          if (!grade.includes('н')) continue;
@@ -44,7 +44,7 @@ apireq = (func, args) => {
 	case "classesGroups":
    try {
       let clList = [];
-      let res = dbFind("curric", {type: "class"});      
+      let res = await dbFind("curric", {type: "class"});      
       for (let currDoc of res) {
          clList.push(currDoc.className);
          clList.push(...currDoc.groups);
@@ -60,7 +60,7 @@ apireq = (func, args) => {
 	case "classesList":
    try {
       let clList = [];
-      let clRes = dbFind("curric", {type: "class"}); 
+      let clRes = await dbFind("curric", {type: "class"}); 
       for (let currDoc of clRes) clList.push(currDoc.className);
       return JSON.stringify(clList);
    }
@@ -74,7 +74,7 @@ apireq = (func, args) => {
 	case "distrGet":
    let dgResp = {};
    try {
-      let dgRes = dbFind("distrib", {});
+      let dgRes = await dbFind("distrib", {});
       if (dgRes.length)
          for (let tObj of dgRes) dgResp[tObj.tLogin] = tObj.tLoad;
       return JSON.stringify(dgResp);
@@ -94,14 +94,14 @@ apireq = (func, args) => {
       
       // Определяем логин классного руководителя
       let tutorLgn = '';
-      let clRes = dbFind("curric", {type: "class", className: clName});
+      let clRes = await dbFind("curric", {type: "class", className: clName});
       if (clRes.length) tutorLgn = clRes[0].tutor ? clRes[0].tutor : '';
       
       resp.className = clName;
       
       // ФИО классного руководителя
       if (tutorLgn) {
-         let tutRes = dbFind("staff", {Ulogin: tutorLgn});
+         let tutRes = await dbFind("staff", {Ulogin: tutorLgn});
          if (tutRes.length) resp.tutor =
             `${tutRes[0].Ufamil} ${tutRes[0].Uname} ${tutRes[0].Uotch}`;
       }
@@ -109,7 +109,7 @@ apireq = (func, args) => {
       // Забираем из таблицы topics все записи данного класса и его подгрупп
       // и сортируем полученный массив по кодам предметов
       let pattern   = new RegExp(`^${clName}`);
-      let resTopics = dbFind("topics", {g: pattern});
+      let resTopics = await dbFind("topics", {g: pattern});
       resTopics = resTopics.sort(
          (a,b) => (a.s.substr(1,3) > b.s.substr(1,3)) ? 1 : -1
       );
@@ -134,7 +134,7 @@ apireq = (func, args) => {
       for (let currGST of Object.keys(objTopics)) {
          let keyArr = currGST.split('^');
          let grGetData =
-            apireq("gradesGet", [keyArr[0], keyArr[1], keyArr[2]]);
+            await apireq("gradesGet", [keyArr[0], keyArr[1], keyArr[2]]);
          let grData = JSON.parse(grGetData);
          
          // Список учащихся и название предмета
@@ -143,7 +143,7 @@ apireq = (func, args) => {
          contElem.s    = keyArr[1];
          
          // Фамилия, имя, отчество педагога
-         let tRes = dbFind("staff", {Ulogin: keyArr[2]});
+         let tRes = await dbFind("staff", {Ulogin: keyArr[2]});
          if (tRes.length) contElem.p =
             `${tRes[0].Ufamil} ${tRes[0].Uname} ${tRes[0].Uotch}`;
             
@@ -219,7 +219,7 @@ apireq = (func, args) => {
       
       // Сначала формируем список учеников данного класса (подгруппы)
       let clName = gr.split('-')[0];
-      let pListArr = dbFind("pupils", {Uclass: clName});
+      let pListArr = await dbFind("pupils", {Uclass: clName});
       
       if (pListArr.length && gr.includes('-')) // если запрошена подгруппа
          pListArr = pListArr.filter(pup => {
@@ -261,7 +261,7 @@ apireq = (func, args) => {
       // Теперь формируем объекты (по датам) с отметками (если предмет != 0)
       if (sb) {
          let grVal = resp.puList.length;
-         let grResp = dbFind("grades", {c: gr, s: sb, t: lg});      
+         let grResp = await dbFind("grades", {c: gr, s: sb, t: lg});      
          for (let currGr of grResp) {
             if (resp.puList.includes(currGr.p)) {
                let i = resp.puList.indexOf(currGr.p);
@@ -294,7 +294,7 @@ apireq = (func, args) => {
       let resp = [];
       
       // Идем циклом по всем ученикам данного класса
-      let pupilsArr = dbFind("pupils", {Uclass: clName});
+      let pupilsArr = await dbFind("pupils", {Uclass: clName});
       if (!pupilsArr.length) return "none";
       pupilsArr.sort((p1, p2) => p1.Ufamil.localeCompare(p2.Ufamil, "ru"));
       for (let pupil of pupilsArr)
@@ -325,7 +325,7 @@ apireq = (func, args) => {
       
       if (pupil) bdReq = {pupil: pupil};    // Если запрашивается один ученик      
       else       bdReq = {Uclass: clName};  // Если запрашивается класс      
-      let sprResp = dbFind("spravki", bdReq);
+      let sprResp = await dbFind("spravki", bdReq);
       for (let spravka of sprResp) {
          let start = spravka.start, fin = spravka.fin, pupil = spravka.pupil;
          if (!resp[pupil]) resp[pupil] = [];
@@ -349,7 +349,7 @@ apireq = (func, args) => {
    // Возвращает объект с условными номерами (ключи) и наименованиями предметов
 	case "subjList":
    try {
-      let res = dbFind("curric", {type: "subj"});
+      let res = await dbFind("curric", {type: "subj"});
       let sbList = {};
       for (let currDoc of res) sbList[currDoc.sbKod] = currDoc.sbName;   
       return JSON.stringify(sbList);
@@ -370,7 +370,7 @@ apireq = (func, args) => {
    try {
       let resp = {};
       let pupil = args[0].substr(0, 20).trim();
-      let res = dbFind("grades", {p: pupil, d: RegExp("\\w{5}")});
+      let res = await dbFind("grades", {p: pupil, d: RegExp("\\w{5}")});
       for (let otm of res) 
          if (otm.g) {
             if (!resp[otm.s]) resp[otm.s] = {};
@@ -389,7 +389,7 @@ apireq = (func, args) => {
 	case "teachList":   
    try {
       let res = [];
-      let dbResult = dbFind("staff", {});      
+      let dbResult = await dbFind("staff", {});      
       if (dbResult.length) {
          for (let currUser of dbResult) {
             if (currUser.block) continue;
@@ -425,7 +425,7 @@ apireq = (func, args) => {
       if (!gr || !sb || !lg) return "none";
       
       let topics = {};      
-      let res = dbFind("topics", {g: gr, s: sb, l: lg});      
+      let res = await dbFind("topics", {g: gr, s: sb, l: lg});      
       for (let currTopic of res) {
          topics[currTopic.d] = {t:currTopic.t, h:currTopic.h, w:currTopic.w};
          if (currTopic.v) (topics[currTopic.d]).v = currTopic.v;
@@ -441,7 +441,7 @@ apireq = (func, args) => {
    // Возвращает объект {"8А": "pupkin", "8Б": "prujinkin", ...}
 	case "tutorsList":
    try {
-      let res = dbFind("curric", {type: "class"});
+      let res = await dbFind("curric", {type: "class"});
       let tutList = {};
       for (let currDoc of res) {
          let tutLogin = currDoc.tutor || "none";
