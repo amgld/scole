@@ -16,21 +16,18 @@
 
 <script>"use strict";
 if (!String.prototype.padStart) location.assign("../www/browsers.html");
-let db = [], errMess = "<br><b>Ошибка загрузки базы данных!</b>";
+let db = {}, errMess = "<br><b>Ошибка загрузки базы данных!</b>";
 
-// Чтение одного файла с диска и импорт его в базу данных в оперативной памяти
+// Чтение одного файла с диска и импорт его в массив с именем типа db["curric"]
 const readFile = fl => {   
    let fName = fl.name;
    let reader = new FileReader();   
    reader.onload = e => {
       let strFile = e.target.result;
       try {
-         let dbArr = JSON.parse(
+         db[fName.replace(".db", '')] = JSON.parse(
             '[' + strFile.trim().replace(/\r/g, '').replace(/\n/g, ',') + ']'
          );
-         let dbName = fName.replace(".db", '');
-         db[dbName] = new Nedb();
-         db[dbName].insert(dbArr);
          document.querySelector("#loadDB textarea").innerHTML +=
             `Файл ${fName} успешно импортирован.\n`;        
       }
@@ -77,7 +74,6 @@ const importBase = filesArr => {
 <a href="https://scole.ru/manual/" target="_blank">Помощь</a>
 </footer>
 
-<script src="js/nedb.js"></script>
 <script src="js/start.js"></script>
 
 </body>

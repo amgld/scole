@@ -11,3 +11,20 @@ menuItems = {"admin": [
    ["stat", "Статистика"]
 ]};
 
+// Функция поиска в базе данных. Пример вызова:
+// dbFind("curric", {type: "class", c: RegExp('^'+clName)}) 
+const dbFind = (collectionName, objFind) => {
+   let docs = db[collectionName].filter(x => {
+      for (let k of Object.keys(objFind)) {
+         // Проверка по простому совпадению
+         if (typeof objFind[k] == "string") {
+            if (x[k] !== objFind[k]) return false;
+         }
+         // Проверка по регулярному выражению
+         else 
+            if(!(objFind[k].test(x[k]))) return false;
+      }
+      return true;
+   });
+   return docs;
+};

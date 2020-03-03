@@ -4,16 +4,6 @@
  */
 "use strict";
 
-// Промисификатор метода find() работы с базой db
-// Пример вызова: let res = await dbFind("curric", {type: "class"}) 
-const dbFind = (collectionName, objFind) => {
-   return new Promise((resolve, reject) => {
-      db[collectionName].find(objFind, (err, docs) => {
-         if (err) reject(err); else resolve(docs);
-      })
-   })
-};
-
 apireq = async (func, args) => {
    switch (func) {
    
