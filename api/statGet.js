@@ -38,6 +38,9 @@ module.exports = async (args) => {
       for (let t of rs)
          teachers[t.Ulogin] = `${t.Ufamil} ${t.Uname[0]}. ${t.Uotch[0]}.`;
          
+      // Логины упоминающихся в выдаче учащихся
+      let pupsLgn = new Set();
+         
       // Получаем всю педагогическую нагрузку в массив объектов вида
       // {
       //    tLogin: "pupkin",
@@ -121,10 +124,7 @@ module.exports = async (args) => {
 // ***** Статистика по одному учителю ***************************************
 
          case "teacher":
-         resp.push(["Предмет", "Класс", "Проведено<br>часов", "Не успевают"]);
-         
-         // Логины неуспевающих
-         let neuspLgn = new Set();
+         resp.push(["Предмет", "Класс", "Проведено<br>часов", "Не успевают"]);         
          
          // Вся педнагрузка данного учителя: {s110: ["10И","8С"], s120: ["8С"]}
          let dtObj = distrib.filter(x => x.tLogin == arg)[0];
@@ -165,7 +165,7 @@ module.exports = async (args) => {
                   if (mrkPer.length) {
                      neusp += `<br><b>${INI.dtsIt[sPer][1]}:</b><br>`;
                      for (let grdPer of mrkPer) {
-                        neuspLgn.add(grdPer.p);
+                        pupsLgn.add(grdPer.p);
                         neusp += `${grdPer.p} ` +
                            `(${grdPer.g.toString().replace('0', "н/а")})<br>`;
                      }
@@ -177,35 +177,85 @@ module.exports = async (args) => {
                neusp = neusp.replace(/^<br>/, '');
                resp.push([subjects[sbjCode], clName, hours, neusp]);
             }
-         }
-         
-         // Разрешаем логины неуспевающих в их фамилии и инициалы
-         let neuspFams = {};
-         for (let nLgn of neuspLgn) {
-            let pup = await dbFind("pupils", {Ulogin: nLgn});
-            if (pup.length)
-               neuspFams[nLgn] = `${pup[0].Ufamil} ${pup[0].Uname[0]}.`;
-         }
-         
-         // Заменяем логины фамилиями
-         if (Object.keys(neuspFams).length) {
-            let respStr = JSON.stringify(resp);
-            for (let neuspL of Object.keys(neuspFams)) respStr =
-               respStr.replace(new RegExp(neuspL, 'g'), neuspFams[neuspL]);
-            resp = JSON.parse(respStr);
-         }
+         }         
          
          break;
          
 // ***** Статистика по одному предмету **************************************
+
          case "subject":
-         ;
+         
+         resp.push(["Учитель", "Класс", "Не успевают"]);
+         
+         // Получаем из базы все итоговые отметки данного предмета в массив sMrks
+         let sMrks = await dbFind("grades", {d: new RegExp("^.{5}$"), s: arg});
+         
+         // Определяем только нужные нам отметки (< 3)
+         let sMrksOut = sMrks.filter(x => (
+            x.g !== undefined && x.g !== '' && x.g < 3
+         ));
+         
+         // Сортируем по учителям
+         sMrksOut.sort(
+            (a, b) => teachers[a.t].localeCompare(teachers[b.t], "ru")
+         );
+         
+         // Список всех участвующих учителей
+         let teachList = new Set(sMrksOut.map(x => x.t));
+         
+         // Цикл по списку учителей
+         for (let teach of teachList) {
+            
+            // Отметки только данного учителя
+            let mrks = sMrksOut.filter(x => x.t == teach);
+            
+            // Список всех участвующих классов
+            let clList = new Set(mrks.map(x => x.c));
+            
+            // Цикл по классам
+            for (let cl of clList) {               
+               let mrksCl = mrks.filter(x => x.c == cl);
+               let neusp = '';
+               
+               // Цикл по учебным периодам
+               for (let sPer of Object.keys(INI.dtsIt)) {
+                  let mrksOut = mrksCl.filter(x => x.d == sPer);
+                  if (mrksOut.length)
+                     neusp += `<br><b>${INI.dtsIt[sPer][1]}:</b><br>`;
+                  for (let mrk of mrksOut) {
+                     pupsLgn.add(mrk.p);
+                     neusp += `${mrk.p} ` +
+                        `(${mrk.g.toString().replace('0', "н/а")})<br>`;
+                  }
+                  neusp = neusp.replace(/<br>$/, '');
+               }
+               neusp = neusp.replace(/^<br>/, '');
+               resp.push([teachers[teach], cl, neusp]);
+            }
+         }
+         
          break;
          
          default: return "none";
+         
+      } // end of switch
+      
+      let respStr = JSON.stringify(resp);
+      
+      // Разрешаем логины учащихся в их фамилии и инициалы
+      let pupsFams = {};
+      for (let nLgn of pupsLgn) {
+         let pup = await dbFind("pupils", {Ulogin: nLgn});
+         if (pup.length)
+            pupsFams[nLgn] = `${pup[0].Ufamil} ${pup[0].Uname[0]}.`;
       }
       
-      return JSON.stringify(resp);
+      // Заменяем логины фамилиями      
+      if (Object.keys(pupsFams).length)          
+         for (let pupsL of Object.keys(pupsFams)) respStr =
+            respStr.replace(new RegExp(pupsL, 'g'), pupsFams[pupsL]);
+      
+      return respStr;
    }
-   catch(e) {return "none";}
+   catch(e) {console.info(e); return "none";}
 };
