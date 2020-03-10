@@ -12,7 +12,7 @@
 // Возвращает массив строк таблицы (включая заголовочную строку) для публикации
 // на странице; каждая строка - это массив значений ячеек
 
-// Импорируем из ini.js метод работы с датами dtConv(), сортировку списка
+// Импортируем из ini.js метод работы с датами dtConv(), сортировку списка
 // предметов sbSort(), объект учебных периодов dtsIt и список предметов по
 // умолчанию sbDef, а также список дополнительных предметов SB()
 const INI = require("../www/js/ini");
@@ -119,8 +119,82 @@ module.exports = async (args) => {
          break;
          
 // ***** Статистика по одному учителю ***************************************
+
          case "teacher":
-         ;
+         resp.push(["Предмет", "Класс", "Проведено<br>часов", "Не успевают"]);
+         
+         // Логины неуспевающих
+         let neuspLgn = new Set();
+         
+         // Вся педнагрузка данного учителя: {s110: ["10И","8С"], s120: ["8С"]}
+         let dtObj = distrib.filter(x => x.tLogin == arg)[0];
+         let distrTeach = dtObj ? dtObj.tLoad : {};
+         
+         // Получаем из базы все записи тем данного учителя в массив lessons
+         let lessons = await dbFind("topics", {l: arg});
+         
+         // Получаем из базы все итоговые отметки данного учителя в массив mrks
+         let mrks = await dbFind("grades", {d: new RegExp("^.{5}$"), t: arg});
+         
+         // Цикл по всем предметам данного учителя
+         for (let sbjCode of Object.keys(distrTeach)) {
+            
+            // Цикл по всем классам внутри данного предмета
+            for (let clName of distrTeach[sbjCode]) {
+               
+               let hours = '', neusp = '';
+               
+               // Цикл по учебным периодам
+               for (let sPer of Object.keys(INI.dtsIt)) {
+                  
+                  // Считаем количество часов
+                  let vols = 0;
+                  lessons.map(x => {
+                     if (x.s == sbjCode && x.g == clName &&
+                         x.d >= INI.dtsIt[sPer][2] &&
+                         x.d <= INI.dtsIt[sPer][3]
+                     ) {x.v ? vols += x.v : vols++;}
+                  });                  
+                  hours += `<br>${INI.dtsIt[sPer][0]} — ${vols}`;
+                  
+                  // Определяем неуспевающих (балл < 3)
+                  let mrkPer = mrks.filter(x => (
+                     x.s == sbjCode && x.c == clName && x.d == sPer &&
+                     x.g !== undefined && x.g !== '' && x.g < 3
+                  ));                  
+                  if (mrkPer.length) {
+                     neusp += `<br><b>${INI.dtsIt[sPer][1]}:</b><br>`;
+                     for (let grdPer of mrkPer) {
+                        neuspLgn.add(grdPer.p);
+                        neusp += `${grdPer.p} ` +
+                           `(${grdPer.g.toString().replace('0', "н/а")})<br>`;
+                     }
+                  }
+                  neusp = neusp.replace(/<br>$/, '');
+               }
+               
+               hours = hours.replace(/^<br>/, '');
+               neusp = neusp.replace(/^<br>/, '');
+               resp.push([subjects[sbjCode], clName, hours, neusp]);
+            }
+         }
+         
+         // Разрешаем логины неуспевающих в их фамилии и инициалы
+         let neuspFams = {};
+         for (let nLgn of neuspLgn) {
+            let pup = await dbFind("pupils", {Ulogin: nLgn});
+            if (pup.length)
+               neuspFams[nLgn] = `${pup[0].Ufamil} ${pup[0].Uname[0]}.`;
+         }
+         
+         // Заменяем логины фамилиями
+         if (Object.keys(neuspFams).length) {
+            let respStr = JSON.stringify(resp);
+            for (let neuspL of Object.keys(neuspFams)) respStr =
+               respStr.replace(new RegExp(neuspL, 'g'), neuspFams[neuspL]);
+            resp = JSON.parse(respStr);
+         }
+         
          break;
          
 // ***** Статистика по одному предмету **************************************
