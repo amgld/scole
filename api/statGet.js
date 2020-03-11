@@ -83,7 +83,8 @@ module.exports = async (args) => {
          // 15 сутками, в объект good вида
          // {ivanov: [["10А", "s430",  "d815"], ...], petrov: [...], ...}
          rs = await dbFind("topics",
-              {$where: function() {return (this.d >= board);}});
+              {$where: function() {return (this.d >= board);}}
+         );
          let good = {};
          for (let rec of rs) {
             if (!good[rec.l]) good[rec.l] = [];
@@ -117,8 +118,57 @@ module.exports = async (args) => {
          break;
          
 // ***** Статистика по параллели классов ************************************
+
          case "classes":
-         ;
+         resp.push(["Класс", "Предмет", "Не успевают"]);
+         
+         // Получаем из базы все итоговые отметки данной параллели,
+         // удовлетворяющие условию <3, в массив mrkp
+         let pattIt = new RegExp("^.{5}$"),
+             pattCl = new RegExp(`^${arg}[А-ЯЁ]{1}`);
+         let mrkp = await dbFind("grades", {$where: function() {return (
+            pattIt.test(this.d) && pattCl.test(this.c) &&
+            this.g !== undefined && this.g !== '' && this.g < 3
+         );}});
+         
+         // Массив всех участвующих классов
+         let pClList = [...(new Set(mrkp.map(x => x.c)))].sort();
+         
+         // Цикл по классам
+         for (let cl of pClList) {
+            
+            // Получаем отметки только данного класса
+            let mrk = mrkp.filter(x => x.c == cl);
+            
+            // Массив участвующих кодов предметов
+            let sbjs = [...(new Set(mrk.map(x => x.s)))]
+                     . sort((a,b) => a.substr(1,3) >= b.substr(1,3) ? 1 : -1);
+            
+            // Цикл по предметам
+            for (let sb of sbjs) {
+               let neusp = '';
+               
+               // Получаем отметки только данного предмета
+               let mrkSb = mrk.filter(x => x.s == sb);
+               
+               // Цикл по учебным периодам
+               for (let sPer of Object.keys(INI.dtsIt)) {
+                  let mrksOut = mrkSb.filter(x => x.d == sPer);
+                  if (mrksOut.length)
+                     neusp += `<br><b>${INI.dtsIt[sPer][1]}:</b><br>`;
+                  for (let m of mrksOut) {
+                     pupsLgn.add(m.p);
+                     neusp += `${m.p} `
+                            + `(${m.g.toString().replace('0', "н/а")}; `
+                            + `${teachers[m.t]})<br>`;
+                  }
+                  neusp = neusp.replace(/<br>$/, '');
+               }
+               neusp = neusp.replace(/^<br>/, '');
+               resp.push([cl, subjects[sb], neusp]);
+            }         
+         }
+         
          break;
          
 // ***** Статистика по одному учителю ***************************************
@@ -187,7 +237,7 @@ module.exports = async (args) => {
          
          resp.push(["Учитель", "Класс", "Не успевают"]);
          
-         // Получаем из базы все итоговые отметки данного предмета в массив sMrks
+         // Получаем из базы итоговые отметки данного предмета в массив sMrks
          let sMrks = await dbFind("grades", {d: new RegExp("^.{5}$"), s: arg});
          
          // Определяем только нужные нам отметки (< 3)
@@ -238,7 +288,7 @@ module.exports = async (args) => {
          
          default: return "none";
          
-      } // end of switch
+      } // end of switch ***************************************************
       
       let respStr = JSON.stringify(resp);
       
