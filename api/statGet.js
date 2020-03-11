@@ -120,7 +120,7 @@ module.exports = async (args) => {
 // ***** Статистика по параллели классов ************************************
 
          case "classes":
-         resp.push(["Класс", "Предмет", "Не успевают"]);
+         resp.push(["Класс", "Учащийся", "Не успевает по..."]);
          
          // Получаем из базы все итоговые отметки данной параллели,
          // удовлетворяющие условию <3, в массив mrkp
@@ -140,33 +140,30 @@ module.exports = async (args) => {
             // Получаем отметки только данного класса
             let mrk = mrkp.filter(x => x.c == cl);
             
-            // Массив участвующих кодов предметов
-            let sbjs = [...(new Set(mrk.map(x => x.s)))]
-                     . sort((a,b) => a.substr(1,3) >= b.substr(1,3) ? 1 : -1);
+            // Список всех неуспевающих учащихся
+            let pupNeLst = new Set(mrk.map(x => x.p));
             
-            // Цикл по предметам
-            for (let sb of sbjs) {
+            // Цикл по учащимся
+            for (let pu of pupNeLst) {
+               let mrksPup = mrk.filter(x => x.p == pu);
                let neusp = '';
-               
-               // Получаем отметки только данного предмета
-               let mrkSb = mrk.filter(x => x.s == sb);
-               
+               pupsLgn.add(pu);
+            
                // Цикл по учебным периодам
                for (let sPer of Object.keys(INI.dtsIt)) {
-                  let mrksOut = mrkSb.filter(x => x.d == sPer);
+                  let mrksOut = mrksPup.filter(x => x.d == sPer);
                   if (mrksOut.length)
                      neusp += `<br><b>${INI.dtsIt[sPer][1]}:</b><br>`;
-                  for (let m of mrksOut) {
-                     pupsLgn.add(m.p);
-                     neusp += `${m.p} `
-                            + `(${m.g.toString().replace('0', "н/а")}; `
-                            + `${teachers[m.t]})<br>`;
+                  for (let m of mrksOut) {                     
+                     neusp += `${subjects[m.s]} — `
+                            + `${m.g.toString().replace('0', "н/а")} `
+                            + `(${teachers[m.t]})<br>`;
                   }
                   neusp = neusp.replace(/<br>$/, '');
                }
                neusp = neusp.replace(/^<br>/, '');
-               resp.push([cl, subjects[sb], neusp]);
-            }         
+               resp.push([cl, pu, neusp]);
+            }
          }
          
          break;
