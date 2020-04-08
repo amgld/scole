@@ -17,7 +17,7 @@ module.exports = async (args) => {
           author = args[2].substr(0,  20).trim();
 
       if (!rcpt || !text || !author) return "none";
-      text = text.replace(/[^а-яёА-ЯЁa-zA-Z0-9.,:;()\/\-—–_@!?№ ]/g, '');
+      text = text.replace(/[^а-яёА-ЯЁa-zA-Z0-9.,:;()\/\-—–_@=&!?№ ]/g, '');
       
       // Определяем полномочия отправителя (сотрудник ли он) и его имя
       let res = await dbFind("staff", {Ulogin: author});
