@@ -57,14 +57,14 @@ div#regNewTopic {
 div#regNewTopic h3 {
    font-size:12pt; margin-bottom:0px;}
 div#regNewTopic textarea {
-   display:block; width:calc(100% - 10px); height:55px; font-size:11pt;
-   resize:none; margin:3px; padding:2px; overflow:auto;
-   border:1px solid #963; border-radius:3px;}
-div#regNewTopic div#regTopHTask {
-   display:block; width:calc(100% - 10px); height:18px; background:white;
-   font-size:11pt; color:gray; text-align:left; margin:0px 3px 3px 3px;
-   padding:2px; border:1px solid #963; border-radius:3px; white-space:nowrap;
-   overflow:hidden;}
+   display:block; width:calc(100% - 10px); height:55px;
+   font:12pt fnt, sans-serif; resize:none; margin:3px; padding:2px;
+   overflow:auto; border:1px solid #963; border-radius:3px;}
+div#regTopHTask {
+   display:block; width:calc(100% - 10px); height:19px; background:white;
+   font-size:12pt; color:gray; text-align:left; margin:0px 3px 3px 3px;
+   padding:2px; border:1px solid #963; border-radius:3px;
+   white-space:nowrap; overflow:hidden;}
 div#regNewTopic input[type=number] {
    width:2em; font-size:11pt; margin:0px 10px 0px 0px;}
 div#regNewTopic button {
@@ -86,6 +86,20 @@ div#regJustTopics p b {
    color:#963;}
 div#regJustTopics p b:hover {
    text-decoration:underline; cursor:pointer;}
+
+/* МОДАЛЬНОЕ ОКНО ЗАПРОСА URL ССЫЛКИ В ДОМАШНЕМ ЗАДАНИИ
+   ----------------------------------------------------- */
+div#hrefQuery {
+   width:30em; max-width:90%; position:absolute; top:40px; right:1%;
+   padding:10px; border:1px solid #963; border-radius:10px;
+   box-shadow: 2px 2px 3px 2px #999; text-align:center;
+   background:#efe; z-index:999999;}
+div#hrefQuery input {
+   width:26em; max-width:80%;}
+div#hrefQuery button {
+   display:block; margin:5px auto; width:26em; max-width:80%; background:#963;
+   color:#ff6; border:none; cursor: pointer; padding:3px 10px;
+   font-weight:bold; border-radius:3px;}
    
 /* ВЫБОР ВЕСА ОТМЕТОК И КОЛИЧЕСТВА ЧАСОВ ПРИ ВВОДЕ ТЕМЫ
    ----------------------------------------------------- */

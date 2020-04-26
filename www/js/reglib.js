@@ -115,7 +115,7 @@ const insertLink = elemId => {
    let getHrefWin = document.createElement("div");
    getHrefWin.id = "hrefQuery";
    getHrefWin.innerHTML = `
-      Введите URL ссылки:
+      <h3>Введите URL ссылки:</h3>
       <input id="hrefURL" type="text">
       <button type="button" onclick="setLink()">Создать ссылку</button>
       <button type="button" onclick="setLink(1)">Отмена</button>
@@ -139,7 +139,9 @@ const insertLink = elemId => {
       lnk.title = hrefVal;
       r.surroundContents(lnk);
       r.collapse();
-      getHrefWin.remove();      
+      getHrefWin.remove();
+      dqs("#regTopHTask").innerHTML = dqs("#regTopHTask").innerHTML
+         .replace(/<br>/g, '').replace(/<br\/>/g, '').replace(/<br \/>/g, '');     
    }   
 }
 
@@ -154,7 +156,7 @@ const topicEdit = async () => {
           dt = dateConv(dqs("#regTopDt").value),
           dtDay = Number(dt.substr(-2,2)),
           topic = dqs("#regNewTopic textarea").value.replace(/\s+/g, ' ').trim(),
-          hometask = dqs("#regTopHTask").value.replace(/\s+/g, ' ').trim(),
+          hometask = dqs("#regTopHTask").innerHTML.replace(/\s+/g, ' ').trim(),
           weight = dqs("#regTopWeight").value.toString().trim(),
           volume = dqs("#regTopVol").value.toString().trim();
       if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}
@@ -194,6 +196,9 @@ const topicEdit = async () => {
             }
 
          topicsShow();
+         
+         // Очищаем поле ввода домашнего задания
+         dqs("#regTopHTask").innerHTML = '';
       }
    }
    catch(e) {info(1, "Ошибка!<br>Действие не выполнено."); return;}
