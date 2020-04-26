@@ -93,6 +93,57 @@ const regPagesSelLoad = async (className) => {
 }
 
 // **************************************************************************
+// Навешивание ссылки на выделенный участок текста в окне div дом. задания
+// Аргумент elemId - это id элемента div, в котором делается выделение текста
+let setLink;
+const insertLink = elemId => {
+   
+   let elem = dqs('#' + elemId), sel = document.getSelection(); 
+   if (sel.isCollapsed) {
+      info(1, "Предварительно выделите фрагмент текста в домашнем задании");
+      return;
+   }
+   
+   let r = sel.getRangeAt(0);
+   let trueSelect = 
+      (r.startContainer == elem && r.endContainer == elem) ||
+      (r.startContainer.parentNode == elem && r.endContainer.parentNode == elem)
+   if (!trueSelect) {
+      info(1, "Недопустимый диапазон выделения"); return;}   
+   
+   // Выводим модальное окно запроса href ссылки
+   let getHrefWin = document.createElement("div");
+   getHrefWin.id = "hrefQuery";
+   getHrefWin.innerHTML = `
+      Введите URL ссылки:
+      <input id="hrefURL" type="text">
+      <button type="button" onclick="setLink()">Создать ссылку</button>
+      <button type="button" onclick="setLink(1)">Отмена</button>
+   `;
+   document.body.append(getHrefWin);
+   hrefURL.focus();   
+   
+   // Оборачивание выделенного текста в ссылку
+   // (при наличии аргумента просто закрывает окно запроса URL)
+   setLink = arg => {
+      if (arg) {getHrefWin.remove(); return;}
+      let hrefVal = dqs("#hrefURL").value.trim();
+      if (
+         !hrefVal.includes("http://")  &&
+         !hrefVal.includes("https://") &&
+         !hrefVal.includes("ftp://")
+      )  hrefVal = "http://" + hrefVal;
+      
+      let lnk   = document.createElement('a');
+      lnk.href  = hrefVal;
+      lnk.title = hrefVal;
+      r.surroundContents(lnk);
+      r.collapse();
+      getHrefWin.remove();      
+   }   
+}
+
+// **************************************************************************
 // Добавление, удаление или редактирование темы урока, дз и веса отметок
 const topicEdit = async () => {
    try {

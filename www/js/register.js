@@ -32,6 +32,13 @@ for (let i=0; i<9; i++) selWeightInner += `<option value=${i}>${i/2}</option>`;
 let selVolInner = '';
 for (let i=1; i<8; i++) selVolInner += `<option value="${i}"> ${i} ч </option>`;
 
+// Функция очищает поле ввода домашнего задания от placeholder'а
+let clearPhr = () => {
+   let elem = dqs("#regTopHTask");
+   elem.innerHTML = '';
+   elem.style.color = "black";
+}
+
 // Формирование контента страницы (regNow, regYst, regYfin определены в ini.js)
 createSection("register", `
    <select id="regClassSel" onChange="regPagesSelLoad(this.value);"></select>
@@ -42,7 +49,10 @@ createSection("register", `
          <input id="regTopDt" type="date" onChange="dtFocus()"
                 min="${regYst}" max="${regYfin}" value="${regNow}">
          <textarea placeholder="${regTopPH}"></textarea>
-         <input id="regTopHTask" type="text" placeholder="Домашнее задание">
+         <div id="regTopHTask" contenteditable="true"
+            onFocus="clearPhr(); clearPhr = () => {;}">Домашнее задание</div>
+         <button id="sLnk" onClick="insertLink('regTopHTask')"
+            title="Создать ссылку в домашнем задании">&#9875;</button>
          <select id="regTopVol">${selVolInner}</select>
          <span>Вес отметок (от 0 до 4)</span>
          <select id="regTopWeight">${selWeightInner}</select>
