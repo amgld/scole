@@ -23,7 +23,7 @@ module.exports = async argsObj => {
       let gr = argsObj[0].substr(0,  20).trim(),
           sb = argsObj[1].substr(0,   4).trim(),          
           dt = argsObj[2].substr(0,   4).trim(),
-          tp = argsObj[3].substr(0, 300).trim(),
+          tp = argsObj[3].substr(0, 500).trim(),
           ht = argsObj[4].substr(0, 300).trim(),
           wt = argsObj[5].substr(0,   1).trim(),
           vl = argsObj[6].substr(0,   1).trim(),
@@ -35,8 +35,11 @@ module.exports = async argsObj => {
       if (!/^d[0-9][0-3][0-9]$/.test(dt))  return "none";
       if (Number(dt.substr(2, 2)) > 31)    return "none";
       
-      // Вырезаем html-теги
-      tp = tp.replace(/<[^>]+?>/gi, ''); ht = ht.replace(/<[^>]+?>/gi, '');
+      // Вырезаем html-теги, сохраняя ссылки в домашнем задании
+      tp = tp.replace(/<[^>]+?>/gi, '');
+      ht = ht.replace(/<.+?javascript:.+?>/gi, '').replace(/<\/a>/g, '¤')
+         . replace(/<(?!a )[^>]+?>/g, ' ').replace(/¤/g, "</a>")
+         . replace(/\s+/g, ' ').replace(/(&nbsp;)+/g, ' ').trim();
       
       // Проверяем полномочия учителя на запрашиваемые класс и предмет
       let distrRes = await dbFind("distrib", {tLogin: lg});

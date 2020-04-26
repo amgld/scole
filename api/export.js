@@ -107,7 +107,11 @@ module.exports = async (args) => {
                for (let i=0; i<contElem.list.length; i++) marks[i] = '';
             }
             marks = marks.map(x => x.replace(/999/g, "зач"));
-            let newEl = {d:currT.d, w:currT.w, t:currT.t, h:currT.h, g:marks};
+            
+            // Вырезаем ссылки из домашних заданий
+            let hmTsk = (currT.h).replace(/<[^>]+?>/gi, '');
+            
+            let newEl = {d:currT.d, w:currT.w, t:currT.t, h:hmTsk, g:marks};
             if (currT.v) newEl.v = currT.v;
             contElem.l.push(newEl);
          }

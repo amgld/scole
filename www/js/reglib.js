@@ -139,9 +139,7 @@ const insertLink = elemId => {
       lnk.title = hrefVal;
       r.surroundContents(lnk);
       r.collapse();
-      getHrefWin.remove();
-      dqs("#regTopHTask").innerHTML = dqs("#regTopHTask").innerHTML
-         .replace(/<br>/g, '').replace(/<br\/>/g, '').replace(/<br \/>/g, '');     
+      getHrefWin.remove();   
    }   
 }
 
@@ -156,7 +154,10 @@ const topicEdit = async () => {
           dt = dateConv(dqs("#regTopDt").value),
           dtDay = Number(dt.substr(-2,2)),
           topic = dqs("#regNewTopic textarea").value.replace(/\s+/g, ' ').trim(),
-          hometask = dqs("#regTopHTask").innerHTML.replace(/\s+/g, ' ').trim(),
+          hometask = dqs("#regTopHTask").innerHTML             
+             .replace(/<.+?javascript:.+?>/gi, '').replace(/<\/a>/g, '¤')
+             .replace(/<(?!a )[^>]+?>/g, ' ').replace(/¤/g, "</a>")
+             .replace(/\s+/g, ' ').replace(/(&nbsp;)+/g, ' ').trim(),
           weight = dqs("#regTopWeight").value.toString().trim(),
           volume = dqs("#regTopVol").value.toString().trim();
       if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}
@@ -410,13 +411,22 @@ const gradesShow = () => {
 // Перемещение выбранной даты (типа d729) в фокус (колонки отметок, темы)
 // и заполнение формы редактирования темы актуальными для этой даты данными
 // При вызове без аргумента - фокусировка на последней по дате теме
-const dtFocus = dt => {   
+let clearPhr = () => {;}
+const dtFocus = dt => { 
    if(!dt) {
       dqs("#regJustTopics").scrollTop = dqs("#regJustTopics").scrollHeight;      
       dqs("#regNewTopic textarea").value = '';
-      dqs("#regTopHTask").value = '';
+      dqs("#regTopHTask").innerHTML = "Домашнее задание";
+      dqs("#regTopHTask").style.color = "gray";
       dqs("#regTopWeight").value = 2;
       dqs("#regTopVol").value = 1;
+      
+      // Функция очищает поле ввода домашнего задания от placeholder'а
+      clearPhr = () => {
+         let elem = dqs("#regTopHTask");
+         elem.innerHTML = '';
+         elem.style.color = "black";
+      }      
       
       // Проматываем таблицу отметок к концу
       if (dqs("#regGrades div")) dqs("#regGrades div").scrollBy(99000, 0);
@@ -426,7 +436,9 @@ const dtFocus = dt => {
       // Заполняем поля формы ввода новой темы данными выбранной даты
       dqs("#regTopDt").value = dateConv(dt, 1);
       dqs("#regNewTopic textarea").value = topicsObj[dt].t;
-      dqs("#regTopHTask").value = topicsObj[dt].h;
+      dqs("#regTopHTask").innerHTML = topicsObj[dt].h;
+      dqs("#regTopHTask").style.color = "black";
+      clearPhr = () => {;}
       dqs("#regTopWeight").value = topicsObj[dt].w;
       dqs("#regTopVol").value = topicsObj[dt].v ? topicsObj[dt].v : 1;
       

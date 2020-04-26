@@ -32,13 +32,6 @@ for (let i=0; i<9; i++) selWeightInner += `<option value=${i}>${i/2}</option>`;
 let selVolInner = '';
 for (let i=1; i<8; i++) selVolInner += `<option value="${i}"> ${i} ч </option>`;
 
-// Функция очищает поле ввода домашнего задания от placeholder'а
-let clearPhr = () => {
-   let elem = dqs("#regTopHTask");
-   elem.innerHTML = '';
-   elem.style.color = "black";
-}
-
 // Формирование контента страницы (regNow, regYst, regYfin определены в ini.js)
 createSection("register", `
    <select id="regClassSel" onChange="regPagesSelLoad(this.value);"></select>
