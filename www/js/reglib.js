@@ -160,6 +160,7 @@ const topicEdit = async () => {
              .replace(/\s+/g, ' ').replace(/(&nbsp;)+/g, ' ').trim(),
           weight = dqs("#regTopWeight").value.toString().trim(),
           volume = dqs("#regTopVol").value.toString().trim();
+      if (hometask == "Домашнее задание") hometask = '';
       if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}
       if (!/^[0-8]{1}$/.test(weight)) {
          info(1, "Вес должен быть числом<br>от 0 до 4 с шагом 0.5");
