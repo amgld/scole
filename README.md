@@ -3,7 +3,7 @@
 # Scole
 ### Электронный журнал общеобразовательной организации
 
-Сайт проекта [scole.ru](http://scole.goldin.su/)
+Сайт проекта [scole.goldin.su](http://scole.goldin.su/)
 
 #### П р о е к т  в  р а з р а б о т к е
 
