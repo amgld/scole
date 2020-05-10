@@ -196,11 +196,13 @@ https.createServer(httpsOpt, (zapros, otvet) => {
          // а успешный запрос авторизации - еще и в базу (authlog)
          // с помощью функции putlog (определена выше)
          let logCont  = '';
-         let logFuncs = ["login", "classAdd", "classDel", "subjAdd", "subjEdit",
-            "subjDel", "usAddEdit", "usImport", "usSetAdmin", "usBlock",
-            "usChPwd", "tutorSet", "distrEdit", "topicEdit", "gradeAdd",
-            "subgrEdit", "subgrPups", "sprAdd", "sprDel", "notesAdd",
-            "notesDel"];
+         let logFuncs = [
+            "login", "classAdd", "classDel", "subjAdd", "subjEdit", "subjDel",
+            "usAddEdit", "usImport", "usSetAdmin", "usBlock", "usChPwd",
+            "tutorSet", "distrEdit", "topicEdit", "gradeAdd", "subgrEdit",
+            "subgrPups", "sprAdd", "sprDel", "notesAdd", "notesDel",
+            "interGroupAdd", "interGroupDel"
+         ];
          try {
             let postDataObj = JSON.parse(postData);
             let logLogin    = postDataObj.l || "none";

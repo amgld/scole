@@ -11,21 +11,22 @@
 // Не забыть добавить функцию еще и в список логируемых функций (если нужно)
 // в скрипте server.js, массив logFuncs
 const modReq = {
-   "classAdd":    [1,1], "classesList": [1,0], "classDel":      [0,1],
-   "subjList":    [1,0], "subjAdd":     [1,1], "subjEdit":      [1,1],
-   "subjDel":     [0,1], "usAddEdit":   [1,1], "usFind":        [1,1],
-   "usFindLogin": [1,1], "usImport":    [1,1], "usSetAdmin":    [1,1],
-   "adminsList":  [1,0], "usBlock":     [1,1], "usChPwd":       [1,1],
-   "teachList":   [1,0], "tutorSet":    [0,1], "tutorsList":    [1,0],
-   "distrGet":    [1,0], "distrEdit":   [1,1], "classesGroups": [1,0],
-   "topicEdit":   [1,1], "topicsGet":   [1,1], "gradesGet":     [1,1],
-   "gradeAdd":    [1,1], "subgrEdit":   [1,1], "subgrPups":     [1,1],
-   "parCodes":    [1,1], "jrnGet":      [1,1], "absentGet":     [1,1],
-   "pupilsList":  [1,1], "sprAdd":      [1,1], "sprGet":        [1,1],
-   "sprDel":      [1,1], "sprResp":     [1,1], "tabelGet":      [1,1],
-   "export":      [1,1], "notesAdd":    [1,1], "notesGet":      [1,1],
-   "notesDel":    [1,1], "logGet":      [1,1], "notesCheck":    [1,1],
-   "statGet":     [1,1]
+   "classAdd":      [1,1], "classesList":    [1,0], "classDel":      [0,1],
+   "interGroupAdd": [1,1], "interGroupList": [1,0], "interGroupDel": [0,1],
+   "subjList":      [1,0], "subjAdd":        [1,1], "subjEdit":      [1,1],
+   "subjDel":       [0,1], "usAddEdit":      [1,1], "usFind":        [1,1],
+   "usFindLogin":   [1,1], "usImport":       [1,1], "usSetAdmin":    [1,1],
+   "adminsList":    [1,0], "usBlock":        [1,1], "usChPwd":       [1,1],
+   "teachList":     [1,0], "tutorSet":       [0,1], "tutorsList":    [1,0],
+   "distrGet":      [1,0], "distrEdit":      [1,1], "classesGroups": [1,0],
+   "topicEdit":     [1,1], "topicsGet":      [1,1], "gradesGet":     [1,1],
+   "gradeAdd":      [1,1], "subgrEdit":      [1,1], "subgrPups":     [1,1],
+   "parCodes":      [1,1], "jrnGet":         [1,1], "absentGet":     [1,1],
+   "pupilsList":    [1,1], "sprAdd":         [1,1], "sprGet":        [1,1],
+   "sprDel":        [1,1], "sprResp":        [1,1], "tabelGet":      [1,1],
+   "export":        [1,1], "notesAdd":       [1,1], "notesGet":      [1,1],
+   "notesDel":      [1,1], "logGet":         [1,1], "notesCheck":    [1,1],
+   "statGet":       [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -42,7 +43,8 @@ const RIGHTS = {
       "classesList", "subjList", "teachList", "tutorSet", "tutorsList",
       "distrGet", "distrEdit", "classesGroups", "topicsGet", "gradesGet",
       "absentGet", "pupilsList", "sprResp", "export", "notesAdd", "notesGet",
-      "notesDel", "logGet", "statGet"
+      "notesDel", "logGet", "statGet", "interGroupAdd", "interGroupList",
+      "interGroupDel"
    ],
    "teacher": [
       "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd",
