@@ -5,7 +5,7 @@
 "use strict";
 
 // Аргументы - ["classes", arg, "petrov"]
-// Здесь classes - типа запрашиваемых статистических данных
+// Здесь classes - тип запрашиваемых статистических данных
 //           arg - аргумент (зависит от типа, см. www/js/stat.js)
 //        petrov - логин автора запроса (с фронтенда не передается,
 //                 подписывается скриптом index.js)
@@ -304,5 +304,5 @@ module.exports = async (args) => {
       
       return respStr;
    }
-   catch(e) {console.info(e); return "none";}
+   catch(e) {return "none";}
 };
