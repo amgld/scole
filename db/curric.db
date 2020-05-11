@@ -8,9 +8,12 @@
 {"type":"class","className":"10Ж","groups":["10Ж-мальч","10Ж-дев","10Ж-иняз1","10Ж-иняз2","10Ж-инф1","10Ж-инф2"],"_id":"quOzcbw30qlLP7Q7","tutor":"kandibober"}
 {"type":"subj","sbKod":"d125","sbName":"Зарубежная литература","_id":"uplydp9vE8qzXTo9"}
 {"type":"class","className":"8В","groups":["8В-мальч","8В-дев","8В-иняз1","8В-иняз2","8В-инф1","8В-инф2"],"_id":"vR1WOKpuBbeEtToW","tutor":"churkina"}
-{"type":"subj","sbKod":"d830","sbName":"Название-с-дефисом","_id":"Yislxz5SIfLZowhL"}
-{"type":"subj","sbKod":"d840","sbName":"Еще ----- с дефисом (- )))---)","_id":"cvCeTIH8ncs9o1ce"}
-{"$$deleted":true,"_id":"cvCeTIH8ncs9o1ce"}
-{"$$deleted":true,"_id":"Yislxz5SIfLZowhL"}
-{"type":"subj","sbKod":"d645","sbName":"Эволюция---человека","_id":"hPR488iomk5nnJun"}
-{"type":"subj","sbKod":"d645","sbName":"Эволюция человека","_id":"hPR488iomk5nnJun"}
+{"type":"intergroup","ingrName":"23Б","ingrTitle":"Секция баскетбола","ingrTeach":"goldin","_id":"g29wsAqL48K9bCxB"}
+{"$$deleted":true,"_id":"g29wsAqL48K9bCxB"}
+{"type":"intergroup","ingrName":"23Б","ingrTitle":"Секция волейбола","ingrTeach":"goldin","_id":"r6fFoTYXlh1zfEky"}
+{"type":"intergroup","ingrName":"23Б","ingrTitle":"Кружок вязания","ingrTeach":"goldin","_id":"r6fFoTYXlh1zfEky"}
+{"type":"intergroup","ingrName":"23Л","ingrTitle":"Секция литербола","ingrTeach":"churkina","_id":"q4WF3GcH1pScN0RH"}
+{"$$deleted":true,"_id":"q4WF3GcH1pScN0RH"}
+{"type":"intergroup","ingrName":"23Б","ingrTitle":"Секция литербола","ingrTeach":"churkina","_id":"r6fFoTYXlh1zfEky"}
+{"type":"intergroup","ingrName":"23Б","ingrTitle":"Кружок какой-то","ingrTeach":"goldin","_id":"r6fFoTYXlh1zfEky"}
+{"type":"intergroup","ingrName":"21Г","ingrTitle":"Фехтование","ingrTeach":"kozlov","_id":"EybPrSERWmnEwoXx"}
