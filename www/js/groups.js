@@ -34,7 +34,11 @@ const ingrEdit = async () => {
        grName     = grNameNum + dqs("#ingrNewNameLit").value,
        grTitle    = dqs("#ingrNewTitle").value.trim(),
        grTeach    = dqs("#ingrNewTeach").value;
-   // здесь еще обнуление этих полей!  
+   
+   dqs("#ingrNewNameNum").value = '';
+   dqs("#ingrNewNameLit").value = 'А';
+   dqs("#ingrNewTitle").value   = '';
+   dqs("#ingrNewTeach").selectedIndex = 0;
    
    if (!grTitle) {
       info(1, "Не указано наименование предмета внеурочной деятельности.");
@@ -85,7 +89,7 @@ createSection("groups", `
       химия</b>), для которого создана группа, а также учителя, ведущего занятия
       в этой группе. Если вы укажете условный номер уже существующей группы, её
       данные будут перезаписаны.</p>
-   <input type="number" id="ingrNewNameNum" min=20 max=99 value=20>
+   <input type="number" id="ingrNewNameNum" min=20 max=99 placeholder=20>
    <select id="ingrNewNameLit"></select>
    <input type="text" id="ingrNewTitle" maxlength="100"
           placeholder="Наименование предмета ВД">
