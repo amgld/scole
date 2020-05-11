@@ -25,7 +25,7 @@ button {
    font-size: 100%;}
    
 /* ОКНА С ФОРМОЙ АВТОРИЗАЦИИ, ФОРМОЙ СМЕНЫ ПАРОЛЯ И ИНФОРМАЦИОННЫМ СООБЩЕНИЕМ
-   ----------------------------------------------------- */
+   -------------------------------------------------------------------------- */
 article, output, div#chPwdWin {
    display: none; width:18em; position:absolute; top:30%; left:50%;
    margin-top:-5em; margin-left:-9em; padding:0px; border:1px solid #963;
@@ -246,6 +246,28 @@ section#distrib table#teachLoad td:first-child {
    font-weight:normal; text-align:left; padding-right:3px;}
 section#distrib table#teachLoad td:nth-child(3) {
    cursor:pointer;}
+   
+/* БЛОК РАБОТЫ С МЕЖКЛАССНЫМИ ГРУППАМИ УЧАЩИХСЯ
+   ----------------------------------------------------- */
+section#groups p {
+   width:50em; max-width:95%; margin:auto; text-align:justify;}
+section#groups span {
+   display:block; margin:3px auto; padding:3px; text-align:left;
+   width:50em; max-width:95%; background:#e6ded5;}
+section#groups span div {
+   display:inline-block; padding:2px 5px; white-space:nowrap; overflow:auto;}
+section#groups span div:nth-child(2) {
+   font-weight:bold; width:2.5em;}
+section#groups span div:nth-child(3) {
+   width:43em; max-width:95%;}
+section#groups span div[title="Удалить"] {
+   cursor:pointer;}
+section#groups input {
+   background:#fff; max-width:95%;}
+section#groups input[type="number"] {
+   width:3em;}
+section#groups input#ingrNewTitle {
+   width:20em;}
    
 /* БЛОК РАБОТЫ С ДОКУМЕНТАМИ О ПРИЧИНАХ ПРОПУСКА УРОКОВ
    ---------------------------------------------------- */

@@ -8,7 +8,7 @@ let ingrList = [], ingrTeachList = {};
 // Публикация списка групп на страничке из массива ingrArr
 const ingrListPubl = ingrArr => {
    if (!ingrArr.length) {
-      dqs("#ingrList").innerHTML = "<p>Межклассных групп пока нет</p>";
+      dqs("#ingrList").innerHTML = "<p>Межклассных групп пока нет.</p>";
       return;
    }   
    // Сортируем массив и публикуем с иконками удаления и редактирования
@@ -19,10 +19,9 @@ const ingrListPubl = ingrArr => {
          divDel   = `<div onclick="ingrDel('${cGr[0]}')"
             title="Удалить">&#10060;</div>`,
          divName  = `<div>${cGr[0]}</div>`,
-         divTitle = `<div>${cGr[1]}</div>`,
-         divTeach = `<div>${ingrTeachList[cGr[2]]}</div>`;
+         divTitle = `<div>${cGr[1]} (${ingrTeachList[cGr[2]]})</div>`;
          
-      cont += `<span>${divDel}${divName}${divTitle}${divTeach}</span>`;
+      cont += `<span>${divDel}${divName}${divTitle}</span>`;
    }
    dqs("#ingrList").innerHTML = cont;  
 };
@@ -41,9 +40,9 @@ const ingrEdit = async () => {
       return;
    }
    
-   let rN = /^[A-Za-z0-9А-Яа-яЁё(). \-]{2,30}$/;
+   let rN = /^[A-Za-z0-9А-Яа-яЁё(). \-]{2,100}$/;
    if (!rN.test(grTitle)) {
-      info(1, "Наименование предмета может содержать от 2 до 30 букв русского "
+      info(1, "Наименование предмета может содержать от 2 до 100 букв русского "
             + "и латинского алфавитов, дефисов, цифр, скобок, точек и пробелов.");
       return;
    }
@@ -77,16 +76,18 @@ const ingrDel = async (grName) => {
 // Формирование контента странички
 createSection("groups", `
    <h3>Межклассные группы обучающихся</h3>
-   <div id="ingrList"></div><br>
+   <div id="ingrList"></div>
+   <h3>Добавление/редактирование группы</h3>
    <p>При добавлении группы укажите ее условный номер (типа <b>23Б</b>, числа
       от 20 до 99), наименование предмета внеурочной деятельности (факультатива,
       кружка, секции и пр., например, <b>Вязание крючком</b> или <b>Олимпиадная
       химия</b>), для которого создана группа, а также учителя, ведущего занятия
       в этой группе. Если вы укажете условный номер уже существующей группы, её
       данные будут перезаписаны.</p>
-   <input type="number" id="ingrNewNameNum" min=20 max=99 placeholder=20>
+   <input type="number" id="ingrNewNameNum" min=20 max=99 value=20>
    <select id="ingrNewNameLit"></select>
-   <input type="text" id="ingrNewTitle" placeholder="Наименование предмета ВД">
+   <input type="text" id="ingrNewTitle" maxlength="100"
+          placeholder="Наименование предмета ВД">
    <select id="ingrNewTeach"></select>
    <button type="button" onclick="ingrEdit()">Добавить/Редактировать</button>
 `);

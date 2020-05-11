@@ -18,7 +18,7 @@ module.exports = async args => {
       
       // Проверяем формат пришедших имени и названия группы
       const reGrName   = /^[2-9][0-9][A-ЯЁ]{1}$/,
-            reGrTitle  = /^[A-Za-z0-9А-Яа-яЁё(). \-]{2,30}$/;;
+            reGrTitle  = /^[A-Za-z0-9А-Яа-яЁё(). \-]{2,100}$/;;
       if (!reGrName.test(grName) || !reGrTitle.test(grTitle)) return "none";
       
       // Проверяем, есть ли такой учитель и не заблокирован ли он
