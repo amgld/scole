@@ -28,11 +28,12 @@ const ingrListPubl = ingrArr => {
 
 // Отправка запроса к API для добавления/редактирования группы
 const ingrEdit = async () => {   
-   let namesArr = ingrList.map(x => x[0]);   
+   let namesArr = ingrList.map(x => x[0]); 
    
-   let grName  = dqs("#ingrNewNameNum").value + dqs("#ingrNewNameLit").value,
-       grTitle = dqs("#ingrNewTitle").value.trim(),
-       grTeach = dqs("#ingrNewTeach").value;
+   let grNameNum  = dqs("#ingrNewNameNum").value || "20",
+       grName     = grNameNum + dqs("#ingrNewNameLit").value,
+       grTitle    = dqs("#ingrNewTitle").value.trim(),
+       grTeach    = dqs("#ingrNewTeach").value;
    // здесь еще обнуление этих полей!  
    
    if (!grTitle) {
