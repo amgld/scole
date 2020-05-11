@@ -55,6 +55,7 @@ let menuItems = {
    ],
    "teacher": [
       ["register", "Журнал"],
+      ["grusers",  "Группы"],
       ["notes",    "Заметки"]
    ],
    "tutor": [
