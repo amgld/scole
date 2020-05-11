@@ -4,12 +4,17 @@
  */
 "use strict";
 
-// Возвращает несортированный массив имен групп
+// Возвращает несортированный массив групп типа
+// [
+//    ["29Б", "Доп. главы математики", "ivanov"],
+//    ...
+// ]
 module.exports = async () => {
    try {
       let grList = [];
       let res = await dbFind("curric", {type: "intergroup"});      
-      for (let currDoc of res) grList.push(currDoc.ingrName);
+      for (let doc of res)
+         grList.push([doc.ingrName, doc.ingrTitle, doc.ingrTeach]);
       return JSON.stringify(grList);
    }
    catch(e) {return "[]";}

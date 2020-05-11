@@ -11,7 +11,7 @@ module.exports = async newSubj => {
       const newSubjKey  = newSubj[0].trim() || 'a',
             newSubjName = newSubj[1].trim() || 'a',
             reSubjKey   = /^[ds]{1}\d{3}$/,
-            reSubjName  = /^[A-Za-z0-9А-Яа-яЁё(). ]{2,30}$/;
+            reSubjName  = /^[A-Za-z0-9А-Яа-яЁё(). \-]{2,30}$/;
       if (!reSubjKey.test(newSubjKey) || !reSubjName.test(newSubjName))
          return "none";
    
