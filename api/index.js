@@ -48,7 +48,7 @@ const RIGHTS = {
    ],
    "teacher": [
       "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd",
-      "notesAdd", "notesGet", "notesDel"
+      "notesAdd", "notesGet", "notesDel", "interGroupList"
    ],
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",
