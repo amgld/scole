@@ -21,7 +21,7 @@ const grusShow = async grName => {
    let pupArr = JSON.parse(apiResp);
    let listInner = pupArr.length ?
                    `<p>Список группы ${grName}</p>` :
-                   `В группе ${grName} нет учащихся`;
+                   `<p>В группе ${grName} нет учащихся</p>`;
    let i=1;
    for (let pup of pupArr) {
       listInner += `<div>
@@ -91,8 +91,9 @@ createSection("grusers", `
    <h3>Редактирование состава групп внеурочной деятельности</h3>
    <select id="grusSelGr" onChange="grusShow(this.value)"></select>
    <div id="grusPupList"></div>
-   <p>Добавить учащегося в группу</p>
-   <input type="text" id="grusFindPup" onKeyUp="grusDataGet(this.value)">
+   <h3>Добавить учащегося в группу</h3>
+   <input type="text" id="grusFindPup" placeholder="Начните вводить фамилию"
+          onKeyUp="grusDataGet(this.value)">
    <div id="grusDatalist"></div>
 `);
 

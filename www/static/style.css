@@ -274,15 +274,22 @@ section#groups input#ingrNewTitle {
 section#grusers p {
    font-weight:bold; margin:20px 0px 10px;}
 section#grusers input {
-   width:20em;}
+   width:20em; max-width:95%;}
 section#grusers div#grusDatalist {
    display:none; padding:5px; border:1px solid gray; width:19.5em;
-   margin:auto; background:white;}
+   max-width:95%; margin:auto; background:white;}
 section#grusers button {
    display:block; background:white; color:black; border:none;
    margin:0px; padding:3px; font-weight:normal; text-align:left; width:100%;}
 section#grusers button:hover {
    background:#e6ded5;}
+section#grusers div#grusPupList div {
+   width:25em; max-width:95%; margin:2px auto; background:#e6ded5;
+   text-align:left; padding:1px 5px;}
+section#grusers div#grusPupList span:first-child {
+   cursor: pointer;}
+section#grusers div#grusPupList span:nth-child(2) {
+   display:inline-block; width:2.5em; text-align:right;}
    
 /* БЛОК РАБОТЫ С ДОКУМЕНТАМИ О ПРИЧИНАХ ПРОПУСКА УРОКОВ
    ---------------------------------------------------- */
