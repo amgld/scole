@@ -1,6 +1,6 @@
 /**
  *   РАБОТА СО СПИСКОМ УЧАЩИХСЯ МЕЖКЛАССНОЙ ГРУППЫ (ДОБАВЛЕНИЕ, УДАЛЕНИЕ)
- *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ *   Copyright © 2020, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 

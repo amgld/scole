@@ -26,7 +26,7 @@ const modReq = {
    "sprDel":         [1,1], "sprResp":        [1,1], "tabelGet":      [1,1],
    "export":         [1,1], "notesAdd":       [1,1], "notesGet":      [1,1],
    "notesDel":       [1,1], "logGet":         [1,1], "notesCheck":    [1,1],
-   "statGet":        [1,1], "interGroupPup":  [1,1]
+   "statGet":        [1,1], "interGroupPup":  [1,1], "interGroupGet": [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -49,7 +49,7 @@ const RIGHTS = {
    "teacher": [
       "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd",
       "notesAdd", "notesGet", "notesDel", "interGroupList", "usFind",
-      "interGroupPup"
+      "interGroupPup", "interGroupGet"
    ],
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",

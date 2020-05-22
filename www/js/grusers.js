@@ -7,19 +7,41 @@
 let grusList = [];
 
 // Показ выбранной учителем группы
-const grusShow = grName => {
+const grusShow = async grName => {
 
    // Очищаем блок добавления нового ученика
    dqs("#grusDatalist").innerHTML = '';
    dqs("#grusDatalist").style.display = "none";
    dqs("#grusFindPup").value = '';
 
-   dqs("#grusPupList").innerHTML = `<p>Список группы ${grName}</p>`;
+   // Получаем список группы и публикуем с иконками удаления учащихся
+   let apiResp = await apireq("interGroupGet", grName);
+   if (apiResp == "none") {info(1, "Ошибка на сервере"); return;}
+
+   let pupArr = JSON.parse(apiResp);
+   let listInner = pupArr.length ?
+                   `<p>Список группы ${grName}</p>` :
+                   `В группе ${grName} нет учащихся`;
+   let i=1;
+   for (let pup of pupArr) {
+      listInner += `<div>
+      <span onClick="grusPupDel('${pup[2]}')" title="Удалить">&#10060;</span>
+      <span>${i}.&nbsp;</span>${pup[0]} (${pup[1]})</div>`;
+      i++;
+   }
+   dqs("#grusPupList").innerHTML = listInner;
 }
 
 // Удаление ученика из группы
-const grusPupDel = pupLgn => {
-   alert(pupLgn + " типа удален из группы " + grName);
+const grusPupDel = async pupLgn => {
+   let grName = dqs("#grusSelGr").value;
+   if (!confirm("Вы уверены?")) return;
+   let apiResp = await apireq("interGroupPup", ["del", grName, pupLgn]);
+   if (apiResp == "none") {
+      info(1, "Ошибка на сервере.<br>Учащийся не удален");
+      return;
+   }
+   grusShow(grName);
 }
 
 // Добавление ученика в группу
