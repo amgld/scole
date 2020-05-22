@@ -6,10 +6,65 @@
 // Массив групп данного учителя: [["23Б", "Химия"], ...]
 let grusList = [];
 
+// Показ выбранной учителем группы
+const grusShow = grName => {
+
+   // Очищаем блок добавления нового ученика
+   dqs("#grusDatalist").innerHTML = '';
+   dqs("#grusDatalist").style.display = "none";
+   dqs("#grusFindPup").value = '';
+
+   dqs("#grusPupList").innerHTML = `<p>Список группы ${grName}</p>`;
+}
+
+// Удаление ученика из группы
+const grusPupDel = pupLgn => {
+   alert(pupLgn + " типа удален из группы " + grName);
+}
+
+// Добавление ученика в группу
+const grusPupAdd = pupLgn => {
+   let grName = dqs("#grusSelGr").value;
+   dqs("#grusDatalist").innerHTML = '';
+   dqs("#grusDatalist").style.display = "none";
+   dqs("#grusFindPup").value = '';
+
+   alert(pupLgn + " типа добавлен в группу " + grName);
+   dqs("#grusFindPup").focus();
+}
+
+// Подгрузка datalist в блоке выбора ученика для добавления
+const grusDataGet = async fragm => {
+   dqs("#grusDatalist").innerHTML = '';
+   dqs("#grusDatalist").style.display = "none";   
+
+   if (!dqs("#grusSelGr").value) {info(1, "Сначала выберите группу"); return;}
+
+   if (fragm.length < 3) return;
+   fragm = fragm.trim();
+
+   let dtListInner = '';
+   let apiResp = await apireq("usFind", ["Учащийся", '0', fragm]);
+   if (apiResp != "none") {
+      let deti = JSON.parse(apiResp);
+      deti.filter(p => !p.block).map(p => {
+         dtListInner += `<button type="button" `
+                      + `onclick="grusPupAdd('${p.login}')">`
+                      + `${p.famil} ${p.name} (${p.unit})</button>`;
+      });
+      dqs("#grusDatalist").innerHTML = dtListInner;
+      dqs("#grusDatalist").style.display = "block";
+   }
+}
+
 // Формирование контента странички
 createSection("grusers", `
    <h3>Редактирование состава групп внеурочной деятельности</h3>
-   <select id="grusSelGr" onChange="alert(this.value)"></select>
+   <select id="grusSelGr" onChange="grusShow(this.value)"></select>
+   <div id="grusPupList"></div>
+   <p>Добавить учащегося в группу</p>
+   <input type="text" id="grusFindPup" onKeyUp="grusDataGet(this.value)">
+   <div id="grusDatalist"></div>
 `);
 
 // Динамически подгружаем список групп данного учителя в массив grusList

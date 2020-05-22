@@ -247,7 +247,7 @@ section#distrib table#teachLoad td:first-child {
 section#distrib table#teachLoad td:nth-child(3) {
    cursor:pointer;}
    
-/* БЛОК РАБОТЫ С МЕЖКЛАССНЫМИ ГРУППАМИ УЧАЩИХСЯ
+/* БЛОК РАБОТЫ АДМИНИСТРАТОРА С МЕЖКЛАССНЫМИ ГРУППАМИ УЧАЩИХСЯ
    ----------------------------------------------------- */
 section#groups p {
    width:50em; max-width:95%; margin:auto; text-align:justify;}
@@ -268,6 +268,21 @@ section#groups input[type="number"] {
    width:3em;}
 section#groups input#ingrNewTitle {
    width:20em;}
+
+/* ДОБАВЛЕНИЕ УЧИТЕЛЕМ УЧАЩИХСЯ В МЕЖКЛАССНЫЕ ГРУППЫ
+   ----------------------------------------------------- */
+section#grusers p {
+   font-weight:bold; margin:20px 0px 10px;}
+section#grusers input {
+   width:20em;}
+section#grusers div#grusDatalist {
+   display:none; padding:5px; border:1px solid gray; width:19.5em;
+   margin:auto; background:white;}
+section#grusers button {
+   display:block; background:white; color:black; border:none;
+   margin:0px; padding:3px; font-weight:normal; text-align:left; width:100%;}
+section#grusers button:hover {
+   background:#e6ded5;}
    
 /* БЛОК РАБОТЫ С ДОКУМЕНТАМИ О ПРИЧИНАХ ПРОПУСКА УРОКОВ
    ---------------------------------------------------- */
