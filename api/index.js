@@ -95,7 +95,7 @@ module.exports = async (post, addr) => {
       "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet",
       "absentGet", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
       "export", "notesAdd", "notesGet", "notesDel", "logGet", "statGet",
-      "grusEdit"
+      "interGroupPup"
    ];
    if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
       
