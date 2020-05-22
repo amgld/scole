@@ -23,13 +23,18 @@ const grusPupDel = pupLgn => {
 }
 
 // Добавление ученика в группу
-const grusPupAdd = pupLgn => {
+const grusPupAdd = async pupLgn => {
    let grName = dqs("#grusSelGr").value;
    dqs("#grusDatalist").innerHTML = '';
    dqs("#grusDatalist").style.display = "none";
    dqs("#grusFindPup").value = '';
 
-   alert(pupLgn + " типа добавлен в группу " + grName);
+   let apiResp = await apireq("interGroupPup", ["add", grName, pupLgn]);
+   if (apiResp == "none") {
+      info(1, "Ошибка на сервере.<br>Учащийся не добавлен");
+      return;
+   }
+   grusShow(grName);
    dqs("#grusFindPup").focus();
 }
 
@@ -52,8 +57,10 @@ const grusDataGet = async fragm => {
                       + `onclick="grusPupAdd('${p.login}')">`
                       + `${p.famil} ${p.name} (${p.unit})</button>`;
       });
-      dqs("#grusDatalist").innerHTML = dtListInner;
-      dqs("#grusDatalist").style.display = "block";
+      if (dtListInner) {
+         dqs("#grusDatalist").innerHTML = dtListInner;
+         dqs("#grusDatalist").style.display = "block";
+      }
    }
 }
 
