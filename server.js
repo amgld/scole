@@ -33,7 +33,7 @@ global.admPwd  = PWD;
  * ----------------------------------------------------------------------- */
 const dbTables = [
    "staff", "pupils", "curric", "distrib", "grades", "spravki", "topics",
-   "authlog", "notes"
+   "authlog", "notes", "elect"
 ];
 global.db  = {};
 for (let dbN of dbTables) db[dbN] =

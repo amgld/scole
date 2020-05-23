@@ -350,7 +350,7 @@ section#achsheet table td:first-child {
 section#export #expGet {
    display:none;}
 section#export ol {
-   width:500px; max-width:98%; margin:auto;}
+   width:500px; max-width:95%; margin:auto;}
 section#export li {
    margin:3pt 0pt; text-align:justify;
    -webkit-hyphens:auto; -moz-hyphens:auto; -ms-hyphens:auto; hiphens:auto;}
@@ -401,7 +401,7 @@ section#stat div h3 {
    
 /* МОБИЛЬНАЯ ВЕРСИЯ
    ----------------------------------------------------- */
-@media (max-width: 960px) {
+@media (max-width: 1200px) {
    /* Хидер и меню ............................. */
    header img {
       display:block;}

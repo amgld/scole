@@ -48,6 +48,7 @@ let menuItems = {
       ["notes",    "Заметки"],
       ["distrib",  "Нагрузка"],
       ["groups",   "Группы"],
+      ["vdreg",    "Внеуроч"],
       ["achsheet", "Табели"],
       ["export",   "Экспорт"],
       ["stat",     "Статистика"],
@@ -56,6 +57,7 @@ let menuItems = {
    "teacher": [
       ["register", "Журнал"],
       ["grusers",  "Группы"],
+      ["vdreg",    "Внеуроч"],
       ["notes",    "Заметки"]
    ],
    "tutor": [
@@ -65,12 +67,14 @@ let menuItems = {
       ["notes",    "Заметки"],
       ["subgroup", "Подгруппы"],
       ["achsheet", "Табели"],
+      ["vdtut",    "Внеуроч"],
       ["parcodes", "Родители"],
       ["export",   "Экспорт"],
       ["userlog",  "Лог"]
    ],
    "pupil": [
-      ["journal", "Дневник"],
+      ["journal",  "Дневник"],
+      ["vdpup",    "Внеуроч"],
       ["achsheet", "Табель"],
       ["absent",   "Посещаемость"],
       ["docs",     "Справки"],
@@ -78,6 +82,7 @@ let menuItems = {
    ],
    "parent": [
       ["journal", "Дневник"],
+      ["vdpup",    "Внеуроч"],
       ["achsheet", "Табель"],
       ["absent",   "Посещаемость"],
       ["docs",     "Справки"],
