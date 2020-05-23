@@ -277,7 +277,8 @@ section#grusers input {
    width:20em; max-width:95%;}
 section#grusers div#grusDatalist {
    display:none; padding:5px; border:1px solid gray; width:19.5em;
-   max-width:95%; margin:auto; background:white;}
+   max-width:95%; margin:auto; background:white;
+   max-height:20ex; overflow-y:auto;}
 section#grusers button {
    display:block; background:white; color:black; border:none;
    margin:0px; padding:3px; font-weight:normal; text-align:left; width:100%;}
