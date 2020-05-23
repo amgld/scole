@@ -12,8 +12,8 @@ const start = () => {
       "../www/js/ini",      "js/iniLocal",         "js/viewExportLocal",
       "js/exportLocal",     "js/apiLocal",         "../www/js/info",
       "../www/js/reglib",   "../www/js/register",  "../www/js/absent",
-      "../www/js/distrib",  "../www/js/groups",    "../www/js/achsheet",
-      "../www/js/stat",     "../www/js/header"
+      "../www/js/distrib",  "../www/js/achsheet",  "../www/js/stat",
+      "../www/js/vdreg",     "../www/js/header"
    ]; 
   
    let scriptElem;
