@@ -127,7 +127,8 @@ const insertLink = elemId => {
    // (при наличии аргумента просто закрывает окно запроса URL)
    setLink = arg => {
       if (arg) {getHrefWin.remove(); return;}
-      let hrefVal = dqs("#hrefURL").value.trim();
+      let hrefVal = dqs("#hrefURL").value.trim()
+         .replace(/[^A-Za-z0-9А-ЯЁа-яё\-._~:\/?#\[\]%@!$&'()*+,;=]/g, '');
       if (
          !hrefVal.includes("http://")  &&
          !hrefVal.includes("https://") &&
