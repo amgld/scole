@@ -1,9 +1,10 @@
 let scrContent = `
 "use strict";
 
-// Получаем объект с данными журнала
+// Получаем объект с данными журнала, вырезаем все ссылки
 let body = document.querySelector("article");
-let scole = JSON.parse(body.innerHTML);
+let bodyInner = body.innerHTML.replace(/<a .+?>/g, '').replace(/<\/a>/g, '');
+let scole = JSON.parse(bodyInner);
 
 // Формируем заголовок страницы и определения стилей
 let title = document.createElement("title");
