@@ -3,7 +3,7 @@ let scrContent = `
 
 // Получаем объект с данными журнала, вырезаем все ссылки
 let body = document.querySelector("article");
-let bodyInner = body.innerHTML.replace(/<a .+?>/g, '').replace(/<\/a>/g, '');
+let bodyInner = body.innerHTML.replace(/<a .+?>/g, '').replace(/<\\/a>/g, '');
 let scole = JSON.parse(bodyInner);
 
 // Формируем заголовок страницы и определения стилей
