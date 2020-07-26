@@ -173,7 +173,7 @@ for (let subjObj of scole.content) {
 
 // Сводная ведомость учета успеваемости
 toc += \`<p><b>\${pageNum}</b>&emsp;Сводная ведомость учета успеваемости</p>\`;
-doc += \`<nav>\${pageNum}</nav>\`; pageNum++;
+doc += \`<nav>\${pageNum}</nav>\`;
 doc += \`<h3>Сводная ведомость учета успеваемости \${scole.className} класса<br>\`
      + \`<small>Классный руководитель: \${scole.tutor}</small></h3>\`;
 
