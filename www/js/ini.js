@@ -45,6 +45,7 @@ let menuItems = {
    "admin": [
       ["register", "Журнал"],
       ["absent",   "Посещаемость"],
+      ["attend",   "Явка"],
       ["notes",    "Заметки"],
       ["distrib",  "Нагрузка"],
       ["groups",   "Группы"],
@@ -56,6 +57,7 @@ let menuItems = {
    ],
    "teacher": [
       ["register", "Журнал"],
+      ["attend",   "Явка"],
       ["grusers",  "Группы"],
       ["vdreg",    "Внеуроч"],
       ["notes",    "Заметки"]
@@ -63,6 +65,7 @@ let menuItems = {
    "tutor": [
       ["register", "Журнал"],
       ["absent",   "Посещаемость"],
+      ["attend",   "Явка"],
       ["docs",     "Справки"],
       ["notes",    "Заметки"],
       ["subgroup", "Подгруппы"],

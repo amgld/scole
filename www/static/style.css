@@ -335,6 +335,15 @@ section#absent table#noRespect td:nth-child(n),
 section#absent table#noRespect tr:nth-child(n) {
    text-align:left; background:none; vertical-align:top;
    border-width:1px; border-left:none; border-right:none;}
+
+/* БЛОК ОТОБРАЖЕНИЯ ЕЖЕДНЕВНОЙ ЯВКИ
+   ---------------------------------------------------- */
+section#attend table {
+   border-collapse:collapse; margin:10px auto;}
+section#attend table td {
+   border:1px solid #963; padding:5px; text-align:left;}
+section#attend table td:first-child {
+   text-align:center;}
    
 /* БЛОК ОТОБРАЖЕНИЯ ТАБЕЛЯ
    ---------------------------------------------------- */

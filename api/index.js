@@ -26,7 +26,8 @@ const modReq = {
    "sprDel":         [1,1], "sprResp":        [1,1], "tabelGet":      [1,1],
    "export":         [1,1], "notesAdd":       [1,1], "notesGet":      [1,1],
    "notesDel":       [1,1], "logGet":         [1,1], "notesCheck":    [1,1],
-   "statGet":        [1,1], "interGroupPup":  [1,1], "interGroupGet": [1,1]
+   "statGet":        [1,1], "interGroupPup":  [1,1], "interGroupGet": [1,1],
+   "attendGet":      [1,1]
 };
 let mod = {};
 mod.auth = require("./auth");
@@ -44,18 +45,18 @@ const RIGHTS = {
       "distrGet", "distrEdit", "classesGroups", "topicsGet", "gradesGet",
       "absentGet", "pupilsList", "sprResp", "export", "notesAdd", "notesGet",
       "notesDel", "logGet", "statGet", "interGroupEdit", "interGroupList",
-      "interGroupDel"
+      "interGroupDel", "attendGet"
    ],
    "teacher": [
       "usChPwd", "subjList", "topicEdit", "topicsGet", "gradesGet", "gradeAdd",
       "notesAdd", "notesGet", "notesDel", "interGroupList", "usFind",
-      "interGroupPup", "interGroupGet"
+      "interGroupPup", "interGroupGet", "attendGet"
    ],
    "tutor":   [
       "subjList", "distrGet", "teachList", "classesGroups", "topicsGet",
       "gradesGet", "subgrEdit", "subgrPups", "parCodes", "absentGet",
       "pupilsList", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
-      "export", "notesAdd", "notesGet", "notesDel", "logGet"
+      "export", "notesAdd", "notesGet", "notesDel", "logGet", "attendGet"
    ],
    "pupil":   [
       "subjList", "teachList", "jrnGet", "absentGet", "sprGet", "sprResp",
@@ -95,7 +96,7 @@ module.exports = async (post, addr) => {
       "topicEdit", "gradeAdd", "subgrEdit", "subgrPups", "parCodes", "jrnGet",
       "absentGet", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
       "export", "notesAdd", "notesGet", "notesDel", "logGet", "statGet",
-      "interGroupPup"
+      "interGroupPup", "attendGet"
    ];
    if (fNames.includes(postDt.f) && postDt.z) postDt.z.push(postDt.l);
       
