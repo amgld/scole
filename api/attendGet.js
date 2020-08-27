@@ -8,11 +8,11 @@
 //    d123 - это дата
 //  petrov - это логин автора запроса (подписывается скриптом index.js)
 // 
-// Возвращается объект вида
+// Возвращается объект (ни классы, ни люди не отсортированы) вида
 // {"10Б": {"Иванов Василий": ["s430", "s210"], ...}}
 // (массив это коды предметов, пропущенных учеником в этот день)
 module.exports = async (args) => {
-   let resp = {}, attResp = [];
+   let resp = {}, respItog = {}, attResp = [];
    try {
       if (args.length != 2) return "none";
       let dt = args[0].substr(0, 4),          
@@ -24,22 +24,32 @@ module.exports = async (args) => {
       let res = await dbFind("staff", {Ulogin: lg});
       if (!res.length) return "none";
 
+      // Разрешение логина учащегося в фамилию и имя
+      const pupGet = async pupLgn => {
+         let pupRes = await dbFind("pupils", {Ulogin: pupLgn});
+         return pupRes.length ?
+            pupRes[0].Ufamil + ' ' + pupRes[0].Uname :
+            pupLgn;
+      }
+
       // Фильтрация ответа базы (только отметки с буквами "н")
       // и формирование результата
       const result = async respArr => {
          for (let gr of respArr) {
-            let grade = gr.g, clss = gr.c, subj = gr.s, pupil = gr.p;
+            let grade = gr.g, clss = gr.c.split('-')[0], subj = gr.s;
             if (!grade.includes('н')) continue;
+            let pupil = await pupGet(gr.p);
+
             if (!resp[clss]) resp[clss] = {};
             if (!resp[clss][pupil]) resp[clss][pupil] = [];
             resp[clss][pupil].push(subj);
-         }
+         }         
       }
 
       // Если автор запроса администратор
       if (res[0].admin) {      
          attResp = await dbFind("grades", {d: dt});
-         result(attResp);
+         await result(attResp);
       }
       else {         
          let clArr = [];
@@ -53,16 +63,13 @@ module.exports = async (args) => {
          for (let subj of Object.keys(clResp[0].tLoad))
             clArr.push(...(clResp[0].tLoad[subj]));
 
-         let classes = new Set(
-            clArr.map(x => x.split('-')[0])
-                 .sort((x,y) => x.padStart(3, '0') > y.padStart(3, '0'))
-         );
+         let classes = new Set(clArr);
          for (let cl of classes) {
             attResp = await dbFind("grades", {d: dt, c: RegExp('^'+cl)});
-            result(attResp);
+            await result(attResp);
          }
-      }      
+      }
       return JSON.stringify(resp);
    }
-   catch(e) {return "none";}
+   catch(e) {console.info(e); return "none";}
 };
