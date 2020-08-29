@@ -9,7 +9,7 @@ let attSbList = {};
 
 // Получение статистики явки за один день с сервера
 // (в запросе передается только дата в формате d123)
-// Сервер возвращает объект вида
+// Сервер возвращает несортированный объект вида
 // {"10Б": {"Иванов Василий": ["s430", "s210"], ...}}
 const attendGet = async () => {
    let dt = dateConv(dqs("#attDt").value);
@@ -23,19 +23,22 @@ const attendGet = async () => {
    dqs("#attResult").innerHTML =
       `<h3>Учащиеся, пропустившие уроки ${dtRus}</h3>`;
    let attObj = JSON.parse(apiResp);
-   if (!Object.keys(attObj).length)
+   if (!Object.keys(attObj).length) {
       dqs("#attResult").innerHTML += "<p>Учащиеся не найдены</p>";
-   else {
-      let inner = "<table>";
-      for (let cl of Object.keys(attObj))
-      for (let pup of Object.keys(attObj[cl])) {
+      return;
+   }
+   let inner = "<table>";
+   let clSort = Object.keys(attObj)
+              . sort((x,y) => x.padStart(3,'0') > y.padStart(3,'0'));
+   for (let cl of clSort) {
+      let pups = Object.keys(attObj[cl]).sort((x,y) => x.localeCompare(y,"ru"));
+      for (let pup of pups) {
          let sb = attObj[cl][pup].map(x => attSbList[x]).join("<br>");
          inner += `<tr><td>${cl}</td><td>${pup}</td><td>${sb}</td></tr>`;
       }
-      inner += "</table>";
-      dqs("#attResult").innerHTML += inner;
    }
-   
+   inner += "</table>";
+   dqs("#attResult").innerHTML += inner;  
 }
 
 // Формирование контента страницы
