@@ -1,4 +1,5 @@
 {"type":"class","className":"8С","groups":["8С-мальч","8С-дев","8С-иняз1","8С-иняз2","8С-инф1","8С-инф2"],"_id":"71hC2E7w9RWFPiCH","tutor":"pupochkin"}
+{"type":"intergroup","ingrName":"23Р","ingrTitle":"Робинзонада","ingrTeach":"goldin","_id":"8UTwMeaIvmrR8EVK"}
 {"type":"class","className":"8А","groups":["8А-дев","8А-иняз1","8А-иняз2","8А-инф1","8А-инф2","8А-мальч"],"_id":"8dSAZFyDTiktjjWW","tutor":"goldin"}
 {"type":"intergroup","ingrName":"20А","ingrTitle":"Секция бокса","ingrTeach":"churkina","_id":"9KRgqe1v7azzKNaH"}
 {"type":"class","className":"9Б","groups":["9Б-мальч","9Б-дев","9Б-иняз1","9Б-иняз2","9Б-инф1","9Б-инф2"],"_id":"9Yin0kgqfeSp9XQl"}
@@ -13,4 +14,3 @@
 {"type":"subj","sbKod":"d125","sbName":"Зарубежная литература","_id":"uplydp9vE8qzXTo9"}
 {"type":"class","className":"8В","groups":["8В-мальч","8В-дев","8В-иняз1","8В-иняз2","8В-инф1","8В-инф2"],"_id":"vR1WOKpuBbeEtToW","tutor":"churkina"}
 {"type":"intergroup","ingrName":"33М","ingrTitle":"Кукуруза","ingrTeach":"pupochkin","_id":"x3S7MkZIPlzP1Z7n"}
-{"type":"intergroup","ingrName":"23Р","ingrTitle":"Робинзонада","ingrTeach":"goldin","_id":"8UTwMeaIvmrR8EVK"}
