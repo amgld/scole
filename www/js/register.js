@@ -65,15 +65,19 @@ getContent.register = async () => {
       regIsContent = false;
       dqs("#regClassSel") .style.display = "none";
       dqs("#regPageSel")  .style.display = "none";
+      dqs("#regGrades")   .style.display = "none";
+      dqs("#regTopics")   .style.display = "none";
       dqs("#regIsContent").style.display = "block";
    }
    
-   // Формирование списка классов в селекте
+   // Формирование списка классов в селекте и видимость контента
    let regRole = dqs("#selRole").value,
        regClList = [],
        regIsContent = true; // есть ли у юзера доступные журнальные страницы
    dqs("#regClassSel") .style.display = "inline";
    dqs("#regPageSel")  .style.display = "inline";
+   dqs("#regGrades")   .style.display = "inline-block";
+   dqs("#regTopics")   .style.display = "inline-block";
    dqs("#regIsContent").style.display = "none";
    
    if (regRole == "admin") { // администратору показываем все классы
