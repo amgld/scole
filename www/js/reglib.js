@@ -387,7 +387,8 @@ const gradesGet = async (className, subjCode, teachLgn) => {
 }
 
 // **************************************************************************
-// Показ списка детей и отметок на странице (из объекта gradesObj)
+// Показ списка детей и отметок на странице
+// (из объекта gradesObj или vdGradesObj для внеурочной деятельности)
 const gradesShow = () => {
    let content = '';
    if (!Object.keys(gradesObj).length) content = "<b>Ничего не найдено</b>";
@@ -506,16 +507,18 @@ const loadGrades = async vneur => {
    }
    else {
       let paramsArr = params.split('^');
-      rgClassName = paramsArr[0]; // глобальные переменные!
+      rgClassName = paramsArr[0]; // глобальные переменные из register.js
       rgSubjCode  = paramsArr[1];
       rgTeachLgn  = paramsArr[2];   
       
       // Загружаем темы уроков из базы и показываем на странице
-      topicsObj = await topicsGet(rgClassName, rgSubjCode, rgTeachLgn);
+      let cTops = await topicsGet(rgClassName, rgSubjCode, rgTeachLgn);
+      if (vneur) vdTopicsObj = cTops; else topicsObj = cTops;
       topicsShow(vneur);
       
       // Загружаем список детей и отметки из базы и показываем на странице
-      gradesObj = await gradesGet(rgClassName, rgSubjCode, rgTeachLgn);
+      let cGrds = await gradesGet(rgClassName, rgSubjCode, rgTeachLgn);
+      if (vneur) vdGradesObj = cGrds; else gradesObj = cGrds;
       gradesShow(vneur);
    }
 }

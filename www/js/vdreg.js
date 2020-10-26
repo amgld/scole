@@ -24,7 +24,7 @@ let vdSelVInner = '';
 for (let i=1; i<8; i++) vdSelVInner += `<option value="${i}"> ${i} ч </option>`;
 
 createSection("vdreg", `
-   <select id="vdGroupSel"  onChange="loadVdGrades()"></select><br>
+   <select id="vdGroupSel"  onChange="loadGrades(1)"></select><br>
    <div id="vdGrades"></div>
    <div id="vdTopics">
       <div id="vdNewTopic">
@@ -99,5 +99,5 @@ getContent.vdreg = async () => {
       `(${vTeachList[grp[2]]})</option>`;
    dqs("#vdGroupSel").innerHTML = vdSelGrInner;
 
-   if (vdIsContent) loadVdGrades(); // список группы, отметки и темы занятий
+   if (vdIsContent) loadGrades(1); // список группы, отметки и темы занятий
 }
