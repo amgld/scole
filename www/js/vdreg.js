@@ -6,19 +6,11 @@
  */
 "use strict";
 
-// Имя группы (типа 23Р), предмет ВД и учитель для отображаемой группы
-let vdGroupName = '', vdSubjName = '', vdTeachLgn = '';
-
-// Объекты с темами занятий, дз, весами отметок, к-вом часов занятия, а также
-// со списком детей и отметками (оба - для текущей отображаемой группы)
-// vdTopicsObj = {d601: {t: "Африка", h: "Учить главу 4", w: 4, v:2},...}
-// vdGradesObj = {
-//    puList: ["ivanov", "petrov",...],
-//    pnList: ["Иванов", "Петров",...],
-//    d601:   ["нн",     "5",     ...],
-//    ...
-// }
+// Объекты для хранения тем и отметок (аналогичные определенным в register.js)
 let vdTopicsObj = {}, vdGradesObj = {};
+
+// Список учителей {"pupking" : "Пупкин В. И."}
+let vTeachList = {};
 
 // Текст placeholder'а в поле редактирования темы урока
 let vdTopPH = `Введите тему занятия\n(если тема пуста, колонка будет удалена)`;
@@ -46,7 +38,7 @@ createSection("vdreg", `
          <select id="vdTopVol">${vdSelVInner}</select>
          <span>Вес отметок (от 0 до 4)</span>
          <select id="vdTopWeight">${vdSelWInner}</select>
-         <button onClick="vdTopicEdit()"> &gt;&gt; </button>
+         <button onClick="topicEdit(1)"> &gt;&gt; </button>
       </div>
       <div id="vdJustTopics"></div>
    </div>
@@ -55,6 +47,11 @@ createSection("vdreg", `
 
 // Динамически подгружаем контент страницы (имя метода = имени пункта меню!)
 getContent.vdreg = async () => {
+
+   // Список учителей {"pupking" : "Пупкин В. И."}
+   let apiResp = await apireq("teachList");
+   if (apiResp != "none")
+      for (let t of JSON.parse(apiResp)) vTeachList[t.login] = t.fio;
 
    // Выдача сообщения и скрытие контента страницы, если нет
    // доступных юзеру журнальных страниц
@@ -75,27 +72,31 @@ getContent.vdreg = async () => {
    dqs("#vdTopics")   .style.display = "inline-block";
    dqs("#vdIsContent").style.display = "none";
 
-   if (vdRole == "admin") { // администратору показываем все группы
-      dqs("#vdNewTopic").style.display = "none";
-      let apiResp = await apireq("interGroupList");
-      if (apiResp != "none") vdGrList = classSort(JSON.parse(apiResp));
+   // Получаем полный список всех групп
+   // [
+   //    ["29Б", "Доп. главы математики", "ivanov"],
+   //    ...
+   // ]
+   apiResp = await apireq("interGroupList");
+   if (apiResp != "none")
+      vdGrList = JSON.parse(apiResp).sort((x,y) => x[0] > y[0]);
+
+   // Администратору показываем все группы
+   if (vdRole == "admin") {
+      dqs("#vdNewTopic").style.display = "none";      
    }
-   else if (vdRole == "tutor") {// кл. рук. - группы с детьми своих классов
-      dqs("#vdNewTopic").style.display = "none";
-      vdGrList = []; // uTutorCls;
-   }
-   else if (vdRole == "teacher") { // учителю только свои группы
-      let vdTeachLoad = {};
-      if (Object.keys(vdTeachLoad).length == 0) vdNoContent();
-      else {
-         dqs("#vdNewTopic").style.display = "block";
-         vdGrList = classSort(Object.keys(vdTeachLoad));
-      }
+   // Учителю только свои группы (uLogin записан скриптом login.js)
+   else if (vdRole == "teacher") {
+      vdGrList = vdGrList.filter(gr => gr[2] == uLogin);
+      if (!vdGrList.length) vdNoContent();
+      else dqs("#vdNewTopic").style.display = "block";
    }
    else vdNoContent();
 
    let vdSelGrInner = '';
-   for (let grp of vdGrList) vdSelGrInner += `<option>${grp}</option>`;
+   for (let grp of vdGrList) vdSelGrInner +=
+      `<option value="${grp[0]}^s000^${grp[2]}">${grp[0]}: ${grp[1]} ` +
+      `(${vTeachList[grp[2]]})</option>`;
    dqs("#vdGroupSel").innerHTML = vdSelGrInner;
 
    if (vdIsContent) loadVdGrades(); // список группы, отметки и темы занятий

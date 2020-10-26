@@ -1,6 +1,6 @@
 /**
  *   РЕДАКТИРОВАНИЕ ТЕМ УРОКОВ, ДОМАШНИХ ЗАДАНИЙ И ВЕСОВ ОТМЕТОК
- *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ *   Copyright © 2020, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 
@@ -40,14 +40,26 @@ module.exports = async argsObj => {
       ht = ht.replace(/<.+?javascript:.+?>/gi, '').replace(/<\/a>/g, '¤')
          . replace(/<(?!a )[^>]+?>/g, ' ').replace(/¤/g, "</a>")
          . replace(/\s+/g, ' ').replace(/(&nbsp;)+/g, ' ').trim();
+
+      // Проверяем полномочия учителя на запрашиваемую группу
+      // для внеурочной деятельности (межклассные сводные группы)
+      if (sb == "s000") {
+         let distrRes = await dbFind("curric", {
+            type: "intergroup", ingrName: gr, ingrTeach: lg
+         });
+         if (!distrRes.length) return "none";
+      }
       
       // Проверяем полномочия учителя на запрашиваемые класс и предмет
-      let distrRes = await dbFind("distrib", {tLogin: lg});
-      if (!distrRes.length) return "none";
+      // для традиционных уроков
       else {
-         let distr = distrRes[0].tLoad;
-         if (!distr[sb]) return "none";
-         else if (!distr[sb].includes(gr)) return "none";
+         let distrRes = await dbFind("distrib", {tLogin: lg});
+         if (!distrRes.length) return "none";
+         else {
+            let distr = distrRes[0].tLoad;
+            if (!distr[sb]) return "none";
+            else if (!distr[sb].includes(gr)) return "none";
+         }
       }
       
       // Количество часов пишем в базу только в случае, если оно не равно 1

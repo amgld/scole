@@ -146,32 +146,55 @@ const insertLink = elemId => {
 
 // **************************************************************************
 // Добавление, удаление или редактирование темы урока, дз и веса отметок
-const topicEdit = async () => {
+// (если пришел ненулевой аргумент vneur - для внеурочной деятельности)
+const topicEdit = async vneur => {
+   if (!vneur) vneur = 0;
    try {
-      // Получаем класс^предмет^учитель, например 10Ж-мальч^s220^ivanov,
+      // Получаем класс^предмет, например 10Ж-мальч^s220
+      // (для внеурочной деятельности только имя_группы, например, 29Ж),
       // разбираем это, получаем данные из формы редактирования темы урока
-      let findArr = dqs("#regPageSel").value.trim().split('^'),
-          className = findArr[0], subj = findArr[1],
-          dt = dateConv(dqs("#regTopDt").value),
-          dtDay = Number(dt.substr(-2,2)),
-          topic = dqs("#regNewTopic textarea").value.replace(/\s+/g, ' ').trim(),
-          hometask = dqs("#regTopHTask").innerHTML             
-             .replace(/<.+?javascript:.+?>/gi, '').replace(/<\/a>/g, '¤')
-             .replace(/<(?!a )[^>]+?>/g, ' ').replace(/¤/g, "</a>")
-             .replace(/\s+/g, ' ').replace(/(&nbsp;)+/g, ' ').trim(),
-          weight = dqs("#regTopWeight").value.toString().trim(),
-          volume = dqs("#regTopVol").value.toString().trim();
+      // Для внеурочной деятельности код предмета - s000
+      let className, subj, dt, topic, hometask, weight, volume;
+      
+      let findNode = vneur ? dqs("#vdGroupSel") : dqs("#regPageSel"),      
+          findArr  = findNode.value.trim().split('^');
+      className    = findArr[0];
+      subj         = findArr[1];
+      
+      dt = vneur ? dateConv(dqs("#vdTopDt" ).value) :
+                   dateConv(dqs("#regTopDt").value);
+      let dtDay = Number(dt.substr(-2,2));
+      if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}     
+
+      topic = vneur ? dqs("#vdNewTopic textarea" ).value :
+                      dqs("#regNewTopic textarea").value;
+      topic = topic.replace(/\s+/g, ' ').trim();
+      if (!topic) if (!confirm(regWarn)) return;
+
+      hometask = vneur ? dqs("#vdTopHTask" ).innerHTML :
+                         dqs("#regTopHTask").innerHTML;
+
+      hometask = hometask             
+         .replace(/<.+?javascript:.+?>/gi, '').replace(/<\/a>/g, '¤')
+         .replace(/<(?!a )[^>]+?>/g, ' ').replace(/¤/g, "</a>")
+         .replace(/\s+/g, ' ').replace(/(&nbsp;)+/g, ' ').trim();
       if (hometask == "Домашнее задание") hometask = '';
-      if (dt.length > 4 || dtDay > 31) {info(1, "Неверная дата."); return;}
+
+      weight = vneur ? dqs("#vdTopWeight" ).value :
+                       dqs("#regTopWeight").value;
+      weight = weight.toString().trim();
       if (!/^[0-8]{1}$/.test(weight)) {
          info(1, "Вес должен быть числом<br>от 0 до 4 с шагом 0.5");
          return;         
       }
+
+      volume = vneur ? dqs("#vdTopVol" ).value :
+                       dqs("#regTopVol").value;
+      volume = volume.toString().trim();      
       if (!/^[1-7]{1}$/.test(volume)) {
          info(1, "Количество часов<br>должно быть от 1 до 7");
          return;         
-      }
-      if (!topic) if (!confirm(regWarn)) return;
+      }     
       
       // Производим запрос к API (логин учителя не передается,
       // берется из данных авторизации модулем API index.js)
@@ -183,25 +206,28 @@ const topicEdit = async () => {
       }
       else {
          // Добавляем или редактируем новую тему в объекте тем topicsObj
+         // либо vdTopicsObj для внеурочной деятельности
          // (либо удаляем) и обновляем показ тем на странице из этого объекта
          // Если тема пустая то, кроме того, удаляем соотв. колонку отметок
-         if (topicsObj[dt] && !topic) {
-            delete topicsObj[dt];
+         let currTopicsObj = vneur ? vdTopicsObj : topicsObj,
+             currGradesObj = vneur ? vdGradesObj : gradesObj;
+         if (currTopicsObj[dt] && !topic) {
+            delete currTopicsObj[dt];
             let apiResp =
                await apireq("gradeAdd", [dt, className, subj, '', '']);
             if (apiResp !== "success") info(1, "Ошибка на сервере.");
-            delete gradesObj[dt];
+            delete currGradesObj[dt];
          }            
-         else 
-            if (topic) {
-               topicsObj[dt] = {t:topic, h:hometask, w:Number(weight)};
-               if (volume != '1') (topicsObj[dt]).v = Number(volume);
-            }
+         else if (topic) {
+            currTopicsObj[dt] = {t:topic, h:hometask, w:Number(weight)};
+            if (volume != '1') (currTopicsObj[dt]).v = Number(volume);
+         }
 
-         topicsShow();
+         topicsShow(vneur);
          
          // Очищаем поле ввода домашнего задания
-         dqs("#regTopHTask").innerHTML = '';
+         if (vneur) dqs("#vdTopHTask" ).innerHTML = '';
+         else       dqs("#regTopHTask").innerHTML = '';
       }
    }
    catch(e) {info(1, "Ошибка!<br>Действие не выполнено."); return;}
@@ -216,23 +242,30 @@ const topicsGet = async (className, subjCode, teachLgn) => {
 }
 
 // **************************************************************************
-// Показ тем уроков, дз, весов отметок и к-ва часов (из объекта topicsObj)
-const topicsShow = () => {
+// Показ тем уроков, дз, весов отметок и к-ва часов (из объекта topicsObj
+// или vdTopicsObj для внеурочной деятельности)
+// (если пришел ненулевой аргумент vneur - для внеурочной деятельности)
+const topicsShow = vneur => {
+   if (!vneur) vneur = 0;
+   let ctObj = vneur ? vdTopicsObj : topicsObj;
    let content = '';
-   if (!Object.keys(topicsObj).length) content = "<b>Тем уроков не найдено</b>";
+   if (!Object.keys(ctObj).length)
+      content = "<b>Тем занятий не найдено</b>";
    else {
-      let dates = Object.keys(topicsObj).sort();
+      let dates = Object.keys(ctObj).sort();
       for (let dt of dates) {
-         let vol = topicsObj[dt].v ? ` (${topicsObj[dt].v}&thinsp;ч)` : '';
-         let dz = topicsObj[dt].h ? ` <span>[${topicsObj[dt].h}]</span>` : '';
-         content += `<p><b onClick="dtFocus('${dt}')">${dateConv(dt)}</b> `
-                  + `${topicsObj[dt].t}${vol}${dz}</p>`;
+         let vol = ctObj[dt].v ? ` (${ctObj[dt].v}&thinsp;ч)` : '';
+         let dz  = ctObj[dt].h ? ` <span>[${ctObj[dt].h}]</span>` : '';
+         content += `<p><b onClick="dtFocus('${dt}', ${vneur})">`
+                  + `${dateConv(dt)}</b> ${ctObj[dt].t}${vol}${dz}</p>`;
       }
    }
-   dqs("#regJustTopics").innerHTML = content;
-   dtFocus();
-   dqs("#regTopDt").value = regNow; // из замыкания
-   gradesShow();
+   let topicNode = vneur ? dqs("#vdJustTopics") : dqs("#regJustTopics"),
+          dtNode = vneur ? dqs("#vdTopDt")      : dqs("#regTopDt");
+   topicNode.innerHTML = content;
+   dtFocus('', vneur);
+   dtNode.value = regNow; // из замыкания
+   gradesShow(vneur);
 }
 
 // **************************************************************************
@@ -354,7 +387,7 @@ const gradesGet = async (className, subjCode, teachLgn) => {
 }
 
 // **************************************************************************
-// Показ списка детей и отметок на странице (из объекта topicsObj)
+// Показ списка детей и отметок на странице (из объекта gradesObj)
 const gradesShow = () => {
    let content = '';
    if (!Object.keys(gradesObj).length) content = "<b>Ничего не найдено</b>";
@@ -412,9 +445,10 @@ const gradesShow = () => {
 // **************************************************************************
 // Перемещение выбранной даты (типа d729) в фокус (колонки отметок, темы)
 // и заполнение формы редактирования темы актуальными для этой даты данными
-// При вызове без аргумента - фокусировка на последней по дате теме
+// При вызове с пустым аргументом даты - фокусировка на последней по дате теме
 let clearPhr = () => {;}
-const dtFocus = dt => { 
+const dtFocus = (dt, vneur) => {
+   if (!vneur) vneur = 0;
    if(!dt) {
       dqs("#regJustTopics").scrollTop = dqs("#regJustTopics").scrollHeight;      
       dqs("#regNewTopic textarea").value = '';
@@ -453,16 +487,21 @@ const dtFocus = dt => {
 
 // **************************************************************************
 // Загрузка списка класса, отметок и тем уроков
-const loadGrades = async () => {
-   dqs("#regGrades").innerHTML     = "<img src='static/preloader.gif'>";
-   dqs("#regJustTopics").innerHTML = "<img src='static/preloader.gif'>";
+// (если пришел ненулевой аргумент vneur - для внеурочной деятельности)
+const loadGrades = async vneur => {
+   if (!vneur) vneur = 0;
+   let gradesNode = vneur ? dqs("#vdGrades")     : dqs("#regGrades"),
+       topicsNode = vneur ? dqs("#vdJustTopics") : dqs("#regJustTopics"),
+       selectNode = vneur ? dqs("#vdGroupSel")   : dqs("#regPageSel");
+
+   gradesNode.innerHTML = "<img src='static/preloader.gif'>";
+   topicsNode.innerHTML = "<img src='static/preloader.gif'>";
    
    // Получаем класс^предмет^учитель, например 10Ж-мальч^s220^ivanov
-   let params = dqs("#regPageSel").value.trim();
+   let params = selectNode.value.trim();
    if (!params) {
-      dqs("#regGrades").innerHTML =
-         "<b>Для этого класса пока нет журнальных страничек</b>";
-      dqs("#regJustTopics").innerHTML = '';
+      gradesNode.innerHTML = "<b>Журнальных страничек пока нет</b>";
+      topicsNode.innerHTML = '';
       return;
    }
    else {
@@ -473,10 +512,10 @@ const loadGrades = async () => {
       
       // Загружаем темы уроков из базы и показываем на странице
       topicsObj = await topicsGet(rgClassName, rgSubjCode, rgTeachLgn);
-      topicsShow();
+      topicsShow(vneur);
       
       // Загружаем список детей и отметки из базы и показываем на странице
       gradesObj = await gradesGet(rgClassName, rgSubjCode, rgTeachLgn);
-      gradesShow();
+      gradesShow(vneur);
    }
 }
