@@ -412,18 +412,24 @@ const gradesShow = () => {
       for (let dt of dtArr) {
          
          // Две верхних заголовочных ячейки с датой и с весом
-         let dtN = '', dtW = ' ', bgcol = '';
+         let dtN = '', dtW = ' ', bgcol = '', ttl = '';
          if (dt.length == 5) { // итоговая дата вида d628c
             dtN = `<b>${DTSIT[dt][0]}</b>`;
             bgcol = " class='grIt'";
+         }
+         else if (topicsObj[dt].t.includes("Экзамен")) {
+            dtN = `<b>Экз</b>`;
+            bgcol = " class='grIt'";
+            dtW = (Number(topicsObj[dt].w)/2).toString();
+            ttl = ` title="${dateConv(dt)}"`;
          }
          else { // обычная текущая дата вида d613
             dtN = dateConv(dt);
             dtW = (Number(topicsObj[dt].w)/2).toString();
          }
          content += `<table${bgcol}><tr>`
-                  + `<td onClick="dtFocus('${dt}')">${dtN}</td></tr>`
-                  + `<tr><td>${dtW}</td></tr>`;
+                  + `<td onClick="dtFocus('${dt}')"${ttl}">`
+                  +  `${dtN}</td></tr><tr><td>${dtW}</td></tr>`;
                   
          // Собственно отметки, если они есть
          for (let i=0; i<gradesObj.pnList.length; i++) {

@@ -33,16 +33,20 @@ const jrnContLoad = async () => {
    let dates = Object.keys(grades).sort();
    
    for (let d of dates) {
-      let dt  = dateConv(d), cls = '';
+      let dt  = dateConv(d), cls = '', stTd = '';
       let otm = (typeof grades[d][3] != "undefined") ? grades[d][3] : '';
       otm = otm.replace(/^999$/, "зач.");
+      if (grades[d][0].includes("Экзамен")) {
+         cls = " class='it'";
+         stTd = " style='color:black'";
+      }
       if (d.length > 4) {
          dt = DTSIT[d][0];
          cls = " class='it'";
          otm = otm.toString().replace(/^0$/, "н/а");
       }      
       cont += `<tr${cls}>`
-            + `<td>${dt}</td><td>${wArr[grades[d][2]]}</td>`
+            + `<td>${dt}</td><td${stTd}>${wArr[grades[d][2]]}</td>`
             + `<td>${grades[d][0]}</td><td>${grades[d][1]}</td>`
             + `<td>${otm}</td></tr>`;
    }
