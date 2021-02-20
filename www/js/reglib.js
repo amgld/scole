@@ -270,10 +270,29 @@ const topicsShow = vneur => {
 
 // **************************************************************************
 // Замена содержимого ячейки таблицы с отметками на input для ввода отметок
+// (только если редактирование отметки разрешено, то есть если редактируемая
+// дата содержится в том же учебном периоде (четверти), что и текущая дата)
+// Если редактирование не разрешено и не определена переменная
+// pincode[дата-класс], показываем модальное окно запроса пин-кода
+// rgClassName был установлен в loadGrades; whereis - в ini.js
+let pincode = {};
 const td2inp = (id, grOld) => {
    if (!grOld) grOld = dqs(`#${id}`).innerHTML
                      . replace("&nbsp;", '').replace(' ', '');
    if (dqs("#selRole").value != "teacher") return;
+
+   // Проверяем полномочия на редактирование и запрашиваем pin-код
+   let clss = rgClassName.split('-')[0];  
+   let dtOtm = id.split('-')[0].substr(0, 4),
+       dtCur = dateConv(regNow); // текущая дата
+   dtCur = dtCur.length > 4 ? "d999" : dtCur;
+   if ((whereis(dtOtm) !== whereis(dtCur)) && !pincode[`${dtOtm}-${clss}`]) {
+      let pin = prompt("Введите PIN-код:", "0000").trim();
+      if (!/^\d{4}$/.test(pin)) {info(1, "Неверный PIN-код"); return;}
+      pincode[`${dtOtm}-${clss}`] = Number(pin);
+   }
+
+   // Меняем содержимое на input
    dqs(`#${id}`).onclick = null;
    dqs(`#${id}`).innerHTML = `
       <input id="inp${id}" maxlength="5"
