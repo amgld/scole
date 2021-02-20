@@ -289,7 +289,7 @@ const td2inp = (id, grOld) => {
    if ((whereis(dtOtm) !== whereis(dtCur)) && !pincode[`${dtOtm}-${clss}`]) {
       let pin = prompt("Введите PIN-код:", "0000").trim();
       if (!/^\d{4}$/.test(pin)) {info(1, "Неверный PIN-код"); return;}
-      pincode[`${dtOtm}-${clss}`] = Number(pin);
+      pincode[`${dtOtm}-${clss}`] = pin.toString();
    }
 
    // Меняем содержимое на input
