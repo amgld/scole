@@ -25,6 +25,8 @@
 {"d":"d004","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"3","_id":"HKmV2A9ZT4aHmsYz"}
 {"d":"d620","c":"11З","s":"s430","t":"goldin","p":"davidov","g":"н","_id":"HgDDs5iw0g3ogwan"}
 {"d":"d709","c":"11З","s":"s430","t":"goldin","p":"davidov","g":"н","_id":"HjhipF9czHYniald"}
+{"d":"d331b","c":"11З-инф1","s":"s430","t":"goldin","p":"davidov","g":"4","_id":"JAWkwXUPTPKZpBe0"}
+{"d":"d205a","c":"8А","s":"s430","t":"goldin","p":"elkin","g":"3","_id":"Jhj58x2mSI9rrMny"}
 {"d":"d004","c":"11З","s":"s430","t":"goldin","p":"davidov","g":"нн","_id":"Jq1rXdpVMQWvI4Ti"}
 {"d":"d305","c":"11З","s":"s430","t":"goldin","p":"davidov","g":"н","_id":"KneTIGtyReMtdRkf"}
 {"d":"d814","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"020","_id":"LpUiptZq3nXdp3UJ"}
@@ -36,12 +38,12 @@
 {"d":"d726","c":"11З","s":"s430","t":"goldin","p":"ezhov","g":"н","_id":"QOUTWhg9qV2wYrNe"}
 {"d":"d305","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"4","_id":"S0M8NYVesHi03Zl0"}
 {"d":"d823","c":"11З","s":"s430","t":"goldin","p":"davidov","g":"нн","_id":"TJHZRAhFJm6EDP0M"}
-{"d":"d331c","c":"11З-инф1","s":"s430","t":"goldin","p":"davidov","g":"2","_id":"UjQpV4v94kD2rZWU"}
+{"d":"d331c","c":"11З-инф1","s":"s430","t":"goldin","p":"davidov","g":"3","_id":"UjQpV4v94kD2rZWU"}
 {"d":"d620","c":"11З","s":"s430","t":"goldin","p":"bistrikh","g":"4","_id":"WbFAQysTEf197ncu"}
 {"d":"d724","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"4 4","_id":"WjWSs9aVNfETHEoa"}
 {"d":"d505","c":"11З","s":"s430","t":"kozlov","p":"davidov","g":"нн","_id":"XftIsQsSFJOC6Icn"}
 {"d":"d331b","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"4","_id":"Xxq35egCPDR5pr0I"}
-{"d":"d205a","c":"11З","s":"s430","t":"goldin","p":"bistrikh","g":"3","_id":"Z6A7q0M0ESlDzynX"}
+{"d":"d205a","c":"11З","s":"s430","t":"goldin","p":"bistrikh","g":"4","_id":"Z6A7q0M0ESlDzynX"}
 {"d":"d620","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"н4","_id":"ZKrel5XyVVDBchOJ"}
 {"d":"d331c","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"3","_id":"ZcPLTmce7N1D5aTh"}
 {"d":"d729","c":"11З","s":"s430","t":"goldin","p":"kazakova","g":"3","_id":"aLs4EWRO9NTuaSL6"}
@@ -49,6 +51,7 @@
 {"d":"d711","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"н","_id":"byPe12F1dUyig6AC"}
 {"d":"d709","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"нн","_id":"cEKsrF3u2GSG4Z4z"}
 {"d":"d303","c":"11З","s":"s430","t":"goldin","p":"elkin","g":"2","_id":"d2LspLrKJXhqRnfo"}
+{"d":"d205a","c":"11З-инф1","s":"s430","t":"goldin","p":"davidov","g":"5","_id":"dbrBosIdFJKfKXOD"}
 {"d":"d726","c":"8А","s":"s410","t":"goldin","p":"petrov","g":"н","_id":"ddoRnj0YDC70iICY"}
 {"d":"d331c","c":"11З","s":"s440","t":"goldin","p":"kazakova","g":"5","_id":"dnXmJuUdh9rtpkJ6"}
 {"d":"d726","c":"11З","s":"s440","t":"goldin","p":"ezhov","g":"н","_id":"eKaDPscf5XvajFst"}
@@ -56,6 +59,7 @@
 {"d":"d726","c":"11З","s":"s440","t":"goldin","p":"kostenko","g":"н","_id":"ewQ3ozzc4fqmAt6v"}
 {"d":"d301","c":"11З","s":"s430","t":"goldin","p":"bikova","g":"4","_id":"gl4cNWerurVy2Tp2"}
 {"d":"d726","c":"8А","s":"s410","t":"goldin","p":"grebenkin","g":"нн","_id":"iRYedWfh6WIM2XD8"}
+{"d":"d727","c":"8А","s":"s430","t":"goldin","p":"elkin","g":"4","_id":"j94BmoiqrES42OR5"}
 {"d":"d730","c":"11З","s":"s430","t":"goldin","p":"bikova","g":"нн","_id":"jZMIxo7zfxY7qzJ5"}
 {"d":"d726","c":"11З","s":"s440","t":"goldin","p":"kataev","g":"н","_id":"kovtf8y7EDAsvVhD"}
 {"d":"d710","c":"11З","s":"s430","t":"goldin","p":"davidov","g":"н","_id":"krMJKNrISrpi4y6k"}
@@ -82,10 +86,8 @@
 {"d":"d726","c":"11З","s":"s440","t":"goldin","p":"bikova","g":"нн","_id":"yV7UwLzv8BouY541"}
 {"d":"d505","c":"11З","s":"s430","t":"kozlov","p":"kazakova","g":"нн4","_id":"zBznbDl9UEWD1LjI"}
 {"d":"d513","c":"11З","s":"s440","t":"goldin","p":"davidov","g":"4н","_id":"zCmhsAqshb03mDPH"}
-{"d":"d727","c":"8А","s":"s430","t":"goldin","p":"elkin","g":"4","_id":"j94BmoiqrES42OR5"}
-{"d":"d205a","c":"8А","s":"s430","t":"goldin","p":"elkin","g":"3","_id":"Jhj58x2mSI9rrMny"}
 {"d":"d331b","c":"11З","s":"s430","t":"goldin","p":"davidov","g":"3","_id":"zPrqimNohfAUwanE"}
-{"d":"d331b","c":"11З-инф1","s":"s430","t":"goldin","p":"davidov","g":"4","_id":"JAWkwXUPTPKZpBe0"}
-{"d":"d331c","c":"11З-инф1","s":"s430","t":"goldin","p":"davidov","g":"3","_id":"UjQpV4v94kD2rZWU"}
-{"d":"d205a","c":"11З-инф1","s":"s430","t":"goldin","p":"davidov","g":"5","_id":"dbrBosIdFJKfKXOD"}
-{"d":"d205a","c":"11З","s":"s430","t":"goldin","p":"bistrikh","g":"4","_id":"Z6A7q0M0ESlDzynX"}
+{"d":"d727","c":"8А","s":"s430","t":"goldin","p":"elkin","g":"5","_id":"j94BmoiqrES42OR5"}
+{"d":"d205a","c":"8А","s":"s430","t":"goldin","p":"elkin","g":"32","_id":"Jhj58x2mSI9rrMny"}
+{"d":"d205a","c":"8А","s":"s430","t":"goldin","p":"ivanov","g":"3","_id":"soJDHsRE56xFKrFX"}
+{"d":"d205a","c":"8А-инф1","s":"d645","t":"goldin","p":"grebenkin","g":"4","_id":"gSpOKctJNUBc06X7"}

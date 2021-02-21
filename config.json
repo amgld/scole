@@ -14,6 +14,7 @@
    },
    "PWD":      "peL4msLYvzbUJ9dBYumQdjPG",
    "SALT":     "abcde",
+   "SALTPIN":  "abcde",
    "ADMIN":    "vk.com/vasya-pupkin",
    "KEYPATH":  "key.pem",
    "CERTPATH": "cert.pem",

@@ -14,8 +14,10 @@ const DOCROOT  = __dirname + "/www/",
       fs       = require("fs"),
       nedb     = require("nedb"),
 
-      {PORT, SERVER, ERR404, MIME, PWD, SALT, ADMIN, KEYPATH, CERTPATH, CAPATH}
-               = require("./config"),
+      {
+         PORT, SERVER, ERR404, MIME, PWD, SALT, SALTPIN,
+         ADMIN, KEYPATH, CERTPATH, CAPATH
+      }        = require("./config"),
       api      = require("./api"),
       captGen  = require("./api/captchaGen"),
 
@@ -26,6 +28,7 @@ const DOCROOT  = __dirname + "/www/",
       if (CAPATH) httpsOpt.ca = CAPATH;
 
 global.salt    = SALT;
+global.saltpin = SALTPIN;
 global.admPwd  = PWD;
 
 
