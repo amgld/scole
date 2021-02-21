@@ -9,6 +9,7 @@
 // Аргументы - [дата, класс, предмет, ученик, отметка, pin, учитель]
 //   например, ["d729", "8Б-мальч", "s110", "ivanov", "нн5", "1234", "petrov"]
 // Если аргумент "ученик" пустой, удаляется вся колонка отметок
+const lib = require("../www/js/ini.js");
 module.exports = async (argsObj) => {
    try {      
       // Проверяем, что пришло
@@ -45,7 +46,27 @@ module.exports = async (argsObj) => {
       }
 
       // Если редактируется отм. за прошлый учебный период, проверяем PIN-код
-      // if () return "pinBad";
+      const dtf = d => d.toString().padStart(2, '0');
+      let now   = new Date(),
+          dtD   = dtf(now.getDate()),
+          dtM   = dtf(now.getMonth()+1),
+          dtY   = now.getFullYear(),
+          dnow  = 'd' + dtY + dtM + dtD,
+          dtOtm = d.substr(0,4),
+          dtCur = lib.dtConv(`${dtY}-${dtM}-${dtD}`);
+      dtCur = dtCur.length > 4 ? "d999" : dtCur;
+      
+      if ((lib.whereIs(dtCur) > lib.whereIs(dtOtm))) {
+         let clas = c.split('-')[0],
+             str = t + clas + dnow + lib.dtConv(dtOtm, 1);
+         let pwdTrue = '', w, h = 0;
+         for (let j = 0; j < 4; j++) {
+            w = global.saltpin + j + str;
+            for (let i=0; i<w.length; i++) h=((h<<5)-h)+w.charCodeAt(i);
+            pwdTrue += Math.abs(h) % 10;
+         }
+         if (pwdTrue !== pin) return "pinBad";
+      }
       
       // Проверяем, есть ли такой ученик и не заблокирован ли он
       let res = await dbFind("pupils", {Ulogin: p});

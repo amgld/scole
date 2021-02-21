@@ -281,6 +281,7 @@ const HTML = `<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
 // Экспорт некоторых функций и объектов на серверную сторону
 try {
    module.exports = {
-      dtConv: dateConv, sbSort: subjSort, dtsIt : DTSIT, sbDef: subjDef
+      dtConv: dateConv, sbSort: subjSort, dtsIt : DTSIT, sbDef: subjDef,
+      whereIs: whereis
    };
 } catch(e) {;}
