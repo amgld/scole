@@ -4,23 +4,25 @@
  */
 "use strict";
 
-// Возвращает "success", либо "none", либо "pupBlock" (ребенок заблокирован)
-// Аргументы - [дата, класс, предмет, ученик, отметка, учитель]
-//   например, ["d729", "8Б-мальч", "s110", "ivanov", "нн5", "petrov"]
+// Возвращает "success", либо "none", либо "pupBlock" (ребенок заблокирован),
+// либо pinBad (неправильный PIN-код, если отметка выставляется после срока)
+// Аргументы - [дата, класс, предмет, ученик, отметка, pin, учитель]
+//   например, ["d729", "8Б-мальч", "s110", "ivanov", "нн5", "1234", "petrov"]
 // Если аргумент "ученик" пустой, удаляется вся колонка отметок
 module.exports = async (argsObj) => {
    try {      
       // Проверяем, что пришло
-      if (argsObj.length != 6) return "none";
+      if (argsObj.length != 7) return "none";
       let d = argsObj[0].substr(0,  5).trim(),
           c = argsObj[1].substr(0, 20).trim(),
           s = argsObj[2].substr(0, 20).trim(),            
           p = argsObj[3].substr(0, 20).trim(),
           g = argsObj[4].substr(0,  5).trim(),
-          t = argsObj[5].substr(0, 20).trim();
+        pin = argsObj[5].substr(0,  4).trim(),
+          t = argsObj[6].substr(0, 20).trim();
       if(!g) g = '';
             
-      if (!d || !c || !s || !t) return "none";
+      if (!d || !c || !s || !pin || !t) return "none";
       if (
          !/^d\d{3}[a-z]{0,1}$/.test(d) ||
          !/^[н0-9 ]{0,5}$/.test(g) ||
@@ -41,6 +43,9 @@ module.exports = async (argsObj) => {
          db.grades.remove({d: d, c: c, s: s, t: t}, {multi: true});
          return "success";
       }
+
+      // Если редактируется отм. за прошлый учебный период, проверяем PIN-код
+      // if () return "pinBad";
       
       // Проверяем, есть ли такой ученик и не заблокирован ли он
       let res = await dbFind("pupils", {Ulogin: p});

@@ -214,7 +214,7 @@ const topicEdit = async vneur => {
          if (currTopicsObj[dt] && !topic) {
             delete currTopicsObj[dt];
             let apiResp =
-               await apireq("gradeAdd", [dt, className, subj, '', '']);
+               await apireq("gradeAdd", [dt, className, subj, '', '', 'a']);
             if (apiResp !== "success") info(1, "Ошибка на сервере.");
             delete currGradesObj[dt];
          }            
@@ -332,16 +332,18 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
       // Отметки хранятся с полями [дата, класс, предм, учитель, ученик, отм]
       // rgClassName, rgSubjCode были установлены в loadGrades()
       // Логин учителя не передается, берется из данных авторизации
-      // модулем API index.js     
+      // модулем API index.js
+      let clss = rgClassName.split('-')[0],
+          dtt  = dt.substr(0, 4),
+          pin  = pincode[`${dtt}-${clss}`] ? pincode[`${dtt}-${clss}`] : 'a';
+
       let apiResp = await apireq(
-         "gradeAdd", [dt, rgClassName, rgSubjCode, pupId, gradeNew]
+         "gradeAdd", [dt, rgClassName, rgSubjCode, pupId, gradeNew, pin]
       );
-      let errMess = (apiResp == "pupBlock") ?
-         "Этот учащийся отчислен." : "Ошибка на сервере."; 
-      if (apiResp != "success") {
-         gradeNew = gradeOld;
-         info(1, errMess);
-      }      
+      let errMess = "Ошибка на сервере";
+      if (apiResp == "pupBlock")    errMess = "Этот учащийся отчислен";
+      else if (apiResp == "pinBad") errMess = "Неверный PIN-код";
+      if (apiResp != "success") {gradeNew = gradeOld; info(1, errMess);}      
    }
       
    // Обновляем ячейку
