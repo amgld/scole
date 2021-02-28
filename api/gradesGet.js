@@ -14,6 +14,8 @@
 // }
 // Если предмет = '', то возвращаются только puList и pnList, причем
 // без заблокированных учащихся
+// Если предмет вида = 's000', то это внеурочка, список детей берется из
+// pupils.db, где поле facult (это массив) содержит имя класса типа 30М
 
 // Одновременная сортировка двух массивов: первый из логинов, второй из
 // фамилий (кириллицей). Сортируется второй массив по алфавиту, а первый
@@ -42,8 +44,15 @@ module.exports = async (argsObj) => {
           pnListMain = [], pnListBlock = [];
       
       // Сначала формируем список учеников данного класса (подгруппы)
+      // (если предмет равен s000, то это внеурочная группа)
       let clName = gr.split('-')[0];
-      let pListArr = await dbFind("pupils", {Uclass: clName});
+      let findTpl = sb !== "s000" ?
+         {Uclass: clName} :
+         {$where: function() {
+            let facField = this.facult;
+            return facField ? facField.includes(clName) : false;
+         }};
+      let pListArr = await dbFind("pupils", findTpl);      
       
       if (pListArr.length && gr.includes('-')) // если запрошена подгруппа
          pListArr = pListArr.filter(pup => {

@@ -28,7 +28,7 @@ createSection("vdreg", `
    <div id="vdGrades"></div>
    <div id="vdTopics">
       <div id="vdNewTopic">
-         <input id="vdTopDt" type="date" onChange="dtFocus()"
+         <input id="vdTopDt" type="date" onChange="dtFocus(0, 1)"
                min="${regYst}" max="${regYfin}" value="${regNow}">
          <textarea placeholder="${vdTopPH}"></textarea>
          <div id="vdTopHTask" contenteditable="true"

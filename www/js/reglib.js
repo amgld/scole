@@ -287,7 +287,8 @@ const td2inp = (id, grOld) => {
        dtCur = dateConv(regNow); // текущая дата
    dtCur = dtCur.length > 4 ? "d999" : dtCur;
    if ((whereis(dtCur) > whereis(dtOtm)) && !pincode[`${dtOtm}-${clss}`]) {
-      let pin = prompt("Введите PIN-код:", "0000").trim();
+      let pin = prompt("Введите PIN-код:", "0000");
+      if (pin) pin = pin.trim();
       if (!/^\d{4}$/.test(pin)) {info(1, "Неверный PIN-код"); return;}
       pincode[`${dtOtm}-${clss}`] = pin.toString();
    }
@@ -410,26 +411,30 @@ const gradesGet = async (className, subjCode, teachLgn) => {
 // **************************************************************************
 // Показ списка детей и отметок на странице
 // (из объекта gradesObj или vdGradesObj для внеурочной деятельности)
-const gradesShow = () => {
+const gradesShow = vneur => {
+   if (!vneur) vneur = 0;
+   let crGradObj = vneur ? vdGradesObj      : gradesObj,
+       crTopiObj = vneur ? vdTopicsObj      : topicsObj,
+       gradElem  = vneur ? dqs("#vdGrades") : dqs("#regGrades");
    let content = '';
-   if (!Object.keys(gradesObj).length) content = "<b>Ничего не найдено</b>";
+   if (!Object.keys(crGradObj).length) content = "<b>Ничего не найдено</b>";
    else {
       // Список детей
       content = "<table id='regPupList'>"
               + "<tr><td>&nbsp;</td></tr>"
               + "<tr><td class='r'>Вес отметок&nbsp;</td></tr>";
-      for (let i=0; i<gradesObj.pnList.length; i++) {
+      for (let i=0; i<crGradObj.pnList.length; i++) {
          let n = (i > 8) ? i+1 : "  " + (i+1);
          content += `<tr><td id="rp${i}" title="Кликните для показа статистики"`
                   + ` onClick="gradesStat(${i})">`
-                  + `${n}. ${gradesObj.pnList[i]}</td></tr>`;
+                  + `${n}. ${crGradObj.pnList[i]}</td></tr>`;
       }
       content += "</table>";
       
       // Отметки
       content += "<div>";
       // Текущие и итоговые даты; DTSIT определен в ini.js
-      let dtArr = [...Object.keys(topicsObj), ...Object.keys(DTSIT)].sort();
+      let dtArr = [...Object.keys(crTopiObj), ...Object.keys(DTSIT)].sort();
       for (let dt of dtArr) {
          
          // Две верхних заголовочных ячейки с датой и с весом
@@ -438,24 +443,24 @@ const gradesShow = () => {
             dtN = `<b>${DTSIT[dt][0]}</b>`;
             bgcol = " class='grIt'";
          }
-         else if (topicsObj[dt].t.includes("Экзамен")) {
+         else if (crTopiObj[dt].t.includes("Экзамен")) {
             dtN = `<b>Экз</b>`;
             bgcol = " class='grIt'";
-            dtW = (Number(topicsObj[dt].w)/2).toString();
+            dtW = (Number(crTopiObj[dt].w)/2).toString();
             ttl = ` title="${dateConv(dt)}"`;
          }
          else { // обычная текущая дата вида d613
             dtN = dateConv(dt);
-            dtW = (Number(topicsObj[dt].w)/2).toString();
+            dtW = (Number(crTopiObj[dt].w)/2).toString();
          }
          content += `<table${bgcol}><tr>`
                   + `<td onClick="dtFocus('${dt}')"${ttl}">`
                   +  `${dtN}</td></tr><tr><td>${dtW}</td></tr>`;
                   
          // Собственно отметки, если они есть
-         for (let i=0; i<gradesObj.pnList.length; i++) {
+         for (let i=0; i<crGradObj.pnList.length; i++) {
             let gr = ' ';
-            if (gradesObj[dt]) if (gradesObj[dt][i]) gr = gradesObj[dt][i];
+            if (crGradObj[dt]) if (crGradObj[dt][i]) gr = crGradObj[dt][i];
             if (!gr) gr = ' ';
             let grA = gr.replace("&nbsp;", '').replace(" ", '');
             content += `<tr><td id="${dt}-${i}" `
@@ -466,8 +471,8 @@ const gradesShow = () => {
       content += "</div>";
    }
    
-   dqs("#regGrades").innerHTML = content;
-   dtFocus();
+   gradElem.innerHTML = content;
+   dtFocus(0, vneur);
 }
 
 // **************************************************************************
