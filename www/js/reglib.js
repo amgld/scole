@@ -477,39 +477,51 @@ const gradesShow = () => {
 let clearPhr = () => {;}
 const dtFocus = (dt, vneur) => {
    if (!vneur) vneur = 0;
+   let gradesNode = vneur ? dqs("#vdGrades div") : dqs("#regGrades div"),
+       topicsNode = vneur ? dqs("#vdJustTopics") : dqs("#regJustTopics"),
+       newtopNode = vneur ?
+                    dqs("#vdNewTopic textarea")  :
+                    dqs("#regNewTopic textarea"),
+       hmtaskNode = vneur ? dqs("#vdTopHTask")   : dqs("#regTopHTask"),
+       topwgtNode = vneur ? dqs("#vdTopWeight")  : dqs("#regTopWeight"),
+       topdtNode  = vneur ? dqs("#vdTopDt")      : dqs("#regTopDt"),
+       topvolNode = vneur ? dqs("#vdTopVol")     : dqs("#regTopVol"),
+       crTopicObj = vneur ? vdTopicsObj          : topicsObj;
+
    if(!dt) {
-      dqs("#regJustTopics").scrollTop = dqs("#regJustTopics").scrollHeight;      
-      dqs("#regNewTopic textarea").value = '';
-      dqs("#regTopHTask").innerHTML = "Домашнее задание";
-      dqs("#regTopHTask").style.color = "gray";
-      dqs("#regTopWeight").value = 2;
-      dqs("#regTopVol").value = 1;
+      topicsNode.scrollTop   = topicsNode.scrollHeight;      
+      newtopNode.value       = '';
+      hmtaskNode.innerHTML   = "Домашнее задание";
+      hmtaskNode.style.color = "gray";
+      topwgtNode.value       = 2;
+      topvolNode.value       = 1;
       
       // Функция очищает поле ввода домашнего задания от placeholder'а
-      clearPhr = () => {
-         let elem = dqs("#regTopHTask");
+      clearPhr = vneuroch => {
+         if (!vneuroch) vneuroch = 0;
+         let elem = vneuroch ? dqs("#vdTopHTask") : dqs("#regTopHTask");
          elem.innerHTML = '';
          elem.style.color = "black";
       }      
       
       // Проматываем таблицу отметок к концу
-      if (dqs("#regGrades div")) dqs("#regGrades div").scrollBy(99000, 0);
+      if (gradesNode) gradesNode.scrollBy(99000, 0);
    }
    else if (dt.length > 4) return;
    else {
       // Заполняем поля формы ввода новой темы данными выбранной даты
-      dqs("#regTopDt").value = dateConv(dt, 1);
-      dqs("#regNewTopic textarea").value = topicsObj[dt].t;
-      dqs("#regTopHTask").innerHTML = topicsObj[dt].h;
-      dqs("#regTopHTask").style.color = "black";
-      clearPhr = () => {;}
-      dqs("#regTopWeight").value = topicsObj[dt].w;
-      dqs("#regTopVol").value = topicsObj[dt].v ? topicsObj[dt].v : 1;
+      topdtNode.value        = dateConv(dt, 1);
+      newtopNode.value       = crTopicObj[dt].t;
+      hmtaskNode.innerHTML   = crTopicObj[dt].h;
+      hmtaskNode.style.color = "black";
+      clearPhr               = () => {;}
+      topwgtNode.value       = crTopicObj[dt].w;
+      topvolNode.value       = crTopicObj[dt].v ? crTopicObj[dt].v : 1;
       
       // Прокручиваем таблицу с отметками, чтобы дата была видима
       let colonObj = dqs(`#${dt}-0`).parentNode.parentNode;
       let realX = colonObj.getBoundingClientRect().left;
-      dqs("#regGrades div").scrollBy(~~realX - 178, 0);
+      gradesNode.scrollBy(~~realX - 178, 0);
    }
 }
 

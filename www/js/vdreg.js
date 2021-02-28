@@ -32,7 +32,7 @@ createSection("vdreg", `
                min="${regYst}" max="${regYfin}" value="${regNow}">
          <textarea placeholder="${vdTopPH}"></textarea>
          <div id="vdTopHTask" contenteditable="true"
-            onFocus="clearPhr(); clearPhr = () => {;}">Домашнее задание</div>
+            onFocus="clearPhr(1); clearPhr = () => {;}">Домашнее задание</div>
          <button id="vdLnk" onClick="insertLink('vdTopHTask')"
             title="Создать ссылку в домашнем задании">&#9875;</button>
          <select id="vdTopVol">${vdSelVInner}</select>
