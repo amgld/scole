@@ -277,8 +277,11 @@ const topicsShow = vneur => {
 // rgClassName был установлен в loadGrades; whereis - в ini.js
 let pincode = {};
 const td2inp = (id, grOld) => {
-   if (!grOld) grOld = dqs(`#${id}`).innerHTML
-                     . replace("&nbsp;", '').replace(' ', '');
+   let idElem  = rgSubjCode == "s000" ?
+          dqs(`#vdGrades #${id}`) : dqs(`#regGrades #${id}`);
+   if (!idElem) return;
+
+   if (!grOld) grOld = idElem.innerHTML.replace("&nbsp;", '').replace(' ', '');
    if (dqs("#selRole").value != "teacher") return;
 
    // Проверяем полномочия на редактирование и запрашиваем pin-код
@@ -294,24 +297,31 @@ const td2inp = (id, grOld) => {
    }
 
    // Меняем содержимое на input
-   dqs(`#${id}`).onclick = null;
-   dqs(`#${id}`).innerHTML = `
+   idElem.onclick = null;
+   idElem.innerHTML = `
       <input id="inp${id}" maxlength="5"
          onBlur="sendGr('${id}', '${grOld}', this.value)"
          onKeyDown="if (event.keyCode == 13 || event.keyCode == 40) `
             + `sendGr('${id}', '${grOld}', this.value, 1);"
          value="${grOld}">
    `;
-   dqs(`#inp${id}`).focus();
+   let inpElem = rgSubjCode == "s000" ?
+          dqs(`#vdGrades #inp${id}`) : dqs(`#regGrades #inp${id}`);
+   inpElem.focus();
 }
 
 // **************************************************************************
 // Отправка введенной отметки для записи в базу с помощью API
-const sendGr = async (id, gradeOld, gradeNew, toDown) => { 
+const sendGr = async (id, gradeOld, gradeNew, toDown) => {
+   let crGrObj = rgSubjCode == "s000" ? vdGradesObj : gradesObj,
+       idElem  = rgSubjCode == "s000" ?
+          dqs(`#vdGrades #${id}`) : dqs(`#regGrades #${id}`),
+       inpElem = rgSubjCode == "s000" ?
+          dqs(`#vdGrades #inp${id}`) : dqs(`#regGrades #inp${id}`);
    
    let dt     = id.split('-')[0],
        pupNum = Number(id.split('-')[1]),
-       pupId  = gradesObj.puList[pupNum];
+       pupId  = crGrObj.puList[pupNum];
    
    gradeNew = gradeNew.replace(/\s+/g, ' ').replace(/Н/g, 'н')
       .replace(/б/g, 'н').replace(/[\-+=.,a-zA-Zа-мо-яёА-ЯЁ]/g, '').trim();
@@ -327,7 +337,7 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
    
    if (gradeOld != gradeNew) {
       
-      dqs(`#inp${id}`).style.background = "#f99";
+      inpElem.style.background = "#f99";
       
       // Отправляем отметку с помощью API
       // Отметки хранятся с полями [дата, класс, предм, учитель, ученик, отм]
@@ -348,22 +358,22 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
    }
       
    // Обновляем ячейку
-   dqs(`#inp${id}`).style.background = "none";
+   inpElem.style.background = "none";
    let cnt = gradeNew ? gradeNew : ' ';
-   dqs(`#${id}`).outerHTML =
+   idElem.outerHTML =
       `<td id="${id}" onClick="td2inp('${id}', '${gradeNew}')">${cnt}</td>`;
       
-   // Обновляем объект gradesObj 
-   if (!gradesObj[dt])
-      gradesObj[dt] = (new Array(gradesObj.puList.length)).map(x => '');
-   gradesObj[dt][pupNum] = gradeNew.toString();
+   // Обновляем объект crGrObj (gradesObj или vdGradesObj для внеурочки)
+   if (!crGrObj[dt])
+      crGrObj[dt] = (new Array(crGrObj.puList.length)).map(x => '');
+   crGrObj[dt][pupNum] = gradeNew.toString();
       
    // Если пришел аргумент toDown, устанавливаем фокус (с полем input)
    // на нижележащую ячейку, если она есть
    if (toDown) {
       pupNum++;
       let idNew = `${dt}-${pupNum}`;
-      if (dqs(`#${idNew}`)) td2inp(idNew);
+      td2inp(idNew);
    }
 }
 
@@ -371,19 +381,22 @@ const sendGr = async (id, gradeOld, gradeNew, toDown) => {
 // Показ средних баллов и сумм баллов по учащемуся с данным номером в списке
 // (номера начинаются с 0, естественно) путем обработки topicsObj и gradesObj
 const gradesStat = i => {
-   let mess = `<h3>${gradesObj.pnList[i]}</h3>`
+   let crGrObj = rgSubjCode == "s000" ? vdGradesObj : gradesObj,
+       crTpObj = rgSubjCode == "s000" ? vdTopicsObj : topicsObj;
+
+   let mess = `<h3>${crGrObj.pnList[i]}</h3>`
             + `<table><tr><th> </th><th>Σ</th><th>m</th><th>Н</th></tr>`;   
    for (let itDate of Object.keys(DTSIT)) {
        // Cумма весов, сумма отметок с весами, среднее, пропуски
       let wSum = 0, sum  = 0, av = 0, abs = 0;
       
       // Цикл по всем темам
-      for (let dt of Object.keys(topicsObj)) { 
+      for (let dt of Object.keys(crTpObj)) { 
          // Если дата хорошая и у данного ребенка за эту дату есть отметки
          if (dt >= DTSIT[itDate][2] && dt <= DTSIT[itDate][3])           
-         if (gradesObj[dt])
-         if (gradesObj[dt][i]) {
-            let w = topicsObj[dt].w, gFull = gradesObj[dt][i];
+         if (crGrObj[dt])
+         if (crGrObj[dt][i]) {
+            let w = crTpObj[dt].w, gFull = crGrObj[dt][i];
             let gClear = gFull.replace(/н/g, ''); // без «н»
             abs += gFull.length - gClear.length;  // к-во пропусков
             gClear = gClear.replace(/\s{2,}/g, ' ').trim();

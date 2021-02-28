@@ -31,12 +31,21 @@ module.exports = async (argsObj) => {
       ) return "none";
       
       // Проверяем полномочия учителя на запрашиваемые класс и предмет
-      let distrRes = await dbFind("distrib", {tLogin: t});
-      if (!distrRes.length) return "none";
-      else {
-         let distr = distrRes[0].tLoad;
-         if (!distr[s]) return "none";
-         else if (!distr[s].includes(c)) return "none";
+      if (s !== "s000") { // обычные предметы
+         let distrRes = await dbFind("distrib", {tLogin: t});
+         if (!distrRes.length) return "none";
+         else {
+            let distr = distrRes[0].tLoad;
+            if (!distr[s]) return "none";
+            else if (!distr[s].includes(c)) return "none";
+         }
+      }
+      else { // внеурочка
+         let distrRes = await dbFind("curric", {
+            type: "intergroup", ingrName: c
+         });
+         if (!distrRes.length) return "none";
+         else if (distrRes[0].ingrTeach !== t) return "none";
       }
       
       // Если пришел пустой ученик, удаляем всю колонку отметок
