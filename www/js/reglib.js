@@ -384,7 +384,7 @@ const gradesStat = i => {
    let crGrObj = rgSubjCode == "s000" ? vdGradesObj : gradesObj,
        crTpObj = rgSubjCode == "s000" ? vdTopicsObj : topicsObj;
 
-   let mess = `<h3>${crGrObj.pnList[i]}</h3>`
+   let mess = `<h3>${crGrObj.pnList[i].replace(/\|.+?\|/, '')}</h3>`
             + `<table><tr><th> </th><th>Σ</th><th>m</th><th>Н</th></tr>`;   
    for (let itDate of Object.keys(DTSIT)) {
        // Cумма весов, сумма отметок с весами, среднее, пропуски
@@ -431,16 +431,24 @@ const gradesShow = vneur => {
        gradElem  = vneur ? dqs("#vdGrades") : dqs("#regGrades");
    let content = '';
    if (!Object.keys(crGradObj).length) content = "<b>Ничего не найдено</b>";
-   else {
+   else {      
       // Список детей
       content = "<table id='regPupList'>"
               + "<tr><td>&nbsp;</td></tr>"
               + "<tr><td class='r'>Вес отметок&nbsp;</td></tr>";
+
       for (let i=0; i<crGradObj.pnList.length; i++) {
+         let pupCl = '',
+             pipFio = crGradObj.pnList[i];
+         if (vneur) {
+            pupCl  = /\|(.+?)\|/.exec(pipFio)[1];
+            pupCl  = `<small>${pupCl}</small>`;
+            pipFio = pipFio.replace(/\|.+?\|/, '');
+         }
          let n = (i > 8) ? i+1 : "  " + (i+1);
          content += `<tr><td id="rp${i}" title="Кликните для показа статистики"`
                   + ` onClick="gradesStat(${i})">`
-                  + `${n}. ${crGradObj.pnList[i]}</td></tr>`;
+                  + `${n}. ${pupCl}${pipFio}</td></tr>`;
       }
       content += "</table>";
       
@@ -467,7 +475,7 @@ const gradesShow = vneur => {
             dtW = (Number(crTopiObj[dt].w)/2).toString();
          }
          content += `<table${bgcol}><tr>`
-                  + `<td onClick="dtFocus('${dt}')"${ttl}">`
+                  + `<td onClick="dtFocus('${dt}', ${vneur})"${ttl}">`
                   +  `${dtN}</td></tr><tr><td>${dtW}</td></tr>`;
                   
          // Собственно отметки, если они есть
@@ -537,8 +545,9 @@ const dtFocus = (dt, vneur) => {
       topvolNode.value       = crTopicObj[dt].v ? crTopicObj[dt].v : 1;
       
       // Прокручиваем таблицу с отметками, чтобы дата была видима
-      let colonObj = dqs(`#${dt}-0`).parentNode.parentNode;
-      let realX = colonObj.getBoundingClientRect().left;
+      let gradesPar = vneur ? "vdGrades" : "regGrades",
+          colonObj  = dqs(`#${gradesPar} #${dt}-0`).parentNode.parentNode,
+          realX     = colonObj.getBoundingClientRect().left;
       gradesNode.scrollBy(~~realX - 178, 0);
    }
 }

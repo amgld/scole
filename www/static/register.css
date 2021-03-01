@@ -26,6 +26,9 @@ div#regGrades table, div#vdGrades table {
 div#regGrades table td, div#vdGrades table td {
    width:42px; text-align:center; padding:2px; white-space:nowrap;
    border:1px solid #963; border-left:none;}
+div#vdGrades table td small {
+   color:#630; position: relative; bottom: 1px; font-size: 0.8em;
+   display: inline-block; width: 2em; text-align: right; padding-right: 3px;}
 div#regGrades table tr:nth-child(even), div#vdGrades table tr:nth-child(even) {
    background:#edeae7;}
 div#regGrades table.grIt td, div#vdGrades table.grIt td {
