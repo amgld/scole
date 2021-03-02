@@ -37,6 +37,7 @@ module.exports = async (args) => {
       const result = async respArr => {
          for (let gr of respArr) {
             let grade = gr.g, clss = gr.c.split('-')[0], subj = gr.s;
+            if (subj == "s000") continue;
             if (!grade.includes('н')) continue;
             let pupil = await pupGet(gr.p);
 
