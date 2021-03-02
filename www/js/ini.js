@@ -77,7 +77,6 @@ let menuItems = {
    ],
    "pupil": [
       ["journal",  "Дневник"],
-      ["vdpup",    "Внеуроч"],
       ["achsheet", "Табель"],
       ["absent",   "Посещаемость"],
       ["docs",     "Справки"],
@@ -85,7 +84,6 @@ let menuItems = {
    ],
    "parent": [
       ["journal", "Дневник"],
-      ["vdpup",    "Внеуроч"],
       ["achsheet", "Табель"],
       ["absent",   "Посещаемость"],
       ["docs",     "Справки"],

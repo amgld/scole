@@ -13,6 +13,8 @@
 //    "s410": {d628a: "5", d831b: "0", ...}
 //    ...
 // }
+// Если предмет равен "s000" (внеурочная деятельность), вместо "s000" ключом
+// будет "23Б" (имя группы внеурочной деятельности)
 module.exports = async (argArr) => {
    let resp = {};
    try {
@@ -42,11 +44,14 @@ module.exports = async (argArr) => {
       }
       
       // Получаем итоговые отметки и подписываем их в объект resp
+      // (для внеурочной деятельности имя предмета заменяем на имя группы)
       let res = await dbFind("grades", {p: pupil, d: RegExp("\\w{5}")});
       for (let otm of res) 
          if (otm.g) {
-            if (!resp[otm.s]) resp[otm.s] = {};
-            resp[otm.s][otm.d] = otm.g;
+            let subj = otm.s;
+            if (subj == "s000") subj = otm.c;
+            if (!resp[subj]) resp[subj] = {};
+            resp[subj][otm.d] = otm.g;
          }
       
       return JSON.stringify(resp);

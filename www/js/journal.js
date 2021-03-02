@@ -1,6 +1,6 @@
 /**
  *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: ДНЕВНИК УЧАЩЕГОСЯ
- *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ *   Copyright © 2021, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 
@@ -15,6 +15,8 @@ let jrnSbList = {}, jrnThList = {};
 //    }
 //    ...
 // }
+// Для внеурочной деятельности (предмет s000) вместо кода предмета
+// в ключе будет код групы типа "23Б"
 let jrnArr = {};
 
 // Отображение контента по данному предмету-учителю на странице
@@ -124,9 +126,12 @@ getContent.journal = async () => {
       dqs("#jrnCont").innerHTML = "<b>Дневник пока пуст.</b>";
       return;
    }
-   keysArr.sort(
-      (a, b) => a.split('_')[1].substr(1, 3) > b.split('_')[1].substr(1, 3)
-   );
+   keysArr.sort((a, b) => {
+      let aSb = a.split('_')[1], bSb = b.split('_')[1];
+      if (aSb.length != bSb.length) return aSb.length < bSb.length ? 1 : -1;
+      else if (aSb.length == 3)     return aSb > bSb ? 1 : -1;
+      else return aSb.substr(1, 3) > bSb.substr(1, 3) ? 1 : -1;
+   });
    
    let selInn = '';
    for (let k of keysArr) {

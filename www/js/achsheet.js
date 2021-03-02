@@ -1,6 +1,6 @@
 /**
  *   ЭЛЕКТРОННЫЙ ЖУРНАЛ «ШКАЛА»: ГЕНЕРИРОВАНИЕ ТАБЕЛЕЙ УСПЕВАЕМОСТИ
- *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ *   Copyright © 2021, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 
