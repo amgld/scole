@@ -34,8 +34,11 @@ const achShow = async (pupil) => {
    let gradesObj = JSON.parse(apiResp);
    
    // Упорядоченный список кодов предметов (ключи объекта gradesObj)
-   let subjs = Object.keys(gradesObj)
-             . sort((a,b) => a.substr(1,3) > b.substr(1,3));
+   let subjs = Object.keys(gradesObj).sort((a, b) => {
+      if (a.length != b.length) return a.length < b.length ? 1 : -1;
+      else if (a.length == 3)   return a > b ? 1 : -1;
+      else return a.substr(1, 3) > b.substr(1, 3) ? 1 : -1;
+   });
    
    // Публикуем
    if (!subjs.length) {
