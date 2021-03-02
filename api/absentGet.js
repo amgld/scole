@@ -1,6 +1,6 @@
 /**
  *   ПОЛУЧЕНИЕ ДАННЫХ О ПОСЕЩАЕМОСТИ
- *   Copyright © 2019, А.М.Гольдин. Modified BSD License
+ *   Copyright © 2021, А.М.Гольдин. Modified BSD License
  */
 "use strict";
 
@@ -14,6 +14,8 @@
 // 
 // Возвращается массив, состоящий из объектов вида
 // {d: "d730", s: s430, p: ivanov, abs: 2} (2 - количество пропущенных уроков)
+// Для внеурочной деятельности (предмет s000) вместо имени предмета пишется
+// имя межклассной группы типа 23Б
 module.exports = async (args) => {
    let resp = [], bdReq = {};
    try {
@@ -31,7 +33,7 @@ module.exports = async (args) => {
          if (!res.length) return "none";
       }      
       
-      if (pupil) bdReq = {p: pupil};              // если в запросе один ученик      
+      if (pupil) bdReq = {p: pupil};   // если в запросе один ученик      
       else       bdReq = {c: RegExp('^'+clName)}; // если весь класс
       
       let grResp = await dbFind("grades", bdReq);
@@ -39,7 +41,8 @@ module.exports = async (args) => {
          let grade = gr.g;
          if (!grade.includes('н')) continue;
          let absVal = grade.length - grade.replace(/н/g, '').length;
-         resp.push({d:gr.d, s:gr.s, p:gr.p, abs:absVal});
+         let subj = gr.s == "s000" ? gr.c : gr.s;
+         resp.push({d: gr.d, s: subj, p: gr.p, abs: absVal});
       }
       
       return JSON.stringify(resp);
