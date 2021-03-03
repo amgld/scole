@@ -57,7 +57,7 @@ const RIGHTS = {
       "gradesGet", "subgrEdit", "subgrPups", "parCodes", "absentGet",
       "pupilsList", "sprAdd", "sprGet", "sprDel", "sprResp", "tabelGet",
       "export", "notesAdd", "notesGet", "notesDel", "logGet", "attendGet",
-      "electGet"
+      "interGroupList", "electGet"
    ],
    "pupil":   [
       "subjList", "teachList", "jrnGet", "absentGet", "sprGet", "sprResp",

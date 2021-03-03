@@ -6,11 +6,16 @@
 
 // В аргументах приходит массив типа ["ivanov", "petrov"],
 // где ivanov - логин ученика, чьи данные запрашиваются,
-//     petrov - логин юзера, который запрашивает эти отметки
+//     petrov - логин юзера, который запрашивает эти данные
 // (логин юзера с фронтенда не передается, подписывается скриптом index.js).
-// Возвращает none или объект с итоговыми отметками по предметам
+// Возвращает none или объект с итоговыми отметками по группам внеур. деят.:
 // {
-//    "s410": {d628a: "5", d831b: "0", ...}
+//    "23Б": {d628: "нн5", d831b: "4", ...}
+//    ...
+// }
+// Если ребенок является членом группы, но отметок нет, выдается что-то типа
+// {
+//    "23Б": {}
 //    ...
 // }
 
@@ -28,24 +33,21 @@ module.exports = async (argArr) => {
       let pupRes = await dbFind("pupils", {Ulogin: pupil});
       if (!pupRes.length) return "none";
       let pupClass = pupRes[0].Uclass;
+
+      // Массив групп, в которых состоит ребенок
+      let grList = pupRes[0].facult || [];
             
       // Проверяем полномочия классного руководителя на запрашиваемый класс
       let clRes = await dbFind("curric", {type: "class", className: pupClass});
       if (!clRes.length)          return "none";
       if (clRes[0].tutor != user) return "none";
+
+      for (let gr of grList) {
+         resp[gr] = {};
+      }
       
-      /*
-      // Получаем итоговые отметки и подписываем их в объект resp
-      // (для внеурочной деятельности имя предмета заменяем на имя группы)
-      let res = await dbFind("grades", {p: pupil, d: RegExp("\\w{5}")});
-      for (let otm of res) 
-         if (otm.g) {
-            let subj = otm.s;
-            if (subj == "s000") subj = otm.c;
-            if (!resp[subj]) resp[subj] = {};
-            resp[subj][otm.d] = otm.g;
-         }
-      */
+      
+      //let res = await dbFind("grades", {p: pupil, d: RegExp("\\w{5}")});
       
       return JSON.stringify(resp);
    }
