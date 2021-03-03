@@ -35,12 +35,13 @@ const vtShow = async pupil => {
    for (let gr of Object.keys(vtObj)) {
       
       let group = vtGroups[gr][0],
-          ped = vtGroups[gr][1],
+          ped = "<nobr>" + vtGroups[gr][1] + "</nobr>",
           gradesObj = vtObj[gr],
           grades = '';
 
       if (!Object.keys(gradesObj).length) grades = "Отметок нет";
       else {;}
+      
       vtData += `<tr><td>${group}</td><td>${ped}</td><td>${grades}</td></tr>`;
    }
 
