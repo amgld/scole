@@ -42,12 +42,13 @@ module.exports = async (argArr) => {
       if (!clRes.length)          return "none";
       if (clRes[0].tutor != user) return "none";
 
-      for (let gr of grList) {
+      // Получаем отметки
+      for (let gr of grList) {         
          resp[gr] = {};
+         let grRes = await dbFind("grades", {c: gr, p: pupil});
+         grRes.sort((a,b) => a.d > b.d ? 1 : -1);
+         for (let grade of grRes) resp[gr][grade.d] = grade.g; 
       }
-      
-      
-      //let res = await dbFind("grades", {p: pupil, d: RegExp("\\w{5}")});
       
       return JSON.stringify(resp);
    }

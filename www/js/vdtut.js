@@ -40,7 +40,14 @@ const vtShow = async pupil => {
           grades = '';
 
       if (!Object.keys(gradesObj).length) grades = "Отметок нет";
-      else {;}
+      else for (let dt of Object.keys(gradesObj)) {
+         let grd = gradesObj[dt].replace(/999/g, "зач");
+         if (dt.length > 4 && grd == "0") grd = "н/а";
+         dt = dt.length > 4 ?
+              `<b>${DTSIT[dt][0]}</b>` :
+              `<em>${dateConv(dt)}</em>`;
+         grades += `<span>${dt}: ${grd}</span>`;
+      }
       
       vtData += `<tr><td>${group}</td><td>${ped}</td><td>${grades}</td></tr>`;
    }

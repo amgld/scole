@@ -69,7 +69,10 @@ const ingrEdit = async () => {
 
 // Удаление группы
 const ingrDel = async (grName) => {
-   if (!confirm("Вы уверены?")) return;
+   if (!confirm(
+      "Все учащиеся должны быть предварительно удалены из группы. "
+    + "Все темы занятий и все отметки будут удалены. Вы уверены?"
+   )) return;
    let apiResp = await apireq("interGroupDel", grName);
    if (apiResp == "none") info(1, "Запрашиваемая операция отклонена.");
    else {

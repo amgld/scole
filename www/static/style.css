@@ -248,7 +248,7 @@ section#distrib table#teachLoad td:nth-child(3) {
    cursor:pointer;}
    
 /* БЛОК РАБОТЫ АДМИНИСТРАТОРА С МЕЖКЛАССНЫМИ ГРУППАМИ УЧАЩИХСЯ
-   ----------------------------------------------------- */
+   ----------------------------------------------------------- */
 section#groups p {
    width:50em; max-width:95%; margin:auto; text-align:justify;}
 section#groups span {
@@ -348,13 +348,21 @@ section#attend table td:first-child {
 /* БЛОКИ ОТОБРАЖЕНИЯ ТАБЕЛЯ И ДАННЫХ О ВНЕУРОЧНОЙ ДЕЯТЕЛЬНОСТИ 
    ------------------------------------------------------------ */
 section#achsheet table, section#vdtut table {
-   border-collapse:collapse; margin:10px auto; border:1px solid #963;}
+   border-collapse:collapse; margin:10px auto; border:1px solid #963;
+   max-width:95%;}
 section#achsheet table th, section#achsheet table td {
    border:1px solid #963; padding:5px; text-align:center;}
 section#achsheet table td:first-child {
    text-align:left;}
 section#vdtut table td {
    border:1px solid #963; padding:5px; text-align:left;}
+section#vdtut table td span {
+   display:inline-block; width:6em; background:#e6ded5; margin:2px;
+   white-space:nowrap;}
+section#vdtut table td span b {
+   color:#963;}
+section#vdtut table td span em {
+   font-weight:bold; font-style:normal;}
    
 /* БЛОК ЭКСПОРТА ЖУРНАЛА В ФАЙЛ
    ---------------------------------------------------- */
