@@ -76,16 +76,36 @@ const ntAdd = async () => {
 
 // Формирование списка детей в селекте выбора учащегося
 const ntPupListShow = async () => {
-   let clName = dqs("#ntSelClass").value;
-   let ntResp = await apireq("gradesGet", [clName, '', "a"]);
+   let clName = dqs("#ntSelClass").value,
+       ntResp, pupLgnArr, pupFioArr;
+
+   // Это межклассная группа (false) или обычный класс (true)?
+   let isCl = Number(clName.substr(0, clName.length - 1)) > 19 ? false : true;
+
+   // Получаем список учащихся
+   if (isCl) ntResp = await apireq("gradesGet", [clName, '', "a"]);
+   else      ntResp = await apireq("interGroupGet", clName);
    if (ntResp == "none") {info(1, "Не могу получить список учащихся"); return;}
    let ntObj = JSON.parse(ntResp);
-   let pupLgnArr = ntObj.puList ? ntObj.puList : []; // логины детей
+
+   // Формируем массивы фио детей и их логинов
+   if (isCl) { // обычный класс
+      pupLgnArr = ntObj.puList ? ntObj.puList : [];
+      pupFioArr = ntObj.pnList;
+   }
+   else { // межклассная группа
+      pupLgnArr = []; pupFioArr = [];
+      for (let pup of ntObj) {
+         pupLgnArr.push(pup[2]);
+         pupFioArr.push(pup[0].replace(/(\S+) (.{1}).*/, "$1 $2."));
+      }
+   }
    
+   // Формируем содержимое селекста выбора учащихся
    if (pupLgnArr.length) {
       let selPupilInner = `<option value="${clName}">ВСЕМ УЧАЩИМСЯ</option>`;
       for (let i=0; i<pupLgnArr.length; i++) selPupilInner +=
-         `<option value="${pupLgnArr[i]}">${ntObj.pnList[i]}</option>`;
+         `<option value="${pupLgnArr[i]}">${pupFioArr[i]}</option>`;
      
       dqs("#ntSelPupil").innerHTML = selPupilInner;
       inpFocus();
@@ -145,7 +165,15 @@ getContent.notes = async () => {
       // Если он учитель, показываем ему все классы и подгруппы его нагрузки
       else if (ntRole == "teacher") {
          let ntClasses = classSort(Object.keys(uTeachLoad));
-         for (let cl of ntClasses) selClassInner += `<option>${cl}</option>`;
+
+         // Получаем список его межкласных групп
+         let ntIntGroups = [];
+         let apiResp = await apireq("interGroupList");
+         if (apiResp != "none") for (let gr of JSON.parse(apiResp))
+            if (gr[2] == uLogin) ntIntGroups.push(gr[0]);
+         
+         for (let cl of [...ntClasses, ...ntIntGroups])
+            selClassInner += `<option>${cl}</option>`;
       }
       
       dqs("#ntSelClass").innerHTML = selClassInner;
