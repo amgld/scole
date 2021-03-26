@@ -155,6 +155,7 @@ getContent.notes = async () => {
          for (let cl of uTutorCls) selClassInner += `<option>${cl}</option>`;
       
       // Если он администратор, показываем ему все классы
+      // (межклассные группы не показываем, их слишком много)
       else if (ntRole == "admin") {
          let apiResp = await apireq("classesList");
          if (apiResp == "none") {info(1, "Не могу получить данные"); return;}
@@ -162,7 +163,7 @@ getContent.notes = async () => {
          for (let cl of ntAllClasses)
             selClassInner += `<option>${cl}</option>`;
       }
-      // Если он учитель, показываем ему все классы и подгруппы его нагрузки
+      // Если он учитель, показываем ему все классы и группы его нагрузки
       else if (ntRole == "teacher") {
          let ntClasses = classSort(Object.keys(uTeachLoad));
 

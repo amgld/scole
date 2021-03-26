@@ -28,11 +28,12 @@ module.exports = async (args) => {
       if (pupil) { // заметки запрашиваются учеником или родителем
          if (pupil != user) return "none";
          
-         // Определяем его класс и группы
+         // Определяем его класс и группы (в том числе межклассные)
          let res = await dbFind("pupils", {Ulogin: pupil});
          if (!res.length) return "none";
          names.push(res[0].Uclass);
-         if (res[0].groups) names.push(...(res[0].groups));         
+         if (res[0].groups) names.push(...(res[0].groups));
+         if (res[0].facult) names.push(...(res[0].facult));                  
          request = {$where: function() {return names.includes(this.r);}}
       }
             
