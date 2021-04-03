@@ -129,7 +129,9 @@ getContent.vdreg = async () => {
       dqs("#vdGroupSel") .style.display = "none";
       dqs("#vdGrades")   .style.display = "none";
       dqs("#vdTopics")   .style.display = "none";
+      dqs("#expVD")      .style.display = "none";
       dqs("#vdIsContent").style.display = "block";
+      
    }
 
    // Формирование списка групп в селекте и отображение блоков контента
