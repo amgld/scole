@@ -60,6 +60,7 @@ const expVD = async () => {
    let expObj = {},
        grades = JSON.parse(gradesStr),
        topics = JSON.parse(topicsStr);
+   if (!grades.pnList) {info(1, "Нечего экспортировать!"); return;}
    let DSset = new Set([...Object.keys(grades), ...Object.keys(topics)]);
        DSset.delete("puList"); DSset.delete("pnList");
    let DS = [...DSset];
