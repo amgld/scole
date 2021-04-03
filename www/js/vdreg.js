@@ -23,8 +23,29 @@ for (let i=0; i<9; i++) vdSelWInner += `<option value=${i}>${i/2}</option>`;
 let vdSelVInner = '';
 for (let i=1; i<8; i++) vdSelVInner += `<option value="${i}"> ${i} ч </option>`;
 
+// Экспорт странички текущей группы в html-файл
+const expVD = async () => {
+   let linkElem = dqs("#expVD");
+   linkElem.innerHTML = "Ждите...";
+   let grName = dqs("#vdGroupSel").value.split('^')[0];
+   let fileContent = "<!DOCTYPE html><html lang='ru'><head>"
+      + `<meta charset='utf-8'></head><body>В разработке</body></html>`;
+
+   let dataLink = new Blob([fileContent], {type: "text/html"});
+   linkElem.href = window.URL.createObjectURL(dataLink);
+   linkElem.download  = `${grName}.html`;
+   linkElem.innerHTML = "Скачать";
+   linkElem.removeAttribute("onclick");
+}
+
 createSection("vdreg", `
-   <select id="vdGroupSel"  onChange="loadGrades(1)"></select><br>
+   <select id="vdGroupSel" onChange="
+      dqs('#expVD').innerHTML='&#128228;';
+      dqs('#expVD').removeAttribute('href');
+      dqs('#expVD').setAttribute('onclick', 'expVD(); return false');
+      loadGrades(1)"></select>&nbsp;
+   <a id="expVD" onclick="expVD(); return false" style="cursor:pointer"
+      title="Экспорт">&#128228;</a><br>
    <div id="vdGrades"></div>
    <div id="vdTopics">
       <div id="vdNewTopic">
