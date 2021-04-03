@@ -141,6 +141,7 @@ getContent.vdreg = async () => {
    dqs("#vdGroupSel") .style.display = "inline";
    dqs("#vdGrades")   .style.display = "inline-block";
    dqs("#vdTopics")   .style.display = "inline-block";
+   dqs("#expVD")      .style.display = "inline";
    dqs("#vdIsContent").style.display = "none";
 
    // Получаем полный список всех групп
