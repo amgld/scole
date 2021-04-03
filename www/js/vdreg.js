@@ -25,11 +25,58 @@ for (let i=1; i<8; i++) vdSelVInner += `<option value="${i}"> ${i} ч </option>`
 
 // Экспорт странички текущей группы в html-файл
 const expVD = async () => {
+
+   // Получаем данные текущей выбранной группы
+   let selElem = dqs("#vdGroupSel"),
+       grName  = selElem.value.split('^')[0],
+       teacher = selElem.value.split('^')[2],
+       grFull  = selElem.options[selElem.selectedIndex].text;
+
+   // Получаем файл со скриптом показа журнала   
+   let scrContent = await (await fetch("/js/viewExportVD.js")).text();
+   if (!scrContent.includes("use strict")) {
+      info(1, "Не могу получить данные");
+      return;
+   }
+   scrContent = scrContent.replace(/\r/g, '').replace(/\/\/.*?\n/g, '')
+            . replace(/\/\*.*?\*\//g, '').replace(/ /g, '¤')
+            . replace(/\s+/g, ' ').replace(/¤/g, ' ').trim();
+
+   // Получаем отметки 
+   let gradesStr = await apireq("gradesGet", [grName, "s000", teacher]);
+   if (gradesStr == "none") {info(1, "Не могу получить данные"); return;}
+
+   // Получаем темы уроков
+   let topicsStr = await apireq("topicsGet", [grName, "s000", teacher]);
+   if (topicsStr == "none") {info(1, "Не могу получить данные"); return;}
+
+   // Формируем объект данных для экспорта
+   // {
+   //    pnList: ["Иванов И.", "Петров П.", ...],
+   //    d601:   {t: "Африка", h: "Учить", w: 4, v: 2, g: ["нн", "5", ...]},
+   //    ...
+   // }
+
+   let expObj = {},
+       grades = JSON.parse(gradesStr),
+       topics = JSON.parse(topicsStr);
+   let DSset = new Set([...Object.keys(grades), ...Object.keys(topics)]);
+       DSset.delete("puList"); DSset.delete("pnList");
+   let DS = [...DSset];
+   for (let k of DS.sort()) {
+      let kNew = k.length == 4 ? dateConv(k) : DTSIT[k][0];
+      let tp = topics[k] ? topics[k] : {},
+          gr = grades[k] ? grades[k] : new Array(grades.pnList.length).fill('');
+      expObj[kNew] = {...tp, g: gr};
+   }
+   expObj.pnList = grades.pnList;
+
    let linkElem = dqs("#expVD");
    linkElem.innerHTML = "Ждите...";
-   let grName = dqs("#vdGroupSel").value.split('^')[0];
    let fileContent = "<!DOCTYPE html><html lang='ru'><head>"
-      + `<meta charset='utf-8'></head><body>В разработке</body></html>`;
+      + `<meta charset='utf-8'></head><body><article>${JSON.stringify(expObj)}`
+      + `</article><script>"use strict"; const grFull = "${grFull}";`
+      + `</script><script>${scrContent}</script></body></html>`;
 
    let dataLink = new Blob([fileContent], {type: "text/html"});
    linkElem.href = window.URL.createObjectURL(dataLink);
