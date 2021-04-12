@@ -7,10 +7,8 @@
 /* ПОДКЛЮЧЕНИЕ МОДУЛЕЙ И ОПРЕДЕЛЕНИЕ ГЛОБАЛЬНЫХ КОНСТАНТ
  * ----------------------------------------------------------------------- */
 const DOCROOT  = __dirname + "/www/",
-      LOGROOT  = __dirname + "/logs/",
 
       https    = require("https"),
-      url      = require("url"),
       fs       = require("fs"),
       nedb     = require("nedb"),
 
@@ -147,12 +145,13 @@ const CAPTDEATH = 180;
 https.createServer(httpsOpt, (zapros, otvet) => {
    
    // Получаем параметры запроса
-   let pathname = url.parse(zapros.url).pathname;
+   let url      = new URL("http://" + zapros.headers.host + zapros.url),
+       pathname = url.pathname;
    if (!pathname.includes(".")) pathname += "/index.html";
    pathname = pathname.replace("//", '/').replace(/\.\./g, '');
    
-   let ADDR = zapros.connection.remoteAddress || "unknown";
-   ADDR = ADDR.replace("::1", "127.0.0.1").replace(/\:.*\:/, '');
+   let ADDR = (zapros.socket.remoteAddress || "unknown")
+            . replace("::1", "127.0.0.1").replace(/\:.*\:/, '');
    
    // Если пришел запрос контактов администратора
    if (pathname == "/a.a") sendOtvet(otvet, 200, "text/plain", ADMIN);
