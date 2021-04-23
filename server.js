@@ -145,14 +145,10 @@ const CAPTDEATH = 180;
 https.createServer(httpsOpt, (zapros, otvet) => {
    
    // Получаем параметры запроса
-   let pathname;
-   try {
-      let url = new URL("http://" + zapros.headers.host + zapros.url);
+      let url  = new URL("http://host" + zapros.url),
       pathname = url.pathname;
       if (!pathname.includes(".")) pathname += "/index.html";
       pathname = pathname.replace("//", '/').replace(/\.\./g, '');
-   }
-   catch(e) {pathname = "/index.html";}
    
    let ADDR = (zapros.socket.remoteAddress || "unknown")
             . replace("::1", "127.0.0.1").replace(/\:.*\:/, '');

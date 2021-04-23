@@ -109,7 +109,7 @@ const CAPTDEATH = 180;
 http.createServer((zapros, otvet) => {
    
    // Получаем параметры запроса
-   let url      = new URL("http://" + zapros.headers.host + zapros.url),
+   let url      = new URL("http://host" + zapros.url),
        pathname = url.pathname;
    if (!pathname.includes(".")) pathname += "/index.html";
    pathname = pathname.replace("//", '/').replace(/\.\./g, '');
