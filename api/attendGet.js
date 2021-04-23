@@ -61,7 +61,7 @@ module.exports = async (args) => {
 
          // В каких классах у него учебная нагрузка
          clResp = await dbFind("distrib", {tLogin: lg});
-         for (let subj of Object.keys(clResp[0].tLoad))
+         if (clResp[0]) for (let subj of Object.keys(clResp[0].tLoad))
             clArr.push(...(clResp[0].tLoad[subj]));
 
          let classes = new Set(clArr);

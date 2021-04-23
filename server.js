@@ -6,7 +6,7 @@
 
 /* ПОДКЛЮЧЕНИЕ МОДУЛЕЙ И ОПРЕДЕЛЕНИЕ ГЛОБАЛЬНЫХ КОНСТАНТ
  * ----------------------------------------------------------------------- */
-const DOCROOT  = __dirname + "/www/",
+const DOCROOT  = __dirname + "/www",
 
       https    = require("https"),
       fs       = require("fs"),
@@ -145,10 +145,14 @@ const CAPTDEATH = 180;
 https.createServer(httpsOpt, (zapros, otvet) => {
    
    // Получаем параметры запроса
-   let url      = new URL("http://" + zapros.headers.host + zapros.url),
-       pathname = url.pathname;
-   if (!pathname.includes(".")) pathname += "/index.html";
-   pathname = pathname.replace("//", '/').replace(/\.\./g, '');
+   let pathname;
+   try {
+      let url = new URL("http://" + zapros.headers.host + zapros.url);
+      pathname = url.pathname;
+      if (!pathname.includes(".")) pathname += "/index.html";
+      pathname = pathname.replace("//", '/').replace(/\.\./g, '');
+   }
+   catch(e) {pathname = "/index.html";}
    
    let ADDR = (zapros.socket.remoteAddress || "unknown")
             . replace("::1", "127.0.0.1").replace(/\:.*\:/, '');
