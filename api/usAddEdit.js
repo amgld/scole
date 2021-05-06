@@ -29,6 +29,8 @@ module.exports = async newUser => {
             newUser.Upwd = res[0].Upwd;
             if (collect == "pupils") newUser.UpwdPar = res[0].UpwdPar;
          }
+         if (res[0].groups) newUser.groups = res[0].groups;
+         if (res[0].facult) newUser.facult = res[0].facult;
          db[collect].update({Ulogin: newUser.Ulogin}, newUser, {});
       }
       else db[collect].insert(newUser);
